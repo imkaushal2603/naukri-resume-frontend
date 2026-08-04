@@ -91,7 +91,7 @@ export default function CustomChooseTemplates() {
                         ))}
                     </Swiper>
                 </div>
-                <div className="custom-template-pagination flex justify-center items-center gap-[10px] mt-[40px] [&>.swiper-pagination-bullet]:w-[12px] [&>.swiper-pagination-bullet]:h-[12px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
+                <div className="h-[15px] custom-template-pagination flex justify-center items-center gap-[10px] mt-[40px] [&>.swiper-pagination-bullet]:w-[12px] [&>.swiper-pagination-bullet]:h-[12px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
             </div>
         </div>
     );

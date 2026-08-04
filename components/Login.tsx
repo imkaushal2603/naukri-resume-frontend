@@ -34,6 +34,10 @@ export default function Login({ isOpen, onClose, onOpenSignUp, onOpenForgotPassw
                 localStorage.setItem("token", response.data.accessToken);
             }
 
+            if (response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user));
+            }
+
             toast.success("Logged in successfully!");
             onClose();
             router.push("/dashboard");

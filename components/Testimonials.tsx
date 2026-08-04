@@ -140,7 +140,7 @@ export default function Testimonials() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="custom-pagination flex justify-center items-center gap-[10px] mt-[30px] [&>.swiper-pagination-bullet]:w-[15px] [&>.swiper-pagination-bullet]:h-[15px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
+          <div className="h-[15px] custom-pagination flex justify-center items-center gap-[10px] mt-[30px] [&>.swiper-pagination-bullet]:w-[15px] [&>.swiper-pagination-bullet]:h-[15px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
         </div>
       </div>
     </div>
