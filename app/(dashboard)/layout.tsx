@@ -3,6 +3,7 @@ import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import Footer from "@/components/dashboard/Footer";
 import { ResumeProvider } from "@/context/ResumeContext";
+import Loader from "@/components/ui/Loader";
 
 export default function DashboardLayout({
     children,
@@ -18,7 +19,9 @@ export default function DashboardLayout({
                 <div className="flex-1 flex flex-col min-w-0 pl-[265px]">
                     <Header />
                     <main className="flex-1 p-8 overflow-y-auto">
-                        {children}
+                        <Suspense fallback={<Loader />}>
+                            {children}
+                        </Suspense>
                     </main>
                     <Footer />
                 </div>
