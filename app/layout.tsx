@@ -19,7 +19,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.naukariresume.com"),
+  metadataBase: new URL("https://naukri-resume.com/"),
   title: {
     default: "Naukari Resume | AI Resume Builder & ATS Friendly Templates",
     template: "%s | Naukari Resume",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.naukariresume.com",
+    url: "https://naukri-resume.com/",
     siteName: "Naukari Resume",
     title: "Naukari Resume | AI Resume Builder & ATS Friendly Templates",
     description: "Create ATS-friendly resumes effortlessly. Pick a template, customize with AI, and download your resume to land top interviews.",

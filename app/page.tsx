@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   title: "AI Resume Builder & ATS-Optimized Templates",
   description: "Create a job-ready, ATS-friendly resume in minutes with Naukari Resume. AI writing assistance, recruiter-approved templates, and instant download.",
   alternates: {
-    canonical: "https://www.naukariresume.com",
+    canonical: "https://naukri-resume.com/",
   }
 };
 
@@ -25,7 +25,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Naukari Resume",
-    url: "https://www.naukariresume.com",
+    url: "https://naukri-resume.com/",
   };
 
   const softwareSchema = {
