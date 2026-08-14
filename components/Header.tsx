@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import Login from "./Login";
 import Registration from "./Registration";
 import ForgotPassword from "./ForgotPassword";
 
 export default function Header() {
+    const { isAuthenticated, loading } = useAuth();
     const [activeAuthModal, setActiveAuthModal] = useState<"login" | "register" | "reset" | null>(null);
 
     return (
@@ -28,8 +30,14 @@ export default function Header() {
                             </Link>
                         </div>
                         <div className="w-[calc(100%-201px)] pl-10 flex justify-end gap-[15px] flex-wrap">
-                            <button type="button" onClick={() => setActiveAuthModal("login")} className="inline-block border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300">Login</button>
-                            <Link href="/build-resume" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Build My Resume</Link>
+                            {loading ? null : isAuthenticated ? (
+                                <Link href="/dashboard" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Dashboard</Link>
+                            ) : (
+                                <>
+                                    <button type="button" onClick={() => setActiveAuthModal("login")} className="inline-block border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300">Login</button>
+                                    <Link href="/build-resume" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Build My Resume</Link>
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>

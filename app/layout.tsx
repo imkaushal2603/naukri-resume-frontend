@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Toaster } from "sonner";
 import { Lato } from "next/font/google";
 import GoogleAuthProvider from "@/components/providers/GoogleAuthProvider";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 const lato = Lato({
@@ -95,9 +96,11 @@ export default function RootLayout({
       className={`${lato.variable} h-full antialiased`}
     >
       <body className={`${lato.className} min-h-full flex flex-col`}>
-        <GoogleAuthProvider>
-          {children}
-        </GoogleAuthProvider>
+        <AuthProvider>
+          <GoogleAuthProvider>
+            {children}
+          </GoogleAuthProvider>
+        </AuthProvider>
         <Toaster position="top-center" richColors />
       </body>
     </html>

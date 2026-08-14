@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import GoogleAuthButton from "./GoogleAuthButton";
 import api from "@/services/api";
+import { useAuth } from "@/context/AuthContext";
 
 interface LoginProps {
     isOpen: boolean;
@@ -15,6 +16,7 @@ interface LoginProps {
 
 export default function Login({ isOpen, onClose, onOpenSignUp, onOpenForgotPassword }: LoginProps) {
     const router = useRouter();
+    const { login: authLogin } = useAuth();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
@@ -31,11 +33,7 @@ export default function Login({ isOpen, onClose, onOpenSignUp, onOpenForgotPassw
             const response = await api.post("/auth/login", { email, password, keepLoggedIn });
 
             if (response.data.accessToken) {
-                localStorage.setItem("token", response.data.accessToken);
-            }
-
-            if (response.data.user) {
-                localStorage.setItem("user", JSON.stringify(response.data.user));
+                await authLogin(response.data.accessToken);
             }
 
             toast.success("Logged in successfully!");

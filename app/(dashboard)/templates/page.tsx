@@ -1,35 +1,171 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import api from "@/services/api";
+import { useResumeId } from "@/hooks/useResumeId";
+import Loader from "@/components/ui/Loader";
+
+function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
+    return Promise.all([
+        promise,
+        new Promise((resolve) => setTimeout(resolve, ms)),
+    ]).then(([result]) => result as T);
+}
+
+interface Template {
+    id: number;
+    name: string;
+    templateKey: string;
+    preview: string;
+    status: number;
+}
+
 export default function Templates() {
+    const router = useRouter();
+    const resumeId = useResumeId();
+    const [templates, setTemplates] = useState<Template[]>([]);
+    const [currentTemplateId, setCurrentTemplateId] = useState<number | null>(null);
+    const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [saving, setSaving] = useState<boolean>(false);
+    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const templatesRes = await withMinDelay(api.get("/resume/templates"));
+                if (templatesRes.data.success) {
+                    setTemplates(templatesRes.data.templates);
+                }
+
+                if (resumeId) {
+                    const resumeRes = await api.get(`/resume/builder/${resumeId}`);
+                    if (resumeRes.data.success) {
+                        const tId = resumeRes.data.resume.templateId;
+                        setCurrentTemplateId(tId);
+                        setSelectedTemplateId(tId);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load templates", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [resumeId]);
+
+    const handleSelectTemplate = (templateId: number) => {
+        setSelectedTemplateId(templateId);
+    };
+
+    const handleUpdate = async () => {
+        if (!resumeId || !selectedTemplateId) return;
+        setSaving(true);
+        try {
+            const res = await api.put(`/resume/builder/${resumeId}`, { templateId: selectedTemplateId });
+            if (res.data.success) {
+                router.push(`/templates/resume-builder/preview?resumeId=${resumeId}`);
+            }
+        } catch (err: any) {
+            console.error("Failed to update template", err.response?.data || err.message);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleContinue = async () => {
+        if (!selectedTemplateId) return;
+        setSaving(true);
+        try {
+            const res = await api.post("/resume/builder", { templateId: selectedTemplateId });
+            if (res.data.success) {
+                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.id}`);
+            }
+        } catch (err: any) {
+            console.error("Failed to select template", err.response?.data || err.message);
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const isEditing = Boolean(resumeId);
+    const hasPendingChange = isEditing && selectedTemplateId !== currentTemplateId;
+    const showActionButton = isEditing ? hasPendingChange : Boolean(selectedTemplateId);
+
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
         <div className="flex flex-wrap gap-[15px]">
-            <div>
-                <div className="flex flex-wrap items-center gap-[150px]">
-                    <div>
+            <div className="w-[calc(70%-7.5px)]">
+                <div className="flex flex-wrap items-center gap-[150px] justify-between">
+                    <div className="w-[40%]">
                         <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[15px]">Choose a Resume Template</h4>
-                        <p>Select a professionally designed template that matches your career goals and helps your resume stand out.</p>
-                    </div>
-                    <div>
-                        <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                                <path d="M11.3333 4.25L14.875 12.0417L22.6667 15.5833L14.875 19.125L11.3333 26.9167L7.79167 19.125L0 15.5833L7.79167 12.0417L11.3333 4.25ZM11.3333 11.0925L9.91667 14.1667L6.8425 15.5833L9.91667 17L11.3333 20.0742L12.75 17L15.8242 15.5833L12.75 14.1667L11.3333 11.0925ZM25.5 11.3333L23.715 7.45167L19.8333 5.66667L23.715 3.89583L25.5 0L27.2708 3.89583L31.1667 5.66667L27.2708 7.45167L25.5 11.3333ZM25.5 31.1667L23.715 27.285L19.8333 25.5L23.715 23.7292L25.5 19.8333L27.2708 23.7292L31.1667 25.5L27.2708 27.285L25.5 31.1667Z" fill="#0456FF" />
-                            </svg>
-                        </div>
-                        <div>
-                            <div>
-                                <div>
-                                    <h6>AI Template Recommender</h6>
-                                </div>
-                                <div>
-                                    <span>New</span>
-                                </div>
-                            </div>
-                            <p>Get template suggestions based on your profile</p>
-                        </div>
+                        <p className="text-[14px] leading-[22px] text-[#00002480]">Select a professionally designed template that matches your career goals and helps your resume stand out.</p>
                     </div>
                 </div>
-            </div>
-            <div>
 
+                <div className="mt-[30px]">
+                    {loading ? (
+                        <p className="text-sm text-[#00002480]">Loading templates...</p>
+                    ) : templates.length === 0 ? (
+                        <p className="text-sm text-[#00002480]">No templates available.</p>
+                    ) : (
+                        <div className="grid grid-cols-3 gap-[20px]">
+                            {templates.map((template) => {
+                                const isCurrent = template.id === currentTemplateId;
+                                const isSelected = template.id === selectedTemplateId;
+
+                                return (
+                                    <div
+                                        key={template.id}
+                                        onClick={() => handleSelectTemplate(template.id)}
+                                        className={`relative cursor-pointer rounded-[8px] border-2 p-[10px] transition-all ${isSelected
+                                            ? "border-[#0456FF]"
+                                            : "border-[#0456FF26]"
+                                            }`}
+                                    >
+                                        {isCurrent && (
+                                            <span className="absolute top-2 right-2 bg-[#0456FF] text-white text-[10px] font-semibold px-2 py-[2px] rounded-[4px] z-10">
+                                                Current
+                                            </span>
+                                        )}
+                                        {template.preview ? (
+                                            <Image
+                                                src={`${backendUrl}${template.preview}`}
+                                                alt={template.name}
+                                                width={220}
+                                                height={300}
+                                                className="w-full h-auto rounded-[4px] object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-[300px] bg-gray-100 rounded-[4px] flex items-center justify-center text-xs text-gray-400">No preview</div>
+                                        )}
+                                        <p className="text-center font-medium text-[14px] mt-[10px]">{template.name}</p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+
+                {showActionButton && (
+                    <button
+                        onClick={isEditing ? handleUpdate : handleContinue}
+                        disabled={saving}
+                        className="mt-[30px] bg-[#0456FF] text-white px-[24px] py-[12px] rounded-[6px] font-semibold text-[14px] disabled:opacity-50"
+                    >
+                        {saving
+                            ? (isEditing ? "Updating..." : "Setting up...")
+                            : (isEditing ? "Update" : "Continue with this template")}
+                    </button>
+                )}
             </div>
+            <div className="w-[calc(30%-7.5px)]"></div>
         </div>
-    )
+    );
 }

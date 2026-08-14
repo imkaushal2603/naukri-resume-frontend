@@ -85,7 +85,6 @@ export default function Header() {
                 </button>
                 {dropdownOpen && (
                     <div className="absolute right-0 mt-[26px] w-48 bg-white border border-gray-100 rounded-xl shadow-lg py-2 z-50">
-                        <button type="button" onClick={() => { setDropdownOpen(false); router.push("/dashboard/profile"); }} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-gray-700 text-left cursor-pointer">Profile Settings</button>
                         <button type="button" onClick={handleLogout} className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 text-left font-medium cursor-pointer">Logout</button>
                     </div>
                 )}

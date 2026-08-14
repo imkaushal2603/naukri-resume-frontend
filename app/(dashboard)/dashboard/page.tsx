@@ -1,8 +1,16 @@
-// app/dashboard/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import api from "@/services/api";
+import Loader from "@/components/ui/Loader";
+
+function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
+    return Promise.all([
+        promise,
+        new Promise((resolve) => setTimeout(resolve, ms)),
+    ]).then(([result]) => result as T);
+}
 
 interface Feature {
     title: string;
@@ -23,20 +31,37 @@ const features: Feature[] = [
 
 export default function DashboardPage() {
     const [showTargetDiv, setShowTargetDiv] = useState(true);
+    const [checkingResumes, setCheckingResumes] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setShowTargetDiv(false);
-        }, 5000);
-
-        return () => clearTimeout(timer);
+        const checkResumes = async () => {
+            try {
+                const res = await withMinDelay(api.get("/resume"));
+                if (res.data.success) {
+                    const resumes = res.data.resumes || [];
+                    setShowTargetDiv(resumes.length === 0);
+                }
+            } catch (err) {
+                console.error("Failed to check resumes", err);
+                setShowTargetDiv(true);
+            } finally {
+                setCheckingResumes(false);
+                setLoading(false);
+            }
+        };
+        checkResumes();
     }, []);
+
+    if (loading) {
+        return <Loader />;
+    }
 
     return (
         <div className="flex flex-wrap gap-[40px]">
             <div className="flex flex-col gap-4 w-[calc(70%-20px)] h-fit">
-                {showTargetDiv && (
-                    <div className="flex flex-wrap items-center gap-[40px] border border-[#CACACA80] shadow-[1px_3px_10px_0px_#2222CC80] rounded-[10px] p-5">
+                {!checkingResumes && showTargetDiv && (
+                    <div className="flex flex-wrap items-center gap-[40px] border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                         <div className="w-[calc(55%_-_20px)]">
                             <h2 className="text-[30px] leading-[100%] text-black mb-[15px] font-bold">
                                 Welcome to <span className="text-[#0456FF] italic">Naukari Resume!</span>
@@ -79,7 +104,7 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 )}
-                <div className="border border-[#CACACA80] shadow-[1px_3px_10px_0px_#2222CC80] rounded-[10px] p-5">
+                <div className="border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                     <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[15px]">Your Current Plan</h4>
                     <div className="flex flex-col gap-y-[25px]">
                         <div className="flex flex-wrap bg-[#FCFCFD] border border-[#CACACA80] rounded-[5px]">
@@ -230,7 +255,7 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </div>
-                <div className="border border-[#CACACA80] shadow-[1px_3px_10px_0px_#2222CC80] rounded-[10px] p-5">
+                <div className="border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                     <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[10px]">My Resumes</h4>
                     <div className="flex flex-wrap gap-[10px] justify-center items-center">
                         <div>
@@ -248,7 +273,7 @@ export default function DashboardPage() {
                             <h5 className="font-bold text-[18px] leading-[100%] text-[#000024] mb-[10px]">No resumes yet</h5>
                             <p className="font-medium text-[16px] leading-[130%] text-[#000024B2] mb-[10px]">You haven't created your first resume.</p>
                             <div>
-                                <Link href="/dashboard/resume/create" className="w-fit flex items-center gap-[10px] border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-colors duration-300">
+                                <Link href="/templates" className="w-fit flex items-center gap-[10px] border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-colors duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                                         <path d="M5 6.66667H0V5H5V0H6.66667V5H11.6667V6.66667H6.66667V11.6667H5V6.66667Z" fill="currentColor" />
                                     </svg>
@@ -258,14 +283,14 @@ export default function DashboardPage() {
                         </div>
                     </div>
                 </div>
-                <div className="flex items-center justify-center gap-[10px]">
+                <div className="flex items-center justify-center gap-[6px]">
                     <div>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="17" viewBox="0 0 14 17" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 17" fill="none">
                             <path d="M5.79167 11.2917L10.5 6.58333L9.3125 5.39583L5.79167 8.91667L4.04167 7.16667L2.85417 8.35417L5.79167 11.2917ZM6.66667 16.6667C4.73611 16.1806 3.1425 15.0728 1.88583 13.3433C0.629167 11.6139 0.000555556 9.69389 0 7.58333V2.5L6.66667 0L13.3333 2.5V7.58333C13.3333 9.69444 12.705 11.6147 11.4483 13.3442C10.1917 15.0736 8.59778 16.1811 6.66667 16.6667ZM6.66667 14.9167C8.11111 14.4583 9.30555 13.5417 10.25 12.1667C11.1944 10.7917 11.6667 9.26389 11.6667 7.58333V3.64583L6.66667 1.77083L1.66667 3.64583V7.58333C1.66667 9.26389 2.13889 10.7917 3.08333 12.1667C4.02778 13.5417 5.22222 14.4583 6.66667 14.9167Z" fill="#000024" fillOpacity="0.7" />
                         </svg>
                     </div>
                     <div>
-                        <p className="font-bold text-[18px] leading-[100%] text-[#000024B2]">Your data is secure with us. We never share your information with third parties.</p>
+                        <p className="font-bold text-[14px] leading-[100%] text-[#000024B2]">Your data is secure with us. We never share your information with third parties.</p>
                     </div>
                 </div>
             </div>
