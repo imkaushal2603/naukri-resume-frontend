@@ -1,4 +1,4 @@
-// app/dashboard/layout.tsx
+import { Suspense } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import Footer from "@/components/dashboard/Footer";
@@ -12,7 +12,9 @@ export default function DashboardLayout({
     return (
         <ResumeProvider>
             <div className="flex min-h-screen">
-                <Sidebar />
+                <Suspense fallback={<div className="w-[265px] shrink-0" />}>
+                    <Sidebar />
+                </Suspense>
                 <div className="flex-1 flex flex-col min-w-0 pl-[265px]">
                     <Header />
                     <main className="flex-1 p-8 overflow-y-auto">
