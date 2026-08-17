@@ -48,7 +48,6 @@ export default function Education() {
     const [saving, setSaving] = useState(false);
 
     const fetchList = useCallback(async () => {
-        if (!resumeId) return;
         try {
             const res = await withMinDelay(
                 api.get(`/resume/builder/${resumeId}/education`)
@@ -63,6 +62,7 @@ export default function Education() {
     }, [resumeId]);
 
     useEffect(() => {
+        if (!resumeId) return;
         fetchList();
     }, [fetchList]);
 

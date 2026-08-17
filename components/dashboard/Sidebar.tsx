@@ -1,6 +1,5 @@
 "use client";
 
-import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useResumeId } from "@/hooks/useResumeId";
@@ -29,7 +28,7 @@ const builderNavItems: NavItem[] = [
     { name: "Preview", href: "/templates/resume-builder/preview" },
 ];
 
-function SidebarContent() {
+export default function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -181,13 +180,5 @@ function SidebarContent() {
                 </div>
             )}
         </aside>
-    );
-}
-
-export default function Sidebar() {
-    return (
-        <Suspense fallback={<div className="w-[265px] h-screen bg-white border-r border-gray-200 fixed left-0 top-0" />}>
-            <SidebarContent />
-        </Suspense>
     );
 }

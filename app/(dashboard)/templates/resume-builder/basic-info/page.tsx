@@ -41,9 +41,9 @@ export default function BasicInfoStep() {
 
     useEffect(() => {
         const fetchData = async () => {
+            if (!resumeId) return;
             try {
                 const res = await withMinDelay(api.get(`/resume/builder/${resumeId}/basic-info`));
-                console.log(res)
                 if (res.data.success) {
                     setForm(res.data.basicInfo);
                     if (res.data.basicInfo.profilePhoto) {

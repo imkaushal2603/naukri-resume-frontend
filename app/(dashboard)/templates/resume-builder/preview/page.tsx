@@ -24,7 +24,6 @@ export default function PreviewPage() {
     const [downloading, setDownloading] = useState<"pdf" | "docx" | null>(null);
 
     const fetchPreview = useCallback(async () => {
-        if (!resumeId) return;
         try {
             const previewRes = await withMinDelay(
                 api.get(`/resume/builder/${resumeId}/preview`)
@@ -42,6 +41,7 @@ export default function PreviewPage() {
     }, [resumeId]);
 
     useEffect(() => {
+        if (!resumeId) return;
         fetchPreview();
     }, [fetchPreview]);
 
