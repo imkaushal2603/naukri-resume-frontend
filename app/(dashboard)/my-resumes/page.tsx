@@ -94,6 +94,22 @@ export default function MyResumes() {
         }
     };
 
+    const getImageUrl = (previewPath: string) => {
+        if (!previewPath) return "";
+
+        if (previewPath.startsWith("http://") || previewPath.startsWith("https://")) {
+            return previewPath;
+        }
+
+        const normalizedPath = previewPath.startsWith("/api/")
+            ? previewPath
+            : `/api${previewPath.startsWith("/") ? previewPath : `/${previewPath}`}`;
+
+        const rawBase = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+
+        return `${rawBase}${normalizedPath}`;
+    };
+
     if (loading) {
         return <Loader />;
     }
@@ -140,7 +156,7 @@ export default function MyResumes() {
                                 <div className="relative w-full h-[260px] bg-gray-50 rounded-[6px] overflow-hidden mb-3 border border-gray-100">
                                     {previewPath ? (
                                         <Image
-                                            src={`${backendUrl}${previewPath}`}
+                                            src={getAssetUrl(previewPath)}
                                             alt={resume.name || "Resume Preview"}
                                             fill
                                             className="object-cover"
