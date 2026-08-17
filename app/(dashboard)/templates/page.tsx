@@ -98,10 +98,10 @@ export default function Templates() {
             return previewPath;
         }
 
-        const baseUrl = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
-        const cleanPath = previewPath.startsWith("/") ? previewPath : `/${previewPath}`;
+        const relativePath = previewPath.startsWith("/api/") ? previewPath.slice(4) : previewPath;
+        const baseUrl = backendUrl.replace(/\/$/, "");
 
-        return `${baseUrl}${cleanPath}`;
+        return `${baseUrl}${relativePath}`;
     };
 
     const isEditing = Boolean(resumeId);
