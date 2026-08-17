@@ -135,6 +135,12 @@ export default function BasicInfoStep() {
         }
     };
 
+    const getAssetUrl = (path: string) => {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+        const assetBase = apiBase.replace(/\/api$/, "");
+        return `${assetBase}${path}`;
+    };
+
     if (loading) {
         return <Loader />;
     }
@@ -159,7 +165,7 @@ export default function BasicInfoStep() {
                 <div className="flex items-center gap-[20px] mb-[20px] pb-[30px] border-b border-[#0456FF26]">
                     <div className="relative w-[253px] h-[282px] rounded-[10px] overflow-hidden bg-gray-100 border border-[#0456FF26] flex items-center justify-center shrink-0">
                         {previewUrl ? (
-                            <img src={previewUrl} alt="Profile Preview" className="w-full h-full object-cover" />
+                            <img src={getAssetUrl(previewUrl)} alt="Profile Preview" className="w-full h-full object-cover" />
                         ) : (
                             <span className="text-[12px] text-gray-400 font-medium">No Photo</span>
                         )}
