@@ -156,7 +156,7 @@ export default function MyResumes() {
                                 <div className="relative w-full h-[260px] bg-gray-50 rounded-[6px] overflow-hidden mb-3 border border-gray-100">
                                     {previewPath ? (
                                         <Image
-                                            src={getAssetUrl(previewPath)}
+                                            src={getImageUrl(previewPath)}
                                             alt={resume.name || "Resume Preview"}
                                             fill
                                             className="object-cover"
