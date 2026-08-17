@@ -91,6 +91,19 @@ export default function Templates() {
         }
     };
 
+    const getImageUrl = (previewPath: string) => {
+        if (!previewPath) return "";
+
+        if (previewPath.startsWith("http://") || previewPath.startsWith("https://")) {
+            return previewPath;
+        }
+
+        const baseUrl = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+        const cleanPath = previewPath.startsWith("/") ? previewPath : `/${previewPath}`;
+
+        return `${baseUrl}${cleanPath}`;
+    };
+
     const isEditing = Boolean(resumeId);
     const hasPendingChange = isEditing && selectedTemplateId !== currentTemplateId;
     const showActionButton = isEditing ? hasPendingChange : Boolean(selectedTemplateId);
@@ -136,7 +149,7 @@ export default function Templates() {
                                         )}
                                         {template.preview ? (
                                             <Image
-                                                src={`${backendUrl}${template.preview}`}
+                                                src={getImageUrl(template.preview)}
                                                 alt={template.name}
                                                 width={220}
                                                 height={300}

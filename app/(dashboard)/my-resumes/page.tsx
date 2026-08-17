@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Image from "next/image";
 import api from "@/services/api";
 import Loader from "@/components/ui/Loader";
@@ -15,12 +16,13 @@ function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
 
 interface Resume {
     id: number;
-    title?: string;
+    name?: string;
     createdAt?: string;
     updatedAt?: string;
-    template?: {
+    resume_templates?: {
         id: number;
         name: string;
+        templateKey: string;
         preview?: string;
     };
 }
@@ -29,6 +31,7 @@ export default function MyResumes() {
     const router = useRouter();
     const [resumes, setResumes] = useState<Resume[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [creating, setCreating] = useState<boolean>(false);
     const [deletingId, setDeletingId] = useState<number | null>(null);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -49,6 +52,26 @@ export default function MyResumes() {
     useEffect(() => {
         fetchResumes();
     }, []);
+
+    const handleCreateNewResume = async () => {
+        setCreating(true);
+        try {
+            const res = await api.post("/resume/builder", {});
+            if (res.data.success && res.data.resume?.id) {
+                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.id}`);
+            }
+        } catch (err: any) {
+            const message = err.response?.data?.message;
+            if (message?.includes("only create up to")) {
+                toast.error(`${message} Upgrade your plan to create more.`);
+            } else {
+                toast.error(message || "Failed to create new resume.");
+            }
+            console.error("Failed to create new resume", err.response?.data || err.message);
+        } finally {
+            setCreating(false);
+        }
+    };
 
     const handleEdit = (resumeId: number) => {
         router.push(`/templates/resume-builder/basic-info?resumeId=${resumeId}`);
@@ -84,8 +107,8 @@ export default function MyResumes() {
                         Manage, edit, or delete your existing resume drafts.
                     </p>
                 </div>
-                <button
-                    onClick={() => router.push("/templates")}
+                <button onClick={handleCreateNewResume}
+                    disabled={creating}
                     className="bg-[#0456FF] text-white px-4 py-2 rounded-[6px] font-semibold text-sm hover:bg-[#0344cc] transition-colors"
                 >
                     + Create New Resume
@@ -105,7 +128,8 @@ export default function MyResumes() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {resumes.map((resume) => {
-                        const previewPath = resume.template?.preview;
+                        console.log(resume)
+                        const previewPath = resume.resume_templates?.preview;
                         const isDeleting = deletingId === resume.id;
 
                         return (
@@ -117,7 +141,7 @@ export default function MyResumes() {
                                     {previewPath ? (
                                         <Image
                                             src={`${backendUrl}${previewPath}`}
-                                            alt={resume.title || "Resume Preview"}
+                                            alt={resume.name || "Resume Preview"}
                                             fill
                                             className="object-cover"
                                             sizes="(max-width: 768px) 100vw, 25vw"
@@ -131,7 +155,7 @@ export default function MyResumes() {
 
                                 <div className="mb-4">
                                     <h4 className="font-semibold text-base text-black truncate">
-                                        {resume.title || resume.template?.name || `Resume #${resume.id}`}
+                                        {resume?.name || `Resume #${resume.id}`}
                                     </h4>
                                     {resume.updatedAt && (
                                         <p className="text-xs text-gray-400 mt-1">

@@ -17,7 +17,7 @@ function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
 }
 
 interface BasicInfo {
-    name: string;
+    fullName: string;
     email: string;
     phone: string;
     profilePhoto: string | null;
@@ -42,7 +42,8 @@ export default function BasicInfoStep() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await withMinDelay(api.get("/resume/basic-info"));
+                const res = await withMinDelay(api.get(`/resume/builder/${resumeId}/basic-info`));
+                console.log(res)
                 if (res.data.success) {
                     setForm(res.data.basicInfo);
                     if (res.data.basicInfo.profilePhoto) {
@@ -58,7 +59,7 @@ export default function BasicInfoStep() {
             }
         };
         fetchData();
-    }, []);
+    }, [resumeId]);
 
     const handleChange = (field: keyof BasicInfo, value: string) => {
         setForm((prev) => ({ ...prev, [field]: value }));
@@ -77,7 +78,7 @@ export default function BasicInfoStep() {
         setPreviewUrl(URL.createObjectURL(file));
     };
 
-    const requiredFields: (keyof BasicInfo)[] = ["name", "phone", "country", "state", "city"];
+    const requiredFields: (keyof BasicInfo)[] = ["fullName", "phone", "country", "state", "city"];
 
     const fieldLabels: Record<string, string> = {
         name: "Full Name",
@@ -88,6 +89,11 @@ export default function BasicInfoStep() {
     };
 
     const handleSave = async () => {
+        if (!resumeId) {
+            toast.error("Resume ID missing.");
+            return;
+        }
+
         const missing = requiredFields.filter((field) => !form[field]?.toString().trim());
 
         if (missing.length > 0) {
@@ -111,11 +117,7 @@ export default function BasicInfoStep() {
                 formData.append("profilePhoto", selectedFile);
             }
 
-            if (resumeId) {
-                formData.append("resumeId", String(resumeId));
-            }
-
-            await api.put("/resume/basic-info", formData, {
+            await api.put(`/resume/builder/${resumeId}/basic-info`, formData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
 
@@ -194,7 +196,7 @@ export default function BasicInfoStep() {
                                         <path d="M8 1.9C8.27578 1.9 8.54885 1.95432 8.80364 2.05985C9.05842 2.16539 9.28992 2.32007 9.48492 2.51508C9.67993 2.71008 9.83461 2.94158 9.94015 3.19636C10.0457 3.45115 10.1 3.72422 10.1 4C10.1 4.27578 10.0457 4.54885 9.94015 4.80364C9.83461 5.05842 9.67993 5.28992 9.48492 5.48492C9.28992 5.67993 9.05842 5.83461 8.80364 5.94015C8.54885 6.04568 8.27578 6.1 8 6.1C7.44305 6.1 6.9089 5.87875 6.51508 5.48492C6.12125 5.0911 5.9 4.55695 5.9 4C5.9 3.44305 6.12125 2.9089 6.51508 2.51508C6.9089 2.12125 7.44305 1.9 8 1.9ZM8 10.9C10.97 10.9 14.1 12.36 14.1 13V14.1H1.9V13C1.9 12.36 5.03 10.9 8 10.9ZM8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 9C5.33 9 0 10.34 0 13V16H16V13C16 10.34 10.67 9 8 9Z" fill="#0456FF" />
                                     </svg>
                                 </div>
-                                <input type="text" value={form.name || ""} onChange={(e) => handleChange("name", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                <input type="text" value={form.fullName || ""} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
                         <div className="w-[calc((100%-60px)/3)]">
@@ -205,7 +207,7 @@ export default function BasicInfoStep() {
                                         <path d="M8 1.9C8.27578 1.9 8.54885 1.95432 8.80364 2.05985C9.05842 2.16539 9.28992 2.32007 9.48492 2.51508C9.67993 2.71008 9.83461 2.94158 9.94015 3.19636C10.0457 3.45115 10.1 3.72422 10.1 4C10.1 4.27578 10.0457 4.54885 9.94015 4.80364C9.83461 5.05842 9.67993 5.28992 9.48492 5.48492C9.28992 5.67993 9.05842 5.83461 8.80364 5.94015C8.54885 6.04568 8.27578 6.1 8 6.1C7.44305 6.1 6.9089 5.87875 6.51508 5.48492C6.12125 5.0911 5.9 4.55695 5.9 4C5.9 3.44305 6.12125 2.9089 6.51508 2.51508C6.9089 2.12125 7.44305 1.9 8 1.9ZM8 10.9C10.97 10.9 14.1 12.36 14.1 13V14.1H1.9V13C1.9 12.36 5.03 10.9 8 10.9ZM8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 9C5.33 9 0 10.34 0 13V16H16V13C16 10.34 10.67 9 8 9Z" fill="#0456FF" />
                                     </svg>
                                 </div>
-                                <input type="email" value={form.email || ""} disabled className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                <input type="email" value={form.email || ""} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
                         <div className="w-[calc((100%-60px)/3)]">

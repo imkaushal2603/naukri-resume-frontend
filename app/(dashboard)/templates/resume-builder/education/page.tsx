@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/services/api";
@@ -47,24 +47,31 @@ export default function Education() {
     const [form, setForm] = useState<Education>(emptyForm);
     const [saving, setSaving] = useState(false);
 
-    const fetchList = async () => {
+    const fetchList = useCallback(async () => {
+        if (!resumeId) return;
         try {
-            const res = await withMinDelay(api.get("/resume/education"));
-            if (res.data.success) setList(res.data.education);
+            const res = await withMinDelay(
+                api.get(`/resume/builder/${resumeId}/education`)
+            );
+            if (res.data?.success) setList(res.data.education || []);
         } catch (err) {
             console.error("Failed to load education", err);
             toast.error("Failed to load education.");
         } finally {
             setLoading(false);
         }
-    };
+    }, [resumeId]);
 
     useEffect(() => {
         fetchList();
-    }, []);
+    }, [fetchList]);
 
-    const handleChange = (field: keyof Education, value: any) => {
-        setForm((prev) => ({ ...prev, [field]: value }));
+    const handleChange = <K extends keyof Education>(field: K, value: Education[K]) => {
+        setForm((prev) => ({
+            ...prev,
+            [field]: value,
+            ...(field === "isCurrent" && value === true ? { endDate: "" } : {}),
+        }));
     };
 
     const openAdd = () => {
@@ -93,13 +100,18 @@ export default function Education() {
             return;
         }
 
+        const payload = {
+            ...form,
+            endDate: form.isCurrent ? null : form.endDate,
+        };
+
         setSaving(true);
         try {
             if (editingId && editingId !== "new") {
-                await api.put(`/resume/education/${editingId}`, form);
+                await api.put(`/resume/builder/${resumeId}/education/${editingId}`, payload);
                 toast.success("Education updated successfully!");
             } else {
-                await api.post("/resume/education", form);
+                await api.post(`/resume/builder/${resumeId}/education`, payload);
                 toast.success("Education added successfully!");
             }
             closeForm();
@@ -115,7 +127,7 @@ export default function Education() {
 
     const handleDelete = async (id: number) => {
         try {
-            await api.delete(`/resume/education/${id}`);
+            await api.delete(`/resume/builder/${resumeId}/education/${id}`);
             toast.success("Education removed.");
             await fetchList();
             await refreshProgress();
@@ -137,7 +149,9 @@ export default function Education() {
         <div className="p-5">
             <div className="grid grid-cols-3 gap-[27px] mb-4">
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Course / Degree *</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        Course / Degree *
+                    </label>
                     <input
                         type="text"
                         value={form.degree}
@@ -146,7 +160,9 @@ export default function Education() {
                     />
                 </div>
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Institute *</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        Institute *
+                    </label>
                     <input
                         type="text"
                         value={form.school}
@@ -155,7 +171,9 @@ export default function Education() {
                     />
                 </div>
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Education Level</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        Education Level
+                    </label>
                     <select
                         value={form.educationLevel}
                         onChange={(e) => handleChange("educationLevel", e.target.value)}
@@ -173,7 +191,9 @@ export default function Education() {
             </div>
             <div className="grid grid-cols-3 gap-[27px] mb-4">
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Start Date</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        Start Date
+                    </label>
                     <input
                         type="date"
                         value={form.startDate}
@@ -182,7 +202,9 @@ export default function Education() {
                     />
                 </div>
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">End Date</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        End Date
+                    </label>
                     <input
                         type="date"
                         value={form.endDate}
@@ -192,7 +214,9 @@ export default function Education() {
                     />
                 </div>
                 <div>
-                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Grade / CGPA</label>
+                    <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
+                        Grade / CGPA
+                    </label>
                     <input
                         type="text"
                         value={form.gpa}
@@ -202,7 +226,8 @@ export default function Education() {
                 </div>
             </div>
             <label className="flex items-center gap-2 mb-[30px] text-[13px] font-semibold w-fit cursor-pointer">
-                <input className="w-[18px] h-[18px]"
+                <input
+                    className="w-[18px] h-[18px]"
                     type="checkbox"
                     checked={form.isCurrent}
                     onChange={(e) => handleChange("isCurrent", e.target.checked)}
@@ -240,11 +265,18 @@ export default function Education() {
             <div className="flex-1">
                 <div className="flex justify-between gap-[20px] mb-[45px]">
                     <div className="w-[calc(100%-231px)]">
-                        <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Education</h4>
-                        <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Add your education details. Start with your latest education.</p>
+                        <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">
+                            Education
+                        </h4>
+                        <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">
+                            Add your education details. Start with your latest education.
+                        </p>
                     </div>
                     <div>
-                        <button onClick={openAdd} className="flex gap-[10px] border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300">
+                        <button
+                            onClick={openAdd}
+                            className="flex gap-[10px] border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                 <mask id="mask0_453_830" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="15" height="15">
                                     <path d="M0.75 7.5C0.75 3.7725 3.7725 0.75 7.5 0.75C11.2275 0.75 14.25 3.7725 14.25 7.5C14.25 11.2275 11.2275 14.25 7.5 14.25C3.7725 14.25 0.75 11.2275 0.75 7.5Z" fill="white" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -264,20 +296,30 @@ export default function Education() {
                 )}
                 <div className="space-y-4">
                     {list.map((edu, i) => (
-                        <div key={edu.id}>
+                        <div key={edu.id ?? i}>
                             <div className="border border-[#0456FF26] rounded-[10px]">
                                 <div className="border-b border-[#0456FF26] p-5 flex flex-wrap items-center justify-between">
                                     <div className="flex flex-wrap gap-[10px] items-center">
-                                        <span className="bg-[#0456FF26] font-bold text-[12px] leading-none text-[#0456FF] w-[30px] h-[30px] flex justify-center items-center rounded-full">{String(i + 1).padStart(2, '0')}</span>
-                                        <p className="font-bold text-[12px] leading-none text-[#000024] inline-block">Education {i + 1}</p>
+                                        <span className="bg-[#0456FF26] font-bold text-[12px] leading-none text-[#0456FF] w-[30px] h-[30px] flex justify-center items-center rounded-full">
+                                            {String(i + 1).padStart(2, "0")}
+                                        </span>
+                                        <p className="font-bold text-[12px] leading-none text-[#000024] inline-block">
+                                            Education {i + 1}
+                                        </p>
                                     </div>
                                     <div className="flex flex-wrap items-center gap-[15px]">
-                                        <button onClick={() => editingId === edu.id ? closeForm() : openEdit(edu)} className="border border-[#00002433] w-[30px] h-[28px] flex justify-center items-center rounded-[4px] cursor-pointer">
+                                        <button
+                                            onClick={() => (editingId === edu.id ? closeForm() : openEdit(edu))}
+                                            className="border border-[#00002433] w-[30px] h-[28px] flex justify-center items-center rounded-[4px] cursor-pointer"
+                                        >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                                                 <path d="M1.70782 13.6626H2.92465L11.2716 5.31561L10.0548 4.09878L1.70782 12.4458V13.6626ZM0 15.3704V11.7413L11.2716 0.491C11.4424 0.334449 11.6311 0.213478 11.8378 0.128087C12.0444 0.0426957 12.2613 0 12.4885 0C12.7156 0 12.9362 0.0426957 13.1503 0.128087C13.3643 0.213478 13.5493 0.341565 13.7053 0.512347L14.8794 1.70783C15.0502 1.86438 15.1749 2.04939 15.2534 2.26287C15.332 2.47635 15.371 2.68982 15.3704 2.9033C15.3704 3.13101 15.3314 3.34819 15.2534 3.55484C15.1754 3.76149 15.0508 3.94991 14.8794 4.12013L3.62913 15.3704H0ZM10.6526 4.71787L10.0548 4.09878L11.2716 5.31561L10.6526 4.71787Z" fill="#000024" fillOpacity="0.8" />
                                             </svg>
                                         </button>
-                                        <button onClick={() => handleDelete(edu.id!)} className="border border-[#00002433] w-[30px] h-[28px] flex justify-center items-center rounded-[4px] cursor-pointer">
+                                        <button
+                                            onClick={() => handleDelete(edu.id!)}
+                                            className="border border-[#00002433] w-[30px] h-[28px] flex justify-center items-center rounded-[4px] cursor-pointer"
+                                        >
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
                                                 <path d="M9.77083 3.9375V10.7042C9.77083 11.0755 9.62333 11.4316 9.36078 11.6941C9.09823 11.9567 8.74214 12.1042 8.37083 12.1042H3.00417C2.63286 12.1042 2.27677 11.9567 2.01422 11.6941C1.75167 11.4316 1.60417 11.0755 1.60417 10.7042V3.9375M8.02083 2.1875V1.1375C8.02083 0.7525 7.70583 0.4375 7.32083 0.4375H4.05417C3.66917 0.4375 3.35417 0.7525 3.35417 1.1375V2.1875M8.02083 2.1875H3.35417M8.02083 2.1875H10.9375M3.35417 2.1875H0.4375M5.6875 5.6875V9.1875M7.4375 5.6875V9.1875M3.9375 5.6875V9.1875" stroke="#F31010" strokeWidth="0.875" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                                             </svg>
@@ -285,7 +327,7 @@ export default function Education() {
                                     </div>
                                 </div>
                                 {editingId === edu.id ? (
-                                    <div className="">{renderForm()}</div>
+                                    <div>{renderForm()}</div>
                                 ) : (
                                     <div className="p-5 flex flex-wrap gap-[20px]">
                                         <div className="w-[80px]">
@@ -296,12 +338,15 @@ export default function Education() {
                                             </svg>
                                         </div>
                                         <div className="w-[calc(100%-100px)] flex flex-col gap-y-[10px]">
-                                            <h6 className="font-bold text-[18px] leading-none text-black">{edu.degree}</h6>
+                                            <h6 className="font-bold text-[18px] leading-none text-black">
+                                                {edu.degree}
+                                            </h6>
                                             <p className="flex gap-[8px] font-normal text-[15px] leading-none text-black items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
                                                     <path d="M10.1667 14.3336H2.66667C2.44565 14.3336 2.23369 14.2458 2.07741 14.0895C1.92113 13.9332 1.83333 13.7213 1.83333 13.5002V7.66691M10.1667 14.3336H14.3333C14.5543 14.3336 14.7663 14.2458 14.9226 14.0895C15.0789 13.9332 15.1667 13.7213 15.1667 13.5002V3.50024M10.1667 14.3336V5.16691M10.1667 5.16691V1.83358M10.1667 5.16691L1 7.66691M6 11.0002V14.3336M9.33333 1.00024L16 3.50024M12.25 6.83358H13.0833M12.25 10.1669H13.0833" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                                 </svg>
-                                                {edu.school} {edu.educationLevel && `- ${edu.educationLevel}`}
+                                                {edu.school}{" "}
+                                                {edu.educationLevel && `- ${edu.educationLevel}`}
                                             </p>
                                             <p className="flex gap-[8px] font-normal text-[15px] leading-none text-black items-center">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -318,12 +363,14 @@ export default function Education() {
                                                 {edu.startDate?.slice(0, 4)} -{" "}
                                                 {edu.isCurrent ? "Present" : edu.endDate?.slice(0, 4)}
                                             </p>
-                                            <p className="flex gap-[8px] font-normal text-[15px] leading-none text-black items-center">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
-                                                    <path d="M9.08 0.353333L8.52 0L4.76667 6L1.02 12L1.58667 12.3533L2.14667 12.7067L5.9 6.70667L9.64666 0.706667L9.08 0.353333ZM0 2.68667C0 3.97333 1.04667 5.02 2.33333 5.02C3.62 5.02 4.66667 3.97333 4.66667 2.68667C4.66667 1.4 3.62 0.353333 2.33333 0.353333C1.04667 0.353333 0 1.4 0 2.68667ZM2.33333 1.68667C2.88667 1.68667 3.33333 2.13333 3.33333 2.68667C3.33333 3.24 2.88667 3.68667 2.33333 3.68667C1.78 3.68667 1.33333 3.24 1.33333 2.68667C1.33333 2.13333 1.78 1.68667 2.33333 1.68667ZM6 10.02C6 11.3067 7.04667 12.3533 8.33333 12.3533C9.62 12.3533 10.6667 11.3067 10.6667 10.02C10.6667 8.73333 9.62 7.68667 8.33333 7.68667C7.04667 7.68667 6 8.73333 6 10.02ZM9.33333 10.02C9.33333 10.5733 8.88666 11.02 8.33333 11.02C7.78 11.02 7.33333 10.5733 7.33333 10.02C7.33333 9.46667 7.78 9.02 8.33333 9.02C8.88666 9.02 9.33333 9.46667 9.33333 10.02Z" fill="#0456FF" />
-                                                </svg>
-                                                {edu.gpa}
-                                            </p>
+                                            {edu.gpa && (
+                                                <p className="flex gap-[8px] font-normal text-[15px] leading-none text-black items-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
+                                                        <path d="M9.08 0.353333L8.52 0L4.76667 6L1.02 12L1.58667 12.3533L2.14667 12.7067L5.9 6.70667L9.64666 0.706667L9.08 0.353333ZM0 2.68667C0 3.97333 1.04667 5.02 2.33333 5.02C3.62 5.02 4.66667 3.97333 4.66667 2.68667C4.66667 1.4 3.62 0.353333 2.33333 0.353333C1.04667 0.353333 0 1.4 0 2.68667ZM2.33333 1.68667C2.88667 1.68667 3.33333 2.13333 3.33333 2.68667C3.33333 3.24 2.88667 3.68667 2.33333 3.68667C1.78 3.68667 1.33333 3.24 1.33333 2.68667C1.33333 2.13333 1.78 1.68667 2.33333 1.68667ZM6 10.02C6 11.3067 7.04667 12.3533 8.33333 12.3533C9.62 12.3533 10.6667 11.3067 10.6667 10.02C10.6667 8.73333 9.62 7.68667 8.33333 7.68667C7.04667 7.68667 6 8.73333 6 10.02ZM9.33333 10.02C9.33333 10.5733 8.88666 11.02 8.33333 11.02C7.78 11.02 7.33333 10.5733 7.33333 10.02C7.33333 9.46667 7.78 9.02 8.33333 9.02C8.88666 9.02 9.33333 9.46667 9.33333 10.02Z" fill="#0456FF" />
+                                                    </svg>
+                                                    {edu.gpa}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -343,7 +390,9 @@ export default function Education() {
                         onClick={handlePrevious}
                         className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none"><path d="M1 7L15 7M7 1L1 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
+                            <path d="M1 7L15 7M7 1L1 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                        </svg>
                         Previous
                     </button>
                     <button
@@ -351,7 +400,9 @@ export default function Education() {
                         className="flex gap-[10px] items-center border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50"
                     >
                         Next
-                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none"><path d="M15 7L1 7M9 1L15 7L9 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
+                            <path d="M15 7L1 7M9 1L15 7L9 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
+                        </svg>
                     </button>
                 </div>
             </div>

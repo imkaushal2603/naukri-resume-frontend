@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import api from "@/services/api";
+import { useResumeId } from "@/hooks/useResumeId";
 
 export interface SectionStatus {
     basicInfo: boolean;
@@ -22,6 +23,7 @@ interface ResumeContextType {
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 
 export const ResumeProvider = ({ children }: { children: React.ReactNode }) => {
+    const resumeId = useResumeId();
     const [sections, setSections] = useState<SectionStatus>({
         basicInfo: false,
         education: false,
@@ -31,8 +33,9 @@ export const ResumeProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     const refreshProgress = async () => {
+        if (!resumeId) return;
         try {
-            const res = await api.get("/resume/progress");
+            const res = await api.get(`/resume/builder/${resumeId}/progress`);
             if (res.data?.success) {
                 setSections(res.data.sections);
             }
@@ -43,7 +46,7 @@ export const ResumeProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         refreshProgress();
-    }, []);
+    }, [resumeId]);
 
     const totalSections = Object.keys(sections).length;
     const completedCount = Object.values(sections).filter(Boolean).length;
