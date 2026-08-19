@@ -307,8 +307,22 @@ export default function BasicInfoStep() {
                     </button>
                 </div>
             </div>
-            <div className="w-[280px] shrink-0">
+            <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
                 <ProgressPanel />
+                <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
+                    <div className="flex flex-wrap gap-[10px]">
+                        <div className="w-[40px]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <rect width="40" height="40" rx="4" fill="#0456FF" fillOpacity="0.15" />
+                                <path d="M15 28H19C19 29.1 18.1 30 17 30C15.9 30 15 29.1 15 28ZM13 27H21V25H13V27ZM24.5 17.5C24.5 21.32 21.84 23.36 20.73 24H13.27C12.16 23.36 9.5 21.32 9.5 17.5C9.5 13.36 12.86 10 17 10C21.14 10 24.5 13.36 24.5 17.5ZM22.5 17.5C22.5 14.47 20.03 12 17 12C13.97 12 11.5 14.47 11.5 17.5C11.5 19.97 12.99 21.39 13.85 22H20.15C21.01 21.39 22.5 19.97 22.5 17.5ZM29.37 15.37L28 16L29.37 16.63L30 18L30.63 16.63L32 16L30.63 15.37L30 14L29.37 15.37ZM27 14L27.94 11.94L30 11L27.94 10.06L27 8L26.06 10.06L24 11L26.06 11.94L27 14Z" fill="#0456FF" />
+                            </svg>
+                        </div>
+                        <div className="w-[calc(100%-55px)]">
+                            <h6 className="font-bold text-[15px] leading-[140%] text-[#000024]">Pro Tip</h6>
+                            <p className="font-normal text-[13px] leading-[140%] inline-block text-[#00002499]">A professional photo and complete information can increase your chances of getting hired by <span className="text-[#0456FF] font-bold">3x</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

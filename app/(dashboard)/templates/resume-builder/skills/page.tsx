@@ -117,19 +117,9 @@ export default function SkillsPage() {
         <div className="flex flex-col lg:flex-row gap-6">
             <div className="flex-1">
                 <div className="border border-[#0456FF26] rounded-[10px] p-5">
-                    <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">
-                        Skills
-                    </h4>
-                    <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block mb-[30px]">
-                        Add your skills to showcase your expertise.
-                    </p>
-
-                    <label
-                        htmlFor="skill-input"
-                        className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] block"
-                    >
-                        Add Skill
-                    </label>
+                    <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Skills</h4>
+                    <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block mb-[30px]">Add your skills to showcase your expertise.</p>
+                    <label htmlFor="skill-input" className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] block">Add Skill</label>
                     <div className="flex flex-col sm:flex-row gap-3 mb-6">
                         <input
                             id="skill-input"
@@ -148,10 +138,7 @@ export default function SkillsPage() {
                             {adding ? "Adding..." : "+ Add Skill"}
                         </button>
                     </div>
-
-                    <p className="font-bold text-[12px] leading-none text-[#000024] mb-[12px] block">
-                        Your Skills ({skills.length})
-                    </p>
+                    <p className="font-bold text-[12px] leading-none text-[#000024] mb-[12px] block">Your Skills ({skills.length})</p>
                     <div className="flex flex-wrap gap-2">
                         {skills.length === 0 && (
                             <p className="text-sm text-[#00002480]">No skills added yet.</p>
@@ -225,7 +212,7 @@ export default function SkillsPage() {
                 </div>
             </div>
 
-            <div className="w-full lg:w-[280px] shrink-0">
+            <div className="w-[325px] shrink-0">
                 <ProgressPanel />
             </div>
         </div>

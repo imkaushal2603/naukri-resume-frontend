@@ -400,7 +400,7 @@ export default function ExperiencePage() {
                 </div>
             </div>
 
-            <div className="w-full lg:w-[280px] shrink-0">
+            <div className="w-[325px] shrink-0">
                 <ProgressPanel />
             </div>
         </div>

@@ -407,7 +407,7 @@ export default function Education() {
                 </div>
             </div>
 
-            <div className="w-[280px] shrink-0">
+            <div className="w-[325px] shrink-0">
                 <ProgressPanel />
             </div>
         </div>
