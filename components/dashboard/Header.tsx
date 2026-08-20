@@ -11,7 +11,7 @@ const pageTitles: Record<string, string> = {
     "/ats-checker": "ATS Checker",
     "/cover-letter": "Cover Letter",
     "/support": "Help & Support",
-    "/profile": "Profile Settings",
+    "/plans": "Plans",
 };
 
 export default function Header() {

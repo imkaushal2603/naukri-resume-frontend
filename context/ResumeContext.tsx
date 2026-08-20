@@ -39,6 +39,7 @@ export const ResumeProvider = ({ children }: { children: React.ReactNode }) => {
             if (res.data?.success) {
                 setSections(res.data.sections);
             }
+            api.post(`/resume/builder/${resumeId}/thumbnail`).catch(() => {});
         } catch (err) {
             console.error("Failed to fetch resume progress", err);
         }

@@ -21,6 +21,7 @@ interface Resume {
     updatedAt?: string;
     progressPercentage?: number;
     isDraft?: boolean;
+    previewImage?: string | null;
     resume_templates?: {
         id: number;
         name: string;
@@ -142,13 +143,18 @@ export default function MyResumes() {
             return previewPath;
         }
 
-        const normalizedPath = previewPath.startsWith("/api/")
-            ? previewPath
-            : `/api${previewPath.startsWith("/") ? previewPath : `/${previewPath}`}`;
-
         const rawBase = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
 
-        return `${rawBase}${normalizedPath}`;
+        if (previewPath.startsWith("/api/")) {
+            return `${rawBase}${previewPath}`;
+        }
+
+        if (previewPath.startsWith("/uploads/")) {
+            return `${rawBase}${previewPath}`;
+        }
+
+        const cleanPath = previewPath.startsWith("/") ? previewPath : `/${previewPath}`;
+        return `${rawBase}/api${cleanPath}`;
     };
 
     const handlePreview = async (resumeId: number) => {
@@ -225,19 +231,63 @@ export default function MyResumes() {
                 ) : (
                     <div className="">
                         {paginatedResumes.map((resume) => {
-                            const previewPath = resume.resume_templates?.preview;
+                            const previewPath = resume.previewImage || resume.resume_templates?.preview;
                             const isDeleting = deletingId === resume.id;
                             return (
                                 <div
                                     key={resume.id}
                                     className="border-b border-[#0456FF26] flex flex-wrap items-center gap-5 py-5"
                                 >
-                                    <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px]">
+                                    <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
                                         {previewPath ? (
-                                            <Image
-                                                src={getImageUrl(previewPath)}
-                                                alt={resume.name || "Resume Preview"} width="120" height="123"
-                                            />
+                                            <>
+                                                <Image
+                                                    src={getImageUrl(previewPath)}
+                                                    alt={resume.name || "Resume Preview"}
+                                                    width="120"
+                                                    height="123"
+                                                    className="w-full h-full object-cover rounded-[3px]"
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handlePreview(resume.id)}
+                                                    disabled={previewLoadingId === resume.id}
+                                                    className="absolute inset-0 bg-black/25 group-hover:bg-black/55 transition-all duration-200 flex flex-col items-center justify-center gap-y-1 text-white cursor-pointer rounded-[3px]"
+                                                >
+                                                    {previewLoadingId === resume.id ? (
+                                                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                    ) : (
+                                                        <>
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                width="16"
+                                                                height="12"
+                                                                viewBox="0 0 13 8"
+                                                                fill="none"
+                                                                className="transition-transform duration-200 group-hover:scale-110"
+                                                            >
+                                                                <path
+                                                                    d="M12.1667 4C12.1667 4 9.5545 7.5 6.33333 7.5C3.11217 7.5 0.5 4 0.5 4C0.5 4 3.11217 0.5 6.33333 0.5C9.5545 0.5 12.1667 4 12.1667 4Z"
+                                                                    stroke="#FFFFFF"
+                                                                    strokeMiterlimit="10"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                                <path
+                                                                    d="M7.57044 5.23744C7.24226 5.56563 6.79714 5.75 6.33301 5.75C5.86888 5.75 5.42376 5.56563 5.09557 5.23744C4.76738 4.90925 4.58301 4.46413 4.58301 4C4.58301 3.53587 4.76738 3.09075 5.09557 2.76256C5.42376 2.43437 5.86888 2.25 6.33301 2.25C6.79714 2.25 7.24226 2.43437 7.57044 2.76256C7.89863 3.09075 8.08301 3.53587 8.08301 4C8.08301 4.46413 7.89863 4.90925 7.57044 5.23744Z"
+                                                                    stroke="#FFFFFF"
+                                                                    strokeMiterlimit="10"
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                />
+                                                            </svg>
+                                                            <span className="text-[12px] font-medium opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-[20px] transition-all duration-200 leading-none">
+                                                                Preview
+                                                            </span>
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </>
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">
                                                 No preview available
@@ -248,9 +298,13 @@ export default function MyResumes() {
                                         <div className="w-[calc(50%-10px)]">
                                             <h4 className="font-bold text-[16px] leading-[100%] text-[#000024] flex flex-wrap items-center gap-[10px]">
                                                 {resume?.name || `Resume #${resume.id}`}
-                                                {resume.isDraft && (
-                                                    <span className="bg-[#FF9F0A26] text-[#B45F00] text-[10px] font-semibold px-[10px] py-[6px] rounded-full leading-none">
-                                                        Draft
+                                                {resume.isDraft ? (
+                                                    <span className="bg-[#FF9F0A26] text-[#B45F00] text-[10px] font-semibold px-[10px] py-[6px] rounded-full leading-none uppercase">
+                                                        Pending
+                                                    </span>
+                                                ) : (
+                                                    <span className="bg-[#29B33A26] text-[#29B33A] text-[10px] font-semibold px-[10px] py-[6px] rounded-full leading-none uppercase">
+                                                        Completed
                                                     </span>
                                                 )}
                                             </h4>
@@ -261,18 +315,6 @@ export default function MyResumes() {
                                             )}
                                         </div>
                                         <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center">
-                                            <button
-                                                type="button"
-                                                onClick={() => handlePreview(resume.id)}
-                                                disabled={previewLoadingId === resume.id}
-                                                className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="8" viewBox="0 0 13 8" fill="none">
-                                                    <path d="M12.1667 4C12.1667 4 9.5545 7.5 6.33333 7.5C3.11217 7.5 0.5 4 0.5 4C0.5 4 3.11217 0.5 6.33333 0.5C9.5545 0.5 12.1667 4 12.1667 4Z" stroke="#000024" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                    <path d="M7.57044 5.23744C7.24226 5.56563 6.79714 5.75 6.33301 5.75C5.86888 5.75 5.42376 5.56563 5.09557 5.23744C4.76738 4.90925 4.58301 4.46413 4.58301 4C4.58301 3.53587 4.76738 3.09075 5.09557 2.76256C5.42376 2.43437 5.86888 2.25 6.33301 2.25C6.79714 2.25 7.24226 2.43437 7.57044 2.76256C7.89863 3.09075 8.08301 3.53587 8.08301 4C8.08301 4.46413 7.89863 4.90925 7.57044 5.23744Z" stroke="#000024" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                                Preview
-                                            </button>
                                             <button
                                                 type="button"
                                                 onClick={() => handleEdit(resume.id)}

@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Link from "next/link";
 import api from "@/services/api";
 import Image from "next/image";
@@ -43,10 +45,19 @@ const features: Feature[] = [
 ];
 
 export default function DashboardPage() {
+    const router = useRouter();
     const [showTargetDiv, setShowTargetDiv] = useState(true);
     const [checkingResumes, setCheckingResumes] = useState(true);
     const [loading, setLoading] = useState<boolean>(true);
     const [resumes, setResumes] = useState<Resume[]>([]);
+    const [deletingId, setDeletingId] = useState<number | null>(null);
+    const [previewModal, setPreviewModal] = useState<{ open: boolean; html: string; resumeName: string }>({
+        open: false,
+        html: "",
+        resumeName: "",
+    });
+    const [previewLoadingId, setPreviewLoadingId] = useState<number | null>(null);
+    const [downloadingId, setDownloadingId] = useState<number | null>(null);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     useEffect(() => {
@@ -76,13 +87,103 @@ export default function DashboardPage() {
             return previewPath;
         }
 
-        const normalizedPath = previewPath.startsWith("/api/")
-            ? previewPath
-            : `/api${previewPath.startsWith("/") ? previewPath : `/${previewPath}`}`;
-
         const rawBase = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
 
-        return `${rawBase}${normalizedPath}`;
+        if (previewPath.startsWith("/api/")) {
+            return `${rawBase}${previewPath}`;
+        }
+
+        if (previewPath.startsWith("/uploads/")) {
+            return `${rawBase}${previewPath}`;
+        }
+
+        const cleanPath = previewPath.startsWith("/") ? previewPath : `/${previewPath}`;
+        return `${rawBase}/api${cleanPath}`;
+    };
+
+    const handleEdit = (resumeId: number) => {
+        router.push(`/templates/resume-builder/basic-info?resumeId=${resumeId}`);
+    };
+
+    const handleDelete = (resumeId: number) => {
+        toast("Are you sure you want to delete this resume?", {
+            description: "This action cannot be undone.",
+            duration: Infinity,
+            action: {
+                label: "Delete",
+                onClick: () => confirmDelete(resumeId),
+            },
+            cancel: {
+                label: "Cancel",
+                onClick: () => { },
+            },
+            classNames: {
+                actionButton: "!bg-red-600 !text-white hover:!bg-red-700",
+                cancelButton: "!bg-gray-100 !text-gray-700 hover:!bg-gray-200",
+            },
+        });
+    };
+
+    const confirmDelete = async (resumeId: number) => {
+        setDeletingId(resumeId);
+        try {
+            const res = await api.delete(`/resume/builder/${resumeId}`);
+            if (res.data.success) {
+                setResumes((prev) => prev.filter((r) => r.id !== resumeId));
+                toast.success("Resume deleted successfully.");
+            }
+        } catch (err: any) {
+            console.error("Failed to delete resume", err);
+            toast.error(err.response?.data?.message || "Failed to delete resume.");
+        } finally {
+            setDeletingId(null);
+        }
+    };
+
+    const handlePreview = async (resumeId: number) => {
+        setPreviewLoadingId(resumeId);
+        try {
+            const res = await api.get(`/resume/builder/${resumeId}/preview`);
+            if (res.data.success) {
+                setPreviewModal({
+                    open: true,
+                    html: res.data.html,
+                    resumeName: res.data.resumeName || "Resume",
+                });
+            }
+        } catch (err) {
+            console.error("Failed to load preview", err);
+            toast.error("Failed to load resume preview.");
+        } finally {
+            setPreviewLoadingId(null);
+        }
+    };
+
+    const closePreview = () => {
+        setPreviewModal({ open: false, html: "", resumeName: "" });
+    };
+
+    const handleDownload = async (resumeId: number, resumeName: string) => {
+        setDownloadingId(resumeId);
+        try {
+            const res = await api.get(`/resume/builder/${resumeId}/download?format=pdf`, {
+                responseType: "blob",
+            });
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.setAttribute("download", `${resumeName || "resume"}.pdf`);
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success("Resume downloaded!");
+        } catch (err) {
+            console.error("Failed to download", err);
+            toast.error("Failed to download resume.");
+        } finally {
+            setDownloadingId(null);
+        }
     };
 
     if (loading) {
@@ -93,7 +194,7 @@ export default function DashboardPage() {
 
     return (
         <div className="flex flex-wrap gap-[40px]">
-            <div className="flex flex-col gap-4 w-[calc(70%-20px)] h-fit">
+            <div className="flex flex-col gap-5 w-[calc(70%-20px)] h-fit">
                 {!checkingResumes && showTargetDiv && (
                     <div className="flex flex-wrap items-center gap-[40px] border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                         <div className="w-[calc(55%_-_20px)]">
@@ -110,13 +211,13 @@ export default function DashboardPage() {
                             <span className="border-[0.5px] border-[#29B33A] bg-[#E5F6EB] rounded-[10px] py-[5px] px-[16.5px] font-bold text-[10px] leading-[100%] text-[#29B33A]">Free Plan Active</span>
                             <p className="font-medium text-[18px] leading-[140%] text-[#000024CC] my-[15px]">Create up to 15 resumes for free.<br />Upgrade anytime to unlock downloads, ATS Checker, Cover Letters & Premium Templates.</p>
                             <div className="flex items-center flex-wrap gap-[15px]">
-                                <Link href="" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
+                                <Link href="/my-resumes" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none">
                                         <path d="M5 6.66667H0V5H5V0H6.66667V5H11.6667V6.66667H6.66667V11.6667H5V6.66667Z" fill="currentColor" />
                                     </svg>
                                     Create New Resume
                                 </Link>
-                                <Link href="" className="flex items-center gap-[10px] border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-colors duration-300">
+                                <Link href="/plans" className="flex items-center gap-[10px] border border-[#0456FF] rounded-[5px] py-[11px] px-[26px] font-semibold text-sm leading-none text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-colors duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M8.95763 7.91663C8.53929 7.91663 8.27929 8.18746 8.13596 8.37496C7.99846 8.55329 7.86096 8.80079 7.71929 9.05496L7.61846 9.23663L7.57096 9.31996L7.48846 9.33913L7.29013 9.38413C7.01763 9.44579 6.74596 9.50746 6.53763 9.58913C6.30763 9.67996 5.99596 9.85579 5.87513 10.2433C5.75679 10.6233 5.90596 10.9441 6.03596 11.1516C6.1568 11.3433 6.34013 11.5566 6.52763 11.7758L6.66096 11.9325L6.73013 12.0133L6.7193 12.1258L6.69929 12.3341C6.67096 12.6275 6.64346 12.9108 6.65346 13.1375C6.66346 13.375 6.72013 13.735 7.04346 13.9791C7.3768 14.2325 7.74346 14.1775 7.97679 14.1108C8.19179 14.0491 8.44596 13.9316 8.70179 13.8141L8.88679 13.7283L8.95763 13.6966L8.98846 13.7108L9.02846 13.7283L9.21429 13.8141C9.46929 13.9316 9.72346 14.0491 9.93846 14.1108C10.1718 14.1775 10.5385 14.2325 10.8718 13.98C11.1943 13.735 11.2518 13.375 11.2618 13.1375C11.2718 12.9108 11.2451 12.6266 11.216 12.3333L11.196 12.1258L11.186 12.0133C11.2026 11.9916 11.2254 11.9647 11.2543 11.9325L11.3876 11.7758C11.5751 11.5566 11.7585 11.3425 11.8793 11.1508C12.0093 10.9441 12.1585 10.6233 12.0401 10.2425C11.9201 9.85663 11.6076 9.67996 11.3776 9.58913C11.1693 9.50746 10.8976 9.44579 10.6251 9.38413L10.4268 9.33913L10.3435 9.31996L10.2968 9.23663L10.196 9.05496C10.0543 8.80079 9.9168 8.55329 9.7793 8.37496C9.63596 8.18746 9.37596 7.91663 8.95763 7.91663ZM8.79179 9.69829C8.85402 9.58496 8.90929 9.4869 8.95763 9.40413C9.00541 9.4869 9.06068 9.58496 9.12346 9.69829L9.20513 9.84496L9.22429 9.87829C9.28929 9.99829 9.39763 10.1966 9.57846 10.3341C9.76263 10.4741 9.98513 10.5225 10.1143 10.5508L10.151 10.5591L10.3093 10.5941C10.456 10.6275 10.5751 10.6541 10.676 10.68C10.6101 10.7616 10.5243 10.8625 10.4126 10.9933L10.3043 11.12L10.2793 11.1491C10.1893 11.2525 10.0443 11.42 9.97679 11.6358C9.91013 11.8491 9.93346 12.0691 9.94763 12.2075L9.9518 12.2466L9.96846 12.4158C9.98346 12.5725 9.99513 12.6975 10.0035 12.7991C9.91596 12.7616 9.81763 12.7158 9.70013 12.6616L9.55096 12.5933L9.51763 12.5775C9.39763 12.5208 9.19013 12.4233 8.95763 12.4233C8.72513 12.4233 8.51763 12.5208 8.39763 12.5775L8.3643 12.5933L8.21513 12.6616C8.09902 12.7155 7.99791 12.7616 7.91179 12.8C7.92013 12.6975 7.93179 12.5725 7.94679 12.4158L7.96346 12.2466L7.96763 12.2075C7.9818 12.0691 8.00513 11.8491 7.93846 11.6358C7.8718 11.4191 7.72596 11.2525 7.63596 11.1491L7.61096 11.12L7.50263 10.9933C7.41363 10.8899 7.32585 10.7854 7.23929 10.68C7.34013 10.655 7.4593 10.6275 7.60596 10.5941L7.76429 10.5583L7.80096 10.55C7.93013 10.5225 8.15263 10.4741 8.3368 10.3333C8.51763 10.1966 8.62596 9.99829 8.69096 9.87913L8.71013 9.84579L8.79179 9.69829Z" fill="currentColor" />
                                         <path fillRule="evenodd" clipRule="evenodd" d="M8.95782 0C8.36948 0 7.99532 0.416667 7.74365 0.789167C7.48865 1.16833 7.22282 1.71417 6.90698 2.36083L5.02115 6.225C4.83865 6.59833 4.72115 6.8375 4.61948 7.00333C4.58657 7.0612 4.54684 7.11492 4.50115 7.16333C4.47835 7.17342 4.45357 7.17826 4.42865 7.1775C4.38206 7.148 4.33851 7.11394 4.29865 7.07583C4.16365 6.95083 3.99532 6.76 3.72865 6.45667L3.70448 6.42917C3.22782 5.88583 2.83782 5.44167 2.51615 5.14167C2.35952 4.98899 2.18523 4.85555 1.99698 4.74417C1.79164 4.62097 1.55335 4.56394 1.31448 4.58083C1.1226 4.59913 0.936287 4.65549 0.766444 4.74664C0.5966 4.83779 0.446635 4.96188 0.325316 5.11167C0.0294826 5.46917 -0.00385071 5.96917 0.000315953 6.40083C0.00364929 6.8675 0.0619826 7.48667 0.133649 8.25667L0.331983 10.3583C0.486149 11.9967 0.606983 13.2792 0.815316 14.2758C1.02865 15.2908 1.34865 16.095 1.96115 16.72C2.58198 17.3558 3.34448 17.6458 4.28782 17.7842C5.19448 17.9167 6.34032 17.9167 7.77532 17.9167H10.1403C11.5753 17.9167 12.7211 17.9167 13.6278 17.7833C14.5711 17.6458 15.3336 17.3558 15.9545 16.72C16.5661 16.095 16.887 15.2908 17.0995 14.2758C17.3086 13.2792 17.4295 11.9967 17.5836 10.3583L17.782 8.25667C17.8545 7.48667 17.9128 6.8675 17.9153 6.40083C17.9195 5.96917 17.8861 5.46917 17.5903 5.11167C17.469 4.96188 17.319 4.83779 17.1492 4.74664C16.9793 4.65549 16.793 4.59913 16.6012 4.58083C16.3623 4.56394 16.124 4.62097 15.9186 4.74417C15.7304 4.85555 15.5561 4.98899 15.3995 5.14167C15.0778 5.44167 14.6878 5.88583 14.2112 6.42917L14.1861 6.45667C13.9195 6.76 13.752 6.95083 13.617 7.07583C13.5774 7.1139 13.5341 7.14795 13.4878 7.1775C13.4626 7.17839 13.4375 7.17354 13.4145 7.16333C13.3688 7.11492 13.3291 7.0612 13.2961 7.00333C13.1945 6.8375 13.077 6.59833 12.8945 6.225L11.0086 2.36083C10.6928 1.71333 10.427 1.16833 10.172 0.789167C9.92032 0.415833 9.54698 0 8.95782 0ZM8.00865 2.95333C8.35198 2.25 8.58032 1.785 8.78032 1.4875C8.83103 1.40798 8.89057 1.33446 8.95782 1.26833C8.99115 1.29917 9.04948 1.36167 9.13532 1.4875C9.33532 1.785 9.56365 2.25 9.90698 2.95333L11.7845 6.8C11.9495 7.13917 12.0936 7.43333 12.2312 7.65833C12.3728 7.8875 12.5578 8.13167 12.8478 8.2775C13.1086 8.40917 13.4028 8.4575 13.6945 8.41083C14.022 8.35917 14.2703 8.17333 14.4653 7.99333C14.6545 7.81833 14.8653 7.57833 15.1053 7.305L15.1261 7.28167C15.6328 6.70417 15.982 6.3075 16.2528 6.055C16.3861 5.93 16.4745 5.86583 16.5286 5.83583C16.5648 5.85041 16.5971 5.87324 16.6228 5.9025L16.6236 5.90833C16.632 5.93333 16.6686 6.05167 16.6653 6.39167C16.6628 6.7975 16.6103 7.3625 16.5345 8.17167L16.3428 10.2008C16.1845 11.8875 16.0695 13.1 15.8761 14.0192C15.6853 14.9275 15.4345 15.4642 15.0611 15.8467C14.6961 16.22 14.2278 16.4333 13.447 16.5467C12.6411 16.665 11.587 16.6667 10.0911 16.6667H7.82448C6.32865 16.6667 5.27448 16.665 4.46865 16.5475C3.68782 16.4333 3.21948 16.22 2.85448 15.8467C2.48115 15.4642 2.22948 14.9275 2.03948 14.0192C1.84615 13.1 1.73115 11.8875 1.57282 10.2008L1.38115 8.17167C1.30615 7.3625 1.25282 6.79667 1.24948 6.39083C1.24698 6.05167 1.28448 5.9325 1.29115 5.9075L1.29365 5.90333C1.31875 5.87368 1.35042 5.85028 1.38615 5.835C1.44032 5.86583 1.52865 5.93 1.66282 6.055C1.93365 6.3075 2.28282 6.70417 2.78948 7.28167L2.81032 7.305C3.05032 7.57833 3.26115 7.81917 3.45032 7.99333C3.64532 8.17333 3.89365 8.36 4.22115 8.41167C4.51282 8.4575 4.80698 8.40917 5.06782 8.2775C5.35782 8.13167 5.54282 7.8875 5.68448 7.65833C5.82198 7.43333 5.96615 7.13917 6.13115 6.8L8.00865 2.95333ZM8.99448 1.24167L8.98615 1.245C8.99171 1.24167 8.99448 1.24056 8.99448 1.24167Z" fill="currentColor" />
@@ -172,7 +273,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className="w-[calc(100%-50px)] leading-[0]">
                                         <h6 className="font-medium text-[16px] leading-[100%] text-[#000024] mb-[8px]">Resume Created</h6>
-                                        <h6 className="font-medium text-[16px] leading-[100%] text-[#000024] mb-[8px]">0/15</h6>
+                                        <h6 className="font-medium text-[16px] leading-[100%] text-[#000024] mb-[8px]">{resumes.length}/15</h6>
                                         <p className="font-medium text-[12px] leading-[100%] text-[#000024CC] inline-block">Resume Limit</p>
                                     </div>
                                 </div>
@@ -283,14 +384,17 @@ export default function DashboardPage() {
                                     <p className="inline-block font-medium text-[16px] leading-[130%] text-[#000024B2]">To download, check ATS score, generate cover letters, access premium templates or create more than 15 resumes, please upgrade your plan.</p>
                                 </div>
                                 <div className="w-[123px]">
-                                    <Link href="" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View Plans</Link>
+                                    <Link href="/plans" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View Plans</Link>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
-                    <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[10px]">My Resumes</h4>
+                    <div className="flex flex-wrap items-center justify-between gap-5">
+                        <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[10px]">My Resumes</h4>
+                        <Link href="/my-resumes" className="inline-block items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300">View All</Link>
+                    </div>
                     {displayedResumes.length === 0 ? (
                         <div className="flex flex-wrap gap-[10px] justify-center items-center">
                             <div>
@@ -319,39 +423,130 @@ export default function DashboardPage() {
                         </div>
                     ) : (
                         <div className="flex flex-col gap-4">
-                            {displayedResumes.map((resume: any) => {
-                                const previewPath = resume.resume_templates?.preview;
-
+                            {displayedResumes.map((resume: any, index) => {
+                                const previewPath = resume.previewImage || resume.resume_templates?.preview;
+                                const isDeleting = deletingId === resume.id;
                                 return (
-                                    <Link
+                                    <div
                                         key={resume.id}
-                                        href={`/templates/resume-builder/basic-info?resumeId=${resume.id}`}
-                                        className="flex items-center gap-4 border border-[#0456FF26] rounded-[8px] p-3 hover:shadow-md transition-all duration-200"
+                                        className={`${index === 0 ? "border-b border-[#0456FF26] py-5" : ""} flex flex-wrap items-center gap-5`}
                                     >
-                                        <div className="w-[60px] h-[80px] shrink-0 bg-[#F9F8FD] border border-[#CACACA80] rounded-[5px] overflow-hidden flex items-center justify-center">
+                                        <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
                                             {previewPath ? (
-                                                <Image
-                                                    src={getImageUrl(previewPath)}
-                                                    alt={resume.name || "Resume Preview"}
-                                                    width={60}
-                                                    height={80}
-                                                    className="object-cover w-full h-full"
-                                                />
+                                                <>
+                                                    <Image
+                                                        src={getImageUrl(previewPath)}
+                                                        alt={resume.name || "Resume Preview"}
+                                                        width="120"
+                                                        height="123"
+                                                        className="w-full h-full object-cover rounded-[3px]"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handlePreview(resume.id)}
+                                                        disabled={previewLoadingId === resume.id}
+                                                        className="absolute inset-0 bg-black/25 group-hover:bg-black/55 transition-all duration-200 flex flex-col items-center justify-center gap-y-1 text-white cursor-pointer rounded-[3px]"
+                                                    >
+                                                        {previewLoadingId === resume.id ? (
+                                                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                                        ) : (
+                                                            <>
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    width="16"
+                                                                    height="12"
+                                                                    viewBox="0 0 13 8"
+                                                                    fill="none"
+                                                                    className="transition-transform duration-200 group-hover:scale-110"
+                                                                >
+                                                                    <path
+                                                                        d="M12.1667 4C12.1667 4 9.5545 7.5 6.33333 7.5C3.11217 7.5 0.5 4 0.5 4C0.5 4 3.11217 0.5 6.33333 0.5C9.5545 0.5 12.1667 4 12.1667 4Z"
+                                                                        stroke="#FFFFFF"
+                                                                        strokeMiterlimit="10"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                    <path
+                                                                        d="M7.57044 5.23744C7.24226 5.56563 6.79714 5.75 6.33301 5.75C5.86888 5.75 5.42376 5.56563 5.09557 5.23744C4.76738 4.90925 4.58301 4.46413 4.58301 4C4.58301 3.53587 4.76738 3.09075 5.09557 2.76256C5.42376 2.43437 5.86888 2.25 6.33301 2.25C6.79714 2.25 7.24226 2.43437 7.57044 2.76256C7.89863 3.09075 8.08301 3.53587 8.08301 4C8.08301 4.46413 7.89863 4.90925 7.57044 5.23744Z"
+                                                                        stroke="#FFFFFF"
+                                                                        strokeMiterlimit="10"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                                <span className="text-[12px] font-medium opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-[20px] transition-all duration-200 leading-none">
+                                                                    Preview
+                                                                </span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                </>
                                             ) : (
-                                                <span className="text-[10px] text-gray-400">No preview</span>
+                                                <div className="w-full h-full flex items-center justify-center text-xs text-gray-400">
+                                                    No preview available
+                                                </div>
                                             )}
                                         </div>
-                                        <div className="flex-1">
-                                            <h5 className="font-bold text-[16px] leading-[100%] text-[#000024]">
-                                                {resume.name || `Resume #${resume.id}`}
-                                            </h5>
-                                            {resume.updatedAt && (
-                                                <p className="font-medium text-[13px] leading-[130%] text-[#000024B2] mt-[5px]">
-                                                    Updated {new Date(resume.updatedAt).toLocaleDateString()}
-                                                </p>
-                                            )}
+                                        <div className="w-[calc(100%-140px)] flex flex-wrap items-center gap-5">
+                                            <div className="w-[calc(50%-10px)]">
+                                                <h4 className="font-bold text-[16px] leading-[100%] text-[#000024] flex flex-wrap items-center gap-[10px]">
+                                                    {resume?.name || `Resume #${resume.id}`}
+                                                    {resume.isDraft ? (
+                                                        <span className="bg-[#FF9F0A26] text-[#B45F00] text-[10px] font-semibold px-[10px] py-[6px] rounded-full leading-none uppercase">
+                                                            Pending
+                                                        </span>
+                                                    ) : (
+                                                        <span className="bg-[#29B33A26] text-[#29B33A] text-[10px] font-semibold px-[10px] py-[6px] rounded-full leading-none uppercase">
+                                                            Completed
+                                                        </span>
+                                                    )}
+                                                </h4>
+                                                {resume.updatedAt && (
+                                                    <p className="font-medium text-[14px] leading-[130%] text-[#000024B2] my-[5px]">
+                                                        Updated {new Date(resume.updatedAt).toLocaleDateString()}
+                                                    </p>
+                                                )}
+                                            </div>
+                                            <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleEdit(resume.id)}
+                                                    className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
+                                                        <path d="M5.83333 0C5.98201 0.000164913 6.12502 0.0570962 6.23313 0.159162C6.34124 0.261227 6.4063 0.400723 6.41502 0.549147C6.42373 0.697571 6.37544 0.843721 6.28001 0.957735C6.18458 1.07175 6.04922 1.14502 5.90158 1.16258L5.83333 1.16667H1.16667V9.33333H9.33333V4.66667C9.3335 4.51799 9.39043 4.37498 9.49249 4.26687C9.59456 4.15876 9.73406 4.0937 9.88248 4.08498C10.0309 4.07627 10.1771 4.12456 10.2911 4.21999C10.4051 4.31541 10.4784 4.45078 10.4959 4.59842L10.5 4.66667V9.33333C10.5001 9.62767 10.3889 9.91116 10.1888 10.127C9.98866 10.3428 9.71434 10.475 9.42083 10.4971L9.33333 10.5H1.16667C0.87233 10.5001 0.588836 10.3889 0.373014 10.1888C0.157191 9.98866 0.024992 9.71434 0.00291679 9.42083L5.84897e-08 9.33333V1.16667C-9.30879e-05 0.87233 0.11107 0.588836 0.311207 0.373014C0.511343 0.157191 0.785659 0.0249919 1.07917 0.00291673L1.16667 0H5.83333ZM9.47508 0.200083C9.58006 0.0954637 9.72092 0.0347238 9.86906 0.0302003C10.0172 0.0256767 10.1615 0.0777088 10.2727 0.175728C10.3838 0.273748 10.4535 0.410405 10.4676 0.557943C10.4816 0.705482 10.439 0.852838 10.3483 0.970083L10.2999 1.0255L4.52492 6.79992C4.41994 6.90454 4.27908 6.96528 4.13094 6.9698C3.98281 6.97432 3.8385 6.92229 3.72734 6.82427C3.61617 6.72625 3.54649 6.58959 3.53243 6.44206C3.51838 6.29452 3.56101 6.14716 3.65167 6.02992L3.70008 5.97508L9.47508 0.200083Z" fill="#000024" />
+                                                    </svg>
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleDownload(resume.id, resume.name || `Resume-${resume.id}`)}
+                                                    disabled={downloadingId === resume.id}
+                                                    className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#29B33A] cursor-pointer"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                        <path d="M7 10.577L3.461 7.039L4.169 6.319L6.5 8.65V0H7.5V8.65L9.83 6.32L10.539 7.039L7 10.577ZM1.616 14C1.15533 14 0.771 13.846 0.463 13.538C0.155 13.23 0.000666667 12.8453 0 12.384V9.961H1V12.384C1 12.538 1.064 12.6793 1.192 12.808C1.32 12.9367 1.461 13.0007 1.615 13H12.385C12.5383 13 12.6793 12.936 12.808 12.808C12.9367 12.68 13.0007 12.5387 13 12.384V9.961H14V12.384C14 12.8447 13.846 13.229 13.538 13.537C13.23 13.845 12.8453 13.9993 12.384 14H1.616Z" fill="#29B33A" />
+                                                    </svg>
+                                                    Download
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    disabled={isDeleting}
+                                                    onClick={() => handleDelete(resume.id)}
+                                                    className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none">
+                                                        <path d="M10 12V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M14 12V17" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M4 7H20" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M6 10V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V10" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                        <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                    Delete
+                                                </button>
+                                            </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 );
                             })}
                         </div>
@@ -493,7 +688,7 @@ export default function DashboardPage() {
                         </li>
                     </ul>
                     <div>
-                        <Link href="" className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
+                        <Link href="/plans" className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M8.95763 7.91663C8.53929 7.91663 8.27929 8.18746 8.13596 8.37496C7.99846 8.55329 7.86096 8.80079 7.71929 9.05496L7.61846 9.23663L7.57096 9.31996L7.48846 9.33913L7.29013 9.38413C7.01763 9.44579 6.74596 9.50746 6.53763 9.58913C6.30763 9.67996 5.99596 9.85579 5.87513 10.2433C5.75679 10.6233 5.90596 10.9441 6.03596 11.1516C6.1568 11.3433 6.34013 11.5566 6.52763 11.7758L6.66096 11.9325L6.73013 12.0133L6.7193 12.1258L6.69929 12.3341C6.67096 12.6275 6.64346 12.9108 6.65346 13.1375C6.66346 13.375 6.72013 13.735 7.04346 13.9791C7.3768 14.2325 7.74346 14.1775 7.97679 14.1108C8.19179 14.0491 8.44596 13.9316 8.70179 13.8141L8.88679 13.7283L8.95763 13.6966L8.98846 13.7108L9.02846 13.7283L9.21429 13.8141C9.46929 13.9316 9.72346 14.0491 9.93846 14.1108C10.1718 14.1775 10.5385 14.2325 10.8718 13.98C11.1943 13.735 11.2518 13.375 11.2618 13.1375C11.2718 12.9108 11.2451 12.6266 11.216 12.3333L11.196 12.1258L11.186 12.0133C11.2026 11.9916 11.2254 11.9647 11.2543 11.9325L11.3876 11.7758C11.5751 11.5566 11.7585 11.3425 11.8793 11.1508C12.0093 10.9441 12.1585 10.6233 12.0401 10.2425C11.9201 9.85663 11.6076 9.67996 11.3776 9.58913C11.1693 9.50746 10.8976 9.44579 10.6251 9.38413L10.4268 9.33913L10.3435 9.31996L10.2968 9.23663L10.196 9.05496C10.0543 8.80079 9.9168 8.55329 9.7793 8.37496C9.63596 8.18746 9.37596 7.91663 8.95763 7.91663ZM8.79179 9.69829C8.85402 9.58496 8.90929 9.4869 8.95763 9.40413C9.00541 9.4869 9.06068 9.58496 9.12346 9.69829L9.20513 9.84496L9.22429 9.87829C9.28929 9.99829 9.39763 10.1966 9.57846 10.3341C9.76263 10.4741 9.98513 10.5225 10.1143 10.5508L10.151 10.5591L10.3093 10.5941C10.456 10.6275 10.5751 10.6541 10.676 10.68C10.6101 10.7616 10.5243 10.8625 10.4126 10.9933L10.3043 11.12L10.2793 11.1491C10.1893 11.2525 10.0443 11.42 9.97679 11.6358C9.91013 11.8491 9.93346 12.0691 9.94763 12.2075L9.9518 12.2466L9.96846 12.4158C9.98346 12.5725 9.99513 12.6975 10.0035 12.7991C9.91596 12.7616 9.81763 12.7158 9.70013 12.6616L9.55096 12.5933L9.51763 12.5775C9.39763 12.5208 9.19013 12.4233 8.95763 12.4233C8.72513 12.4233 8.51763 12.5208 8.39763 12.5775L8.3643 12.5933L8.21513 12.6616C8.09902 12.7155 7.99791 12.7616 7.91179 12.8C7.92013 12.6975 7.93179 12.5725 7.94679 12.4158L7.96346 12.2466L7.96763 12.2075C7.9818 12.0691 8.00513 11.8491 7.93846 11.6358C7.8718 11.4191 7.72596 11.2525 7.63596 11.1491L7.61096 11.12L7.50263 10.9933C7.41363 10.8899 7.32585 10.7854 7.23929 10.68C7.34013 10.655 7.4593 10.6275 7.60596 10.5941L7.76429 10.5583L7.80096 10.55C7.93013 10.5225 8.15263 10.4741 8.3368 10.3333C8.51763 10.1966 8.62596 9.99829 8.69096 9.87913L8.71013 9.84579L8.79179 9.69829Z" fill="currentColor" />
                                 <path fillRule="evenodd" clipRule="evenodd" d="M8.95782 0C8.36948 0 7.99532 0.416667 7.74365 0.789167C7.48865 1.16833 7.22282 1.71417 6.90698 2.36083L5.02115 6.225C4.83865 6.59833 4.72115 6.8375 4.61948 7.00333C4.58657 7.0612 4.54684 7.11492 4.50115 7.16333C4.47835 7.17342 4.45357 7.17826 4.42865 7.1775C4.38206 7.148 4.33851 7.11394 4.29865 7.07583C4.16365 6.95083 3.99532 6.76 3.72865 6.45667L3.70448 6.42917C3.22782 5.88583 2.83782 5.44167 2.51615 5.14167C2.35952 4.98899 2.18523 4.85555 1.99698 4.74417C1.79164 4.62097 1.55335 4.56394 1.31448 4.58083C1.1226 4.59913 0.936287 4.65549 0.766444 4.74664C0.5966 4.83779 0.446635 4.96188 0.325316 5.11167C0.0294826 5.46917 -0.00385071 5.96917 0.000315953 6.40083C0.00364929 6.8675 0.0619826 7.48667 0.133649 8.25667L0.331983 10.3583C0.486149 11.9967 0.606983 13.2792 0.815316 14.2758C1.02865 15.2908 1.34865 16.095 1.96115 16.72C2.58198 17.3558 3.34448 17.6458 4.28782 17.7842C5.19448 17.9167 6.34032 17.9167 7.77532 17.9167H10.1403C11.5753 17.9167 12.7211 17.9167 13.6278 17.7833C14.5711 17.6458 15.3336 17.3558 15.9545 16.72C16.5661 16.095 16.887 15.2908 17.0995 14.2758C17.3086 13.2792 17.4295 11.9967 17.5836 10.3583L17.782 8.25667C17.8545 7.48667 17.9128 6.8675 17.9153 6.40083C17.9195 5.96917 17.8861 5.46917 17.5903 5.11167C17.469 4.96188 17.319 4.83779 17.1492 4.74664C16.9793 4.65549 16.793 4.59913 16.6012 4.58083C16.3623 4.56394 16.124 4.62097 15.9186 4.74417C15.7304 4.85555 15.5561 4.98899 15.3995 5.14167C15.0778 5.44167 14.6878 5.88583 14.2112 6.42917L14.1861 6.45667C13.9195 6.76 13.752 6.95083 13.617 7.07583C13.5774 7.1139 13.5341 7.14795 13.4878 7.1775C13.4626 7.17839 13.4375 7.17354 13.4145 7.16333C13.3688 7.11492 13.3291 7.0612 13.2961 7.00333C13.1945 6.8375 13.077 6.59833 12.8945 6.225L11.0086 2.36083C10.6928 1.71333 10.427 1.16833 10.172 0.789167C9.92032 0.415833 9.54698 0 8.95782 0ZM8.00865 2.95333C8.35198 2.25 8.58032 1.785 8.78032 1.4875C8.83103 1.40798 8.89057 1.33446 8.95782 1.26833C8.99115 1.29917 9.04948 1.36167 9.13532 1.4875C9.33532 1.785 9.56365 2.25 9.90698 2.95333L11.7845 6.8C11.9495 7.13917 12.0936 7.43333 12.2312 7.65833C12.3728 7.8875 12.5578 8.13167 12.8478 8.2775C13.1086 8.40917 13.4028 8.4575 13.6945 8.41083C14.022 8.35917 14.2703 8.17333 14.4653 7.99333C14.6545 7.81833 14.8653 7.57833 15.1053 7.305L15.1261 7.28167C15.6328 6.70417 15.982 6.3075 16.2528 6.055C16.3861 5.93 16.4745 5.86583 16.5286 5.83583C16.5648 5.85041 16.5971 5.87324 16.6228 5.9025L16.6236 5.90833C16.632 5.93333 16.6686 6.05167 16.6653 6.39167C16.6628 6.7975 16.6103 7.3625 16.5345 8.17167L16.3428 10.2008C16.1845 11.8875 16.0695 13.1 15.8761 14.0192C15.6853 14.9275 15.4345 15.4642 15.0611 15.8467C14.6961 16.22 14.2278 16.4333 13.447 16.5467C12.6411 16.665 11.587 16.6667 10.0911 16.6667H7.82448C6.32865 16.6667 5.27448 16.665 4.46865 16.5475C3.68782 16.4333 3.21948 16.22 2.85448 15.8467C2.48115 15.4642 2.22948 14.9275 2.03948 14.0192C1.84615 13.1 1.73115 11.8875 1.57282 10.2008L1.38115 8.17167C1.30615 7.3625 1.25282 6.79667 1.24948 6.39083C1.24698 6.05167 1.28448 5.9325 1.29115 5.9075L1.29365 5.90333C1.31875 5.87368 1.35042 5.85028 1.38615 5.835C1.44032 5.86583 1.52865 5.93 1.66282 6.055C1.93365 6.3075 2.28282 6.70417 2.78948 7.28167L2.81032 7.305C3.05032 7.57833 3.26115 7.81917 3.45032 7.99333C3.64532 8.17333 3.89365 8.36 4.22115 8.41167C4.51282 8.4575 4.80698 8.40917 5.06782 8.2775C5.35782 8.13167 5.54282 7.8875 5.68448 7.65833C5.82198 7.43333 5.96615 7.13917 6.13115 6.8L8.00865 2.95333ZM8.99448 1.24167L8.98615 1.245C8.99171 1.24167 8.99448 1.24056 8.99448 1.24167Z" fill="currentColor" />
@@ -557,6 +752,19 @@ export default function DashboardPage() {
                     </ul>
                 </div>
             </div>
+            {previewModal.open && (
+                <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6" onClick={closePreview}>
+                    <div className="bg-white rounded-[10px] w-full max-w-[850px] max-h-[90vh] overflow-hidden flex flex-col" onClick={(e) => e.stopPropagation()}>
+                        <div className="flex justify-between items-center p-4 border-b border-[#0456FF26]">
+                            <h4 className="font-bold text-[16px]">{previewModal.resumeName}</h4>
+                            <button onClick={closePreview} className="text-[#00002480] cursor-pointer hover:text-black text-xl leading-none">×</button>
+                        </div>
+                        <div className="flex-1">
+                            <iframe srcDoc={previewModal.html} className="w-full" style={{ height: "80vh", border: "none" }} title="Resume Preview" />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

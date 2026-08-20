@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useResumeId } from "@/hooks/useResumeId";
 
 interface NavItem {
@@ -29,7 +29,6 @@ const builderNavItems: NavItem[] = [
 ];
 
 export default function Sidebar() {
-    const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const hookResumeId = useResumeId();
@@ -175,7 +174,7 @@ export default function Sidebar() {
                         </svg>
                         <p className="text-[16px] leading-none font-bold text-[#000000]">Upgrade to Premium</p>
                         <p className="text-[14px] leading-[140%] font-medium text-[#000024CC]">Unlock powerful features to build job-winning resumes and get hired faster.</p>
-                        <Link href="/dashboard/upgrade" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View all Plans</Link>
+                        <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View all Plans</Link>
                     </div>
                 </div>
             )}
