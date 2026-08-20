@@ -7,6 +7,7 @@ import Link from "next/link";
 import api from "@/services/api";
 import Image from "next/image";
 import Loader from "@/components/ui/Loader";
+import MembershipPaymentButton from "@/components/MembershipPaymentButton";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
@@ -765,6 +766,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             )}
+            <MembershipPaymentButton />
         </div>
     );
 }
