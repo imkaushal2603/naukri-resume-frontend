@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import api from "@/services/api";
 import Loader from "@/components/ui/Loader";
+import MembershipPaymentButton from "@/components/MembershipPaymentButton";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
@@ -483,6 +484,7 @@ export default function DashboardPage() {
                     </ul>
                 </div>
             </div>
+            <MembershipPaymentButton />
         </div>
     );
 }
