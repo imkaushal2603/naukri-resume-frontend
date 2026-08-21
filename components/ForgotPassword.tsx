@@ -15,12 +15,9 @@ export default function ForgotPassword({
     onClose,
     onOpenLogin,
 }: ForgotPasswordProps) {
-    const [step, setStep] = useState<1 | 2>(1);
     const [email, setEmail] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     if (!isOpen) return null;
 
@@ -31,36 +28,10 @@ export default function ForgotPassword({
 
         try {
             await api.post("/auth/forgot-password", { email });
-            toast.success("Verification code sent to your email!");
-            setStep(2);
+            toast.success("Password reset link sent to your email!");
+            setIsSubmitted(true);
         } catch (err: any) {
-            const errorMsg =
-                err.response?.data?.message || "Failed to process request. Please try again.";
-            toast.error(errorMsg);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleResetPassword = async (e: React.FormEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        if (newPassword !== confirmPassword) {
-            toast.error("Passwords do not match.");
-            return;
-        }
-
-        setLoading(true);
-
-        try {
-            await api.post("/auth/reset-password", { email, newPassword });
-            toast.success("Password reset successfully! Please log in.");
-
-            handleBackToLogin();
-        } catch (err: any) {
-            const errorMsg =
-                err.response?.data?.message || "Failed to reset password. Please try again.";
+            const errorMsg = err.response?.data?.message || "Failed to process request. Please try again.";
             toast.error(errorMsg);
         } finally {
             setLoading(false);
@@ -68,10 +39,8 @@ export default function ForgotPassword({
     };
 
     const handleBackToLogin = () => {
-        setStep(1);
         setEmail("");
-        setNewPassword("");
-        setConfirmPassword("");
+        setIsSubmitted(false);
         onClose();
         if (onOpenLogin) {
             onOpenLogin();
@@ -82,11 +51,9 @@ export default function ForgotPassword({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
             <div className="scrollbar-thin relative w-full max-w-[1000px] bg-white rounded-[10px] shadow-2xl overflow-hidden flex flex-wrap max-h-[90dvh] overflow-y-auto">
                 <div className="w-[55%] p-8 sm:p-10 flex flex-col justify-center">
-                    <h2 className="text-[26px] font-bold text-[#000000] leading-none mb-[30px]">
-                        {step === 1 ? "Forgot Password?" : "Reset Password"}
-                    </h2>
+                    <h2 className="text-[26px] font-bold text-[#000000] leading-none mb-[30px]">Forgot Password?</h2>
 
-                    {step === 1 ? (
+                    {!isSubmitted ? (
                         <form onSubmit={handleRequestReset}>
                             <div>
                                 <label className="block text-[16px] font-normal text-[#000000] leading-none mb-[15px]">
@@ -107,56 +74,18 @@ export default function ForgotPassword({
                                 disabled={loading}
                                 className="w-full p-[12px] bg-[#0456FF] border border-[#0456FF] text-white text-[15px] font-semibold rounded-[8px] cursor-pointer disabled:opacity-50 mt-[35px] hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
                             >
-                                {loading ? "Sending..." : "Next"}
+                                {loading ? "Sending Link..." : "Send Reset Link"}
                             </button>
                         </form>
                     ) : (
-                        <form onSubmit={handleResetPassword}>
-                            <div>
-                                <label className="block text-[16px] font-normal text-[#000000] leading-none mb-[15px]">
-                                    New Password
-                                </label>
-                                <div className="relative">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        value={newPassword}
-                                        onChange={(e) => setNewPassword(e.target.value)}
-                                        placeholder="Enter new password"
-                                        required
-                                        className="w-full px-3.5 py-2.5 border border-[#0456FF26] rounded-[6px] text-[14px] leading-none text-[#000024] outline-none transition-all placeholder:text-gray-400"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-semibold text-[#0456FF] hover:underline cursor-pointer"
-                                    >
-                                        {showPassword ? "Hide" : "Show"}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="pt-[20px]">
-                                <label className="block text-[16px] font-normal text-[#000000] leading-none mb-[15px]">
-                                    Confirm New Password
-                                </label>
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    value={confirmPassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                    placeholder="Confirm new password"
-                                    required
-                                    className="w-full px-3.5 py-2.5 border border-[#0456FF26] rounded-[6px] text-[14px] leading-none text-[#000024] outline-none transition-all placeholder:text-gray-400"
-                                />
-                            </div>
-
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full p-[12px] bg-[#0456FF] border border-[#0456FF] text-white text-[15px] font-semibold rounded-[8px] cursor-pointer disabled:opacity-50 mt-[35px] hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
-                            >
-                                {loading ? "Updating..." : "Update Password"}
-                            </button>
-                        </form>
+                        <div className="text-center py-4">
+                            <p className="text-[16px] text-green-600 font-semibold mb-2">
+                                Check your email!
+                            </p>
+                            <p className="text-[14px] text-gray-600">
+                                We sent a password reset link to <strong>{email}</strong>. Please check your inbox and click the link to reset your password.
+                            </p>
+                        </div>
                     )}
 
                     <p className="text-[13px] text-center leading-none text-[#00002499] font-medium mt-[33px]">
@@ -179,14 +108,8 @@ export default function ForgotPassword({
                         ✕
                     </button>
                     <div className="text-center mt-[60px]">
-                        <h3 className="text-[#000024] text-[38px] leading-tight font-bold mb-[12px]">
-                            {step === 1 ? "Don't worry!" : "Almost There!"}
-                        </h3>
-                        <p className="text-[15px] leading-normal text-[#000024]">
-                            {step === 1
-                                ? "Enter your email address and we'll help you reset your account password."
-                                : "Enter your new credentials to gain back access to your account."}
-                        </p>
+                        <h3 className="text-[#000024] text-[38px] leading-tight font-bold mb-[12px]">Don't worry!</h3>
+                        <p className="text-[15px] leading-normal text-[#000024]">Enter your email address and we'll send you a link to reset your password.</p>
                         <div className="relative w-full aspect-[4/3] mx-auto my-auto flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="406" height="437" viewBox="0 0 406 437" fill="none">
                                 <rect width="405.606" height="436.518" fill="url(#pattern0_196_392)" />

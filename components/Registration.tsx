@@ -14,6 +14,7 @@ interface RegistrationProps {
 export default function Registration({ isOpen, onClose, onOpenLogin }: RegistrationProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
@@ -22,13 +23,23 @@ export default function Registration({ isOpen, onClose, onOpenLogin }: Registrat
   if (!isOpen) return null;
 
   const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  const PHONE_REGEX = /^(?:\+91|0)?[6-9]\d{9}$/;
 
-  const validatePassword = (pwd: string) => {
-    return PASSWORD_REGEX.test(pwd);
-  };
+  const validatePassword = (pwd: string) => PASSWORD_REGEX.test(pwd);
+  const validatePhone = (num: string) => PHONE_REGEX.test(num.trim());
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!phone.trim()) {
+      toast.error("Phone number is required.");
+      return;
+    }
+
+    if (!validatePhone(phone)) {
+      toast.error("Please enter a valid 10-digit phone number.");
+      return;
+    }
 
     if (!validatePassword(password)) {
       toast.error("Password must be at least 8 characters long and include an uppercase letter, lowercase letter, and a number.");
@@ -43,7 +54,7 @@ export default function Registration({ isOpen, onClose, onOpenLogin }: Registrat
     setLoading(true);
 
     try {
-      const response = await api.post("/auth/register", { name, email, password });
+      const response = await api.post("/auth/register", { name, email, phone, password });
 
       if (response.data.accessToken) {
         localStorage.setItem("token", response.data.accessToken);
@@ -93,6 +104,18 @@ export default function Registration({ isOpen, onClose, onOpenLogin }: Registrat
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Email ID"
+                required
+                className="w-full px-3.5 py-2.5 border border-[#0456FF26] rounded-[6px] text-[14px] leading-none text-[#000024] outline-none transition-all placeholder:text-gray-400"
+              />
+            </div>
+            <div className="pt-[20px]">
+              <label className="block text-[16px] font-normal text-[#000000] leading-none mb-[15px]">Phone Number</label>
+              <input
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter 10-digit Phone Number"
+                maxLength={13}
                 required
                 className="w-full px-3.5 py-2.5 border border-[#0456FF26] rounded-[6px] text-[14px] leading-none text-[#000024] outline-none transition-all placeholder:text-gray-400"
               />
