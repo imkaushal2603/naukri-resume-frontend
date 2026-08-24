@@ -429,7 +429,8 @@ export default function DashboardPage() {
                     ) : (
                         <div className="flex flex-col gap-4">
                             {displayedResumes.map((resume: any, index) => {
-                                const previewPath = resume.previewImage || resume.resume_templates?.preview;
+                                const defaultPreview = resume.resume_templates?.preview;
+                                const initialSrc = getImageUrl(resume.previewImage || defaultPreview);
                                 const isDeleting = deletingId === resume.id;
                                 return (
                                     <div
@@ -437,14 +438,19 @@ export default function DashboardPage() {
                                         className={`${index === 0 ? "border-b border-[#0456FF26] py-5" : ""} flex flex-wrap items-center gap-5`}
                                     >
                                         <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
-                                            {previewPath ? (
+                                            {initialSrc ? (
                                                 <>
                                                     <Image
-                                                        src={getImageUrl(previewPath)}
+                                                        src={initialSrc}
                                                         alt={resume.name || "Resume Preview"}
                                                         width="120"
                                                         height="123"
                                                         className="w-full h-full object-cover rounded-[3px]"
+                                                        onError={(e) => {
+                                                            if (defaultPreview) {
+                                                                (e.target as HTMLImageElement).src = getImageUrl(defaultPreview);
+                                                            }
+                                                        }}
                                                     />
                                                     <button
                                                         type="button"

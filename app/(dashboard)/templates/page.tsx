@@ -67,6 +67,7 @@ export default function Templates() {
         try {
             const res = await api.put(`/resume/builder/${resumeId}`, { templateId: selectedTemplateId });
             if (res.data.success) {
+                api.post(`/resume/builder/${resumeId}/thumbnail`).catch(() => { });
                 router.push(`/templates/resume-builder/preview?resumeId=${resumeId}`);
             }
         } catch (err: any) {
