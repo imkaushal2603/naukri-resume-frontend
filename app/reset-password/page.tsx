@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import api from "@/services/api";
 
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
 
-export default function ResetPasswordPage() {
+function ResetPasswordForm() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const token = searchParams.get("token");
@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
                 newPassword,
             });
             toast.success(res.data.message || "Password updated successfully!");
-            router.push("/"); // Redirect user to home or login page
+            router.push("/");
         } catch (err: any) {
             const errorMsg = err.response?.data?.message || "Failed to reset password.";
             toast.error(errorMsg);
@@ -102,5 +102,17 @@ export default function ResetPasswordPage() {
                 </form>
             </div>
         </div>
+    );
+}
+
+export default function ResetPasswordPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen flex items-center justify-center">
+                <p className="text-gray-500">Loading...</p>
+            </div>
+        }>
+            <ResetPasswordForm />
+        </Suspense>
     );
 }
