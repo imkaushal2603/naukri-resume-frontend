@@ -260,7 +260,7 @@ export default function DashboardPage() {
                                         </svg>
                                         You're <span className="text-[#0456FF]">Premium!</span>
                                     </h2>
-                                    <span className="font-bold text-[18px] leading-[140%] text-[#000024CC]">{getPlanLabel(membership.plan.durationDays)} is active</span>
+                                    <span className="font-bold text-[18px] leading-[140%] text-[#000024CC]">{getPlanLabel(membership?.plan?.durationDays)} is active</span>
                                     <p className="font-medium text-[18px] leading-[140%] text-[#000024CC] my-[10px]">
                                         Enjoy unlimited access to all premium features.
                                     </p>
@@ -349,7 +349,7 @@ export default function DashboardPage() {
                                             <div className="w-[calc(100%-65px)]">
                                                 <div className="flex flex-wrap items-center gap-[20px]">
                                                     <div>
-                                                        <h6 className="font-bold text-[16px] leading-[100%] text-[#000024]">{membership ? getPlanLabel(membership.plan.durationDays) : "Free Plan"}</h6>
+                                                        <h6 className="font-bold text-[16px] leading-[100%] text-[#000024]">{membership ? getPlanLabel(membership?.plan?.durationDays) : "Free Plan"}</h6>
                                                     </div>
                                                     <div>
                                                         <span className="bg-[#E6F9EC] border border-[#29B33A] py-[5px] px-[10px] rounded-[20px] font-bold text-[10px] leading-[100%] text-[#29B33A]">Active</span>
