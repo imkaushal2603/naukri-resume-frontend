@@ -29,11 +29,12 @@ interface Resume {
 }
 
 interface Membership {
-    startDate: string;
-    endDate: string;
-    membershipPlanId: number;
-    status: string;
-    plan: {
+    status: string | null;
+    membershipPlanId?: number;
+    startDate?: string;
+    endDate?: string;
+    resumeLimit?: number;
+    plan?: {
         id: number;
         name: string;
         price: string;
@@ -101,8 +102,14 @@ export default function DashboardPage() {
         const fetchMembership = async () => {
             try {
                 const res = await api.get("/membership");
-                if (res.data.success) {
-                    setMembership(res.data.status);
+                if (res.data.success && res.data.status) {
+                    if (res.data.status.status === null) {
+                        setMembership(null);
+                    } else {
+                        setMembership(res.data.status);
+                    }
+                } else {
+                    setMembership(null);
                 }
             } catch (err) {
                 console.error("Failed to load membership", err);
@@ -245,7 +252,7 @@ export default function DashboardPage() {
             <div className="flex flex-1 flex-col gap-5 w-[calc(70%-20px)] h-fit">
                 {!checkingResumes && showTargetDiv && (
                     <>
-                        {membership ? (
+                        {membership && membership.status === "ACTIVE" && membership.plan ? (
                             <div className="flex flex-wrap gap-[40px] border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                                 <div className="w-[calc(55%_-_20px)]">
                                     <h2 className="text-[30px] leading-[100%] text-black mb-[10px] font-bold flex gap-[10px]">
@@ -349,14 +356,14 @@ export default function DashboardPage() {
                                             <div className="w-[calc(100%-65px)]">
                                                 <div className="flex flex-wrap items-center gap-[20px]">
                                                     <div>
-                                                        <h6 className="font-bold text-[16px] leading-[100%] text-[#000024]">{membership ? getPlanLabel(membership?.plan?.durationDays) : "Free Plan"}</h6>
+                                                        <h6 className="font-bold text-[16px] leading-[100%] text-[#000024]">{membership && membership.plan ? getPlanLabel(membership.plan.durationDays) : "Free Plan"}</h6>
                                                     </div>
                                                     <div>
                                                         <span className="bg-[#E6F9EC] border border-[#29B33A] py-[5px] px-[10px] rounded-[20px] font-bold text-[10px] leading-[100%] text-[#29B33A]">Active</span>
                                                     </div>
                                                 </div>
                                                 <p className="font-medium text-[16px] leading-[120%] text-[#000024CC] mt-[10px] inline-block">
-                                                    {membership
+                                                    {membership?.endDate
                                                         ? `Enjoy all premium features until ${new Date(membership.endDate).toLocaleDateString("en-US", {
                                                             day: "numeric",
                                                             month: "long",
@@ -376,7 +383,7 @@ export default function DashboardPage() {
                                                 </svg>
                                             </div>
                                             <div className="w-[calc(100%-50px)] leading-[0]">
-                                                {membership ? (
+                                                {membership && membership.endDate ? (
                                                     <>
                                                         <h6 className="font-medium text-[16px] leading-[100%] text-[#000024] mb-[8px]">
                                                             Plan Validity
@@ -540,7 +547,7 @@ export default function DashboardPage() {
                                     </div>
                                     <div className="w-[calc(100%-39px)] flex flex-wrap gap-[50px]">
                                         <div className="w-[calc(100%-185px)]">
-                                            {membership ? (
+                                            {membership && membership.endDate ? (
                                                 <p className="font-medium text-[14px] leading-[140%] text-[#000024]">
                                                     After {new Date(membership.endDate).toLocaleDateString("en-US", {
                                                         day: "numeric",
@@ -550,8 +557,12 @@ export default function DashboardPage() {
                                                 </p>
                                             ) : (
                                                 <>
-                                                    <h5 className="font-bold text-[18px] leading-[100%] text-[#000024] mb-[10px]">Free users can create up to 15 resumes.</h5>
-                                                    <p className="inline-block font-medium text-[16px] leading-[130%] text-[#000024B2]">To download, check ATS score, generate cover letters, access premium templates or create more than 15 resumes, please upgrade your plan.</p>
+                                                    <h5 className="font-bold text-[18px] leading-[100%] text-[#000024] mb-[10px]">
+                                                        Free users can create up to 15 resumes.
+                                                    </h5>
+                                                    <p className="inline-block font-medium text-[16px] leading-[130%] text-[#000024B2]">
+                                                        To download, check ATS score, generate cover letters, access premium templates or create more than 15 resumes, please upgrade your plan.
+                                                    </p>
                                                 </>
                                             )}
                                         </div>
