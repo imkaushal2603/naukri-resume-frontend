@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
+import Link from "next/link";
 import api from "@/services/api";
 import Loader from "@/components/ui/Loader";
+import PlanDetails from "@/hooks/PlanDetails";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
@@ -30,10 +32,26 @@ interface Resume {
     };
 }
 
+interface Membership {
+    startDate: string;
+    endDate: string;
+    membershipPlanId: number;
+    status: string;
+    plan: {
+        id: number;
+        name: string;
+        price: string;
+        durationDays: number;
+    };
+}
+
 export default function MyResumes() {
     const router = useRouter();
     const [resumes, setResumes] = useState<Resume[]>([]);
+    const [maxResumes, setMaxResumes] = useState<number>(15);
     const [loading, setLoading] = useState<boolean>(true);
+    const [membership, setMembership] = useState<Membership | null>(null);
+    const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
     const [creating, setCreating] = useState<boolean>(false);
     const [deletingId, setDeletingId] = useState<number | null>(null);
     const [previewModal, setPreviewModal] = useState<{ open: boolean; html: string; resumeName: string }>({
@@ -58,6 +76,9 @@ export default function MyResumes() {
             const res = await withMinDelay(api.get("/resume"));
             if (res.data.success) {
                 setResumes(res.data.resumes || res.data.data || []);
+                if (res.data.maxResumes) {
+                    setMaxResumes(res.data.maxResumes);
+                }
             }
         } catch (err) {
             console.error("Failed to load resumes", err);
@@ -71,6 +92,22 @@ export default function MyResumes() {
     }, []);
 
     useEffect(() => {
+        const fetchMembership = async () => {
+            try {
+                const res = await api.get("/membership");
+                if (res.data.success && res.data.status) {
+                    setMembership(res.data.status);
+                }
+            } catch (err) {
+                console.error("Failed to load membership", err);
+            } finally {
+                setMembershipLoading(false);
+            }
+        };
+        fetchMembership();
+    }, []);
+
+    useEffect(() => {
         const maxPage = Math.max(1, Math.ceil(resumes.length / RESUMES_PER_PAGE));
         if (currentPage > maxPage) {
             setCurrentPage(maxPage);
@@ -78,6 +115,11 @@ export default function MyResumes() {
     }, [resumes, currentPage]);
 
     const handleCreateNewResume = async () => {
+        if (resumes.length >= maxResumes) {
+            toast.error(`You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`);
+            return;
+        }
+
         setCreating(true);
         try {
             const res = await api.post("/resume/builder", {});
@@ -138,18 +180,12 @@ export default function MyResumes() {
 
     const getImageUrl = (previewPath: string) => {
         if (!previewPath) return "";
-
         if (previewPath.startsWith("http://") || previewPath.startsWith("https://")) {
             return previewPath;
         }
 
         const rawBase = backendUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
-
-        if (previewPath.startsWith("/api/")) {
-            return `${rawBase}${previewPath}`;
-        }
-
-        if (previewPath.startsWith("/uploads/")) {
+        if (previewPath.startsWith("/api/") || previewPath.startsWith("/uploads/")) {
             return `${rawBase}${previewPath}`;
         }
 
@@ -195,9 +231,19 @@ export default function MyResumes() {
             link.remove();
             window.URL.revokeObjectURL(url);
             toast.success("Resume downloaded!");
-        } catch (err) {
+        } catch (err: any) {
             console.error("Failed to download", err);
-            toast.error("Failed to download resume.");
+            if (err.response?.data instanceof Blob) {
+                try {
+                    const text = await err.response.data.text();
+                    const parsed = JSON.parse(text);
+                    toast.error(parsed.message || "Failed to download resume.");
+                } catch {
+                    toast.error("Failed to download resume.");
+                }
+            } else {
+                toast.error(err.response?.data?.message || "Failed to download resume.");
+            }
         } finally {
             setDownloadingId(null);
         }
@@ -329,11 +375,17 @@ export default function MyResumes() {
                                                 type="button"
                                                 onClick={() => handleDownload(resume.id, resume.name || `Resume-${resume.id}`)}
                                                 disabled={downloadingId === resume.id}
-                                                className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#29B33A] cursor-pointer"
+                                                className={`flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#29B33A] cursor-pointer ${membership ? "text-[#29B33A]" : "text-[#FF0000]"}`}
                                             >
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                                    <path d="M7 10.577L3.461 7.039L4.169 6.319L6.5 8.65V0H7.5V8.65L9.83 6.32L10.539 7.039L7 10.577ZM1.616 14C1.15533 14 0.771 13.846 0.463 13.538C0.155 13.23 0.000666667 12.8453 0 12.384V9.961H1V12.384C1 12.538 1.064 12.6793 1.192 12.808C1.32 12.9367 1.461 13.0007 1.615 13H12.385C12.5383 13 12.6793 12.936 12.808 12.808C12.9367 12.68 13.0007 12.5387 13 12.384V9.961H14V12.384C14 12.8447 13.846 13.229 13.538 13.537C13.23 13.845 12.8453 13.9993 12.384 14H1.616Z" fill="#29B33A" />
-                                                </svg>
+                                                {membership ? (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                        <path d="M7 10.577L3.461 7.039L4.169 6.319L6.5 8.65V0H7.5V8.65L9.83 6.32L10.539 7.039L7 10.577ZM1.616 14C1.15533 14 0.771 13.846 0.463 13.538C0.155 13.23 0.000666667 12.8453 0 12.384V9.961H1V12.384C1 12.538 1.064 12.6793 1.192 12.808C1.32 12.9367 1.461 13.0007 1.615 13H12.385C12.5383 13 12.6793 12.936 12.808 12.808C12.9367 12.68 13.0007 12.5387 13 12.384V9.961H14V12.384C14 12.8447 13.846 13.229 13.538 13.537C13.23 13.845 12.8453 13.9993 12.384 14H1.616Z" fill="#29B33A" />
+                                                    </svg>
+                                                ) : (
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="13" viewBox="0 0 10 13" fill="none">
+                                                        <path d="M8.16666 4.08333H7.58333V2.91667C7.58333 1.30667 6.27666 0 4.66667 0C3.05667 0 1.75 1.30667 1.75 2.91667V4.08333H1.16667C0.525 4.08333 0 4.60833 0 5.25V11.0833C0 11.725 0.525 12.25 1.16667 12.25H8.16666C8.80833 12.25 9.33333 11.725 9.33333 11.0833V5.25C9.33333 4.60833 8.80833 4.08333 8.16666 4.08333ZM2.91667 2.91667C2.91667 1.94833 3.69833 1.16667 4.66667 1.16667C5.635 1.16667 6.41666 1.94833 6.41666 2.91667V4.08333H2.91667V2.91667ZM8.16666 11.0833H1.16667V5.25H8.16666V11.0833ZM4.66667 9.33333C5.30833 9.33333 5.83333 8.80833 5.83333 8.16667C5.83333 7.525 5.30833 7 4.66667 7C4.025 7 3.5 7.525 3.5 8.16667C3.5 8.80833 4.025 9.33333 4.66667 9.33333Z" fill="currentColor" />
+                                                    </svg>
+                                                )}
                                                 Download
                                             </button>
                                             <button
@@ -390,9 +442,32 @@ export default function MyResumes() {
                         </button>
                     </div>
                 )}
+                {resumes.length >= maxResumes && (
+                    <div className="bg-[#FCFCFD] border border-[#CACACA80] mt-[30px] flex items-center flex-row rounded-[5px] p-5 justify-between">
+                        <div className="flex items-center gap-[18px]">
+                            <div className="">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M9.75 8.75V13.75M9.75 18.75C8.5681 18.75 7.39778 18.5172 6.30585 18.0649C5.21392 17.6126 4.22177 16.9497 3.38604 16.114C2.55031 15.2782 1.88738 14.2861 1.43508 13.1942C0.982792 12.1022 0.75 10.9319 0.75 9.75C0.75 8.5681 0.982792 7.39778 1.43508 6.30585C1.88738 5.21392 2.55031 4.22177 3.38604 3.38604C4.22177 2.55031 5.21392 1.88738 6.30585 1.43508C7.39778 0.982792 8.5681 0.75 9.75 0.75C12.1369 0.75 14.4261 1.69821 16.114 3.38604C17.8018 5.07387 18.75 7.36305 18.75 9.75C18.75 12.1369 17.8018 14.4261 16.114 16.114C14.4261 17.8018 12.1369 18.75 9.75 18.75ZM9.8 5.75V5.85H9.7V5.75H9.8Z" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </div>
+                            <div className="text-sm">
+                                <p className="font-normal text-[14px] leading-[140%] text-[#000024]">You've reached the maximum limit of {maxResumes} resumes.</p>
+                                <p className="font-normal text-[14px] leading-[140%] text-[#000024]">Delete a resume or extend your limit to create more.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2.5 w-full sm:w-auto">
+                            <Link href="/extend-resume-limit" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
+                                    <path d="M0.583496 3.49998L1.34416 4.1084C1.60916 4.32035 1.9172 4.47196 2.24681 4.55264C2.57641 4.63332 2.91965 4.64114 3.25259 4.57555C3.58553 4.50997 3.90015 4.37255 4.17453 4.17288C4.44891 3.97322 4.67644 3.71611 4.84125 3.41948L6.41683 0.583313L7.99241 3.41948C8.15726 3.71615 8.38485 3.97329 8.6593 4.17296C8.93375 4.37263 9.24845 4.51002 9.58146 4.57556C9.91447 4.64109 10.2578 4.63319 10.5874 4.55241C10.9171 4.47162 11.2251 4.3199 11.4901 4.10781L12.2502 3.49998L11.227 8.61581C11.1825 8.83914 11.0875 9.04932 10.9493 9.2303C10.8111 9.41128 10.6333 9.55825 10.4296 9.65998C9.18368 10.283 7.80982 10.6074 6.41683 10.6074C5.02383 10.6074 3.64997 10.283 2.40408 9.65998C2.20035 9.55825 2.02258 9.41128 1.88437 9.2303C1.74616 9.04932 1.65117 8.83914 1.60666 8.61581L0.583496 3.49998Z" stroke="currentColor" strokeWidth="1.16667" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                Extend Limit
+                            </Link>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
-
+                <PlanDetails />
             </div>
             {previewModal.open && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-6" onClick={closePreview}>

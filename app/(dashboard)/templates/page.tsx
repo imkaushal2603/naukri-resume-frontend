@@ -174,7 +174,7 @@ export default function Templates() {
                                         key={template.id}
                                         onClick={() => handleSelectTemplate(template.id)}
                                         className={`relative cursor-pointer rounded-[8px] border-2 p-[10px] transition-all flex flex-col justify-between ${isSelected
-                                            ? "border-[#0456FF]"
+                                            ? "border-[#0456ff]"
                                             : "border-[#0456FF26]"
                                             }`}
                                     >
@@ -194,7 +194,14 @@ export default function Templates() {
                                         ) : (
                                             <div className="w-full h-[300px] bg-gray-100 rounded-[4px] flex items-center justify-center text-xs text-gray-400">No preview</div>
                                         )}
-                                        <p className="text-center font-medium text-[14px] mt-[10px] font-semibold">{template.name}</p>
+                                        {isSelected && (
+                                            <div className="absolute bottom-[8px] right-[8px]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#0456ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </div>
+                                        )}
+                                        < p className="text-center font-medium text-[14px] mt-[10px] font-semibold">{template.name}</p>
                                     </div>
                                 );
                             })}
@@ -213,6 +220,6 @@ export default function Templates() {
                     </button>
                 )}
             </div>
-        </div>
+        </div >
     );
 }

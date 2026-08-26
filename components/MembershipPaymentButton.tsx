@@ -3,12 +3,19 @@
 import { load } from "@cashfreepayments/cashfree-js";
 import api from "@/services/api";
 
+interface MembershipPaymentButtonProps {
+    planId?: number;
+    label?: string;
+}
 
-export default function MembershipPaymentButton({ amount = 499 }) {
+export default function MembershipPaymentButton({
+    planId = 1,
+    label = "Upgrade Plan",
+}: MembershipPaymentButtonProps) {
     const handlePayment = async () => {
         try {
             const { data } = await api.post("/payment/create-order", {
-                planId: 1,
+                planId,
             });
 
             if (!data.success) {
@@ -29,8 +36,11 @@ export default function MembershipPaymentButton({ amount = 499 }) {
     };
 
     return (
-        <button onClick={handlePayment}>
-            Pay ₹{amount}
+        <button
+            onClick={handlePayment}
+            className="w-full flex items-center justify-center gap-[10px] bg-[#0456FF] text-white font-semibold text-[15px] py-[13px] px-[26px] rounded-[8px] cursor-pointer hover:bg-[#0344cc] transition-colors duration-300"
+        >
+            {label}
         </button>
     );
 }

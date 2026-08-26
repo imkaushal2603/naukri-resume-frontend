@@ -1,3 +1,5 @@
+import MembershipPaymentButton from "@/components/MembershipPaymentButton";
+
 export default function Plans() {
     return (
         <div className="flex gap-6">
@@ -35,7 +37,7 @@ export default function Plans() {
                             </div>
                         </div>
                         <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
-                        <ul className="flex flex-col gap-y-[6px]">
+                        <ul className="flex flex-col gap-y-[6px] mb-[20px]">
                             <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -107,8 +109,8 @@ export default function Plans() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="inline-block w-full mt-[30px] mb-[25px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Choose Monthly Plan</button>
-                        <div className="flex justify-center flex-wrap items-center gap-3">
+                        <MembershipPaymentButton planId={1} label="Choose Weekly Plan" />
+                        <div className="flex justify-center flex-wrap items-center gap-3 mt-[20px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="20" viewBox="0 0 17 20" fill="none">
                                 <path d="M13.0248 7.02449C13.1375 6.91182 13.2008 6.75902 13.2008 6.59969C13.2008 6.44036 13.1375 6.28755 13.0248 6.17489C12.9121 6.06222 12.7593 5.99893 12.6 5.99893C12.4407 5.99893 12.2879 6.06222 12.1752 6.17489L7.8 10.5513L5.8248 8.57489C5.76902 8.5191 5.70279 8.47485 5.6299 8.44466C5.55701 8.41447 5.47889 8.39893 5.4 8.39893C5.32111 8.39893 5.24299 8.41447 5.1701 8.44466C5.09721 8.47485 5.03099 8.5191 4.9752 8.57489C4.91942 8.63067 4.87516 8.6969 4.84497 8.76979C4.81478 8.84267 4.79924 8.92079 4.79924 8.99969C4.79924 9.07858 4.81478 9.1567 4.84497 9.22959C4.87516 9.30248 4.91942 9.3687 4.9752 9.42449L7.3752 11.8245C7.43094 11.8804 7.49715 11.9247 7.57004 11.9549C7.64294 11.9852 7.72108 12.0008 7.8 12.0008C7.87892 12.0008 7.95707 11.9852 8.02996 11.9549C8.10286 11.9247 8.16907 11.8804 8.2248 11.8245L13.0248 7.02449ZM8.7324 0.10049C8.63393 0.0349612 8.51829 0 8.4 0C8.28172 0 8.16607 0.0349612 8.0676 0.10049C5.80216 1.62772 3.21974 2.62106 0.5148 3.00569C0.371881 3.02619 0.241147 3.09754 0.146587 3.20665C0.052026 3.31576 -1.92468e-05 3.45531 5.33926e-09 3.59969V8.99969C5.33926e-09 13.6689 2.7684 17.0757 8.184 19.1601C8.32301 19.2137 8.477 19.2137 8.616 19.1601C14.0316 17.0757 16.8 13.6677 16.8 8.99969V3.59969C16.8 3.45513 16.7478 3.31543 16.653 3.2063C16.5582 3.09717 16.4271 3.02593 16.284 3.00569C13.5795 2.62088 10.9975 1.62756 8.7324 0.10049ZM1.2 4.11329C3.577 3.7098 5.85674 2.86223 7.92 1.61489L8.4 1.31609L8.88 1.61489C10.9433 2.86223 13.223 3.7098 15.6 4.11329V8.99969C15.6 13.0701 13.2384 16.0353 8.4 17.9553C3.5616 16.0353 1.2 13.0713 1.2 8.99969V4.11329Z" fill="#000024" fillOpacity="0.7" />
                             </svg>
@@ -135,7 +137,7 @@ export default function Plans() {
                             </div>
                         </div>
                         <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
-                        <ul className="flex flex-col gap-y-[6px]">
+                        <ul className="flex flex-col gap-y-[6px] mb-[20px]">
                             <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -207,8 +209,8 @@ export default function Plans() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="inline-block w-full mt-[30px] mb-[25px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Choose Annual Plan</button>
-                        <div className="flex justify-center flex-wrap items-center gap-3">
+                        <MembershipPaymentButton planId={2} label="Choose Annual Plan" />
+                        <div className="flex justify-center flex-wrap items-center gap-3 mt-[20px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="20" viewBox="0 0 17 20" fill="none">
                                 <path d="M13.0248 7.02449C13.1375 6.91182 13.2008 6.75902 13.2008 6.59969C13.2008 6.44036 13.1375 6.28755 13.0248 6.17489C12.9121 6.06222 12.7593 5.99893 12.6 5.99893C12.4407 5.99893 12.2879 6.06222 12.1752 6.17489L7.8 10.5513L5.8248 8.57489C5.76902 8.5191 5.70279 8.47485 5.6299 8.44466C5.55701 8.41447 5.47889 8.39893 5.4 8.39893C5.32111 8.39893 5.24299 8.41447 5.1701 8.44466C5.09721 8.47485 5.03099 8.5191 4.9752 8.57489C4.91942 8.63067 4.87516 8.6969 4.84497 8.76979C4.81478 8.84267 4.79924 8.92079 4.79924 8.99969C4.79924 9.07858 4.81478 9.1567 4.84497 9.22959C4.87516 9.30248 4.91942 9.3687 4.9752 9.42449L7.3752 11.8245C7.43094 11.8804 7.49715 11.9247 7.57004 11.9549C7.64294 11.9852 7.72108 12.0008 7.8 12.0008C7.87892 12.0008 7.95707 11.9852 8.02996 11.9549C8.10286 11.9247 8.16907 11.8804 8.2248 11.8245L13.0248 7.02449ZM8.7324 0.10049C8.63393 0.0349612 8.51829 0 8.4 0C8.28172 0 8.16607 0.0349612 8.0676 0.10049C5.80216 1.62772 3.21974 2.62106 0.5148 3.00569C0.371881 3.02619 0.241147 3.09754 0.146587 3.20665C0.052026 3.31576 -1.92468e-05 3.45531 5.33926e-09 3.59969V8.99969C5.33926e-09 13.6689 2.7684 17.0757 8.184 19.1601C8.32301 19.2137 8.477 19.2137 8.616 19.1601C14.0316 17.0757 16.8 13.6677 16.8 8.99969V3.59969C16.8 3.45513 16.7478 3.31543 16.653 3.2063C16.5582 3.09717 16.4271 3.02593 16.284 3.00569C13.5795 2.62088 10.9975 1.62756 8.7324 0.10049ZM1.2 4.11329C3.577 3.7098 5.85674 2.86223 7.92 1.61489L8.4 1.31609L8.88 1.61489C10.9433 2.86223 13.223 3.7098 15.6 4.11329V8.99969C15.6 13.0701 13.2384 16.0353 8.4 17.9553C3.5616 16.0353 1.2 13.0713 1.2 8.99969V4.11329Z" fill="#000024" fillOpacity="0.7" />
                             </svg>
