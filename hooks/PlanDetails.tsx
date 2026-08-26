@@ -22,12 +22,11 @@ interface Resume {
 }
 
 interface Membership {
-    status: string | null;
-    membershipPlanId?: number;
-    startDate?: string;
-    endDate?: string;
-    resumeLimit?: number;
-    plan?: {
+    startDate: string;
+    endDate: string;
+    membershipPlanId: number;
+    status: string;
+    plan: {
         id: number;
         name: string;
         price: string;
@@ -114,7 +113,7 @@ export default function PlanDetails() {
                     <div className="h-5 w-32 bg -gray-200 rounded mb-3" />
                     <div className="h-4 w-48 bg-gray-100 rounded" />
                 </div>
-            ) : membership && membership.endDate ? (
+            ) : membership ? (
                 <div className="border border-[#CACACA80] rounded-[5px] py-[15px] px-[21px]">
                     <h5 className="font-semibold text-[16px] leading-[120%] text-black mb-[20px] border-b border-[#CACACA80] pb-[10px]">Your Plan Overview</h5>
                     <div className="flex flex-wrap gap-5">
@@ -125,7 +124,7 @@ export default function PlanDetails() {
                         </div>
                         <div className="w-[calc(100%-48px)]">
                             <div className="flex items-center gap-[10px] mb-[13px]">
-                                <h4 className="font-bold text-[16px] leading-none text-[#000024]">{getPlanLabel(membership.plan?.durationDays ?? 0)}</h4>
+                                <h4 className="font-bold text-[16px] leading-none text-[#000024]">{getPlanLabel(membership.plan.durationDays)}</h4>
                                 <span className="border border-[#29B33A] bg-[#E6F9EC] rounded-[20px] font-bold text-[10px] leading-[100%] py-[5px] px-[10px] text-[#29B33A]">
                                     Active
                                 </span>
@@ -406,21 +405,15 @@ export default function PlanDetails() {
                         <div className="w-[calc(100%-47px)]">
                             <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">Plan Expiry Reminder</h6>
                             <p className="font-normal text-[12px] leading-[140%] text-[#000024CC] mb-[18px]">
-                                {membership?.endDate ? (
-                                    <>
-                                        Your plan will expire on {new Date(membership.endDate).toLocaleDateString("en-US", {
-                                            day: "numeric",
-                                            month: "short",
-                                            year: "numeric",
-                                        })}, {new Date(membership.endDate).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "2-digit",
-                                            hour12: true,
-                                        })}. Renew your plan to avoid any interruption.
-                                    </>
-                                ) : (
-                                    "Renew your plan to avoid any interruption."
-                                )}
+                                Your plan will expire on {new Date(membership.endDate).toLocaleDateString("en-US", {
+                                    day: "numeric",
+                                    month: "short",
+                                    year: "numeric",
+                                })}, {new Date(membership.endDate).toLocaleTimeString("en-US", {
+                                    hour: "numeric",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                })}. Renew your plan to avoid any interruption.
                             </p>
                             <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Renew Plan</Link>
                         </div>
