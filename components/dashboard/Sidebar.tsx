@@ -1,6 +1,8 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import api from "@/services/api";
 import { usePathname, useSearchParams } from "next/navigation";
 import { useResumeId } from "@/hooks/useResumeId";
 
@@ -28,12 +30,43 @@ const builderNavItems: NavItem[] = [
     { name: "Preview", href: "/templates/resume-builder/preview" },
 ];
 
+interface Membership {
+    startDate: string;
+    endDate: string;
+    membershipPlanId: number;
+    status: string;
+    plan: {
+        id: number;
+        name: string;
+        price: string;
+        durationDays: number;
+    };
+}
+
 export default function Sidebar() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const hookResumeId = useResumeId();
     const resumeId = searchParams.get("resumeId") || hookResumeId;
     const isBuilderFlow = pathname.startsWith("/templates/resume-builder");
+    const [membership, setMembership] = useState<Membership | null>(null);
+    const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchMembership = async () => {
+            try {
+                const res = await api.get("/membership");
+                if (res.data.success) {
+                    setMembership(res.data.status);
+                }
+            } catch (err) {
+                console.error("Failed to load membership", err);
+            } finally {
+                setMembershipLoading(false);
+            }
+        };
+        fetchMembership();
+    }, []);
 
     return (
         <aside className="w-[265px] bg-white border-r border-[#CACACA80] flex flex-col h-screen fixed top-0 shrink-0 justify-between overflow-y-auto">
@@ -172,9 +205,21 @@ export default function Sidebar() {
                                 </filter>
                             </defs>
                         </svg>
-                        <p className="text-[16px] leading-none font-bold text-[#000000]">Upgrade to Premium</p>
-                        <p className="text-[14px] leading-[140%] font-medium text-[#000024CC]">Unlock powerful features to build job-winning resumes and get hired faster.</p>
-                        <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View all Plans</Link>
+                        {membership ? (
+                            <p className="text-[16px] leading-none font-bold text-[#000000]">Premium Active</p>
+                        ) : (
+                            <p className="text-[16px] leading-none font-bold text-[#000000]">Upgrade to Premium</p>
+                        )}
+                        {membership ? (
+                            <p className="text-[14px] leading-[140%] font-medium text-[#000024CC]">You're all set! Enjoy all premium features during your plan validity.</p>
+                        ) : (
+                            <p className="text-[14px] leading-[140%] font-medium text-[#000024CC]">Unlock powerful features to build job-winning resumes and get hired faster.</p>
+                        )}
+                        {membership ? (
+                            <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Manage Plan</Link>
+                        ) : (
+                            <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View all Plans</Link>
+                        )}
                     </div>
                 </div>
             )}

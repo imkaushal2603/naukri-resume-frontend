@@ -308,11 +308,9 @@ export default function ExperiencePage() {
                         + Add Experience
                     </button>
                 </div>
-
                 {list.length === 0 && editingId !== "new" && (
                     <p className="text-sm text-[#00002480] mb-4">No experience added yet.</p>
                 )}
-
                 <div className="space-y-4">
                     {list.map((exp, i) => (
                         <div key={exp.id ?? i} className="border border-[#0456FF26] rounded-[10px]">
@@ -340,7 +338,6 @@ export default function ExperiencePage() {
                                     </button>
                                 </div>
                             </div>
-
                             {editingId === exp.id ? (
                                 renderForm()
                             ) : (
@@ -351,26 +348,35 @@ export default function ExperiencePage() {
                                             <path d="M26.321 25.5334H23.6793C23.5396 25.5332 23.4012 25.5605 23.2721 25.6137C23.1429 25.667 23.0256 25.7452 22.9267 25.8439C22.8278 25.9426 22.7494 26.0598 22.6958 26.1889C22.6423 26.3179 22.6147 26.4562 22.6147 26.5959V30.6022C22.6147 30.9155 22.6764 31.2256 22.7963 31.5151C22.9162 31.8045 23.0919 32.0674 23.3134 32.2889C23.5349 32.5105 23.7979 32.6862 24.0873 32.806C24.3767 32.9259 24.6869 32.9876 25.0002 32.9876C25.3134 32.9876 25.6236 32.9259 25.913 32.806C26.2024 32.6862 26.4654 32.5105 26.6869 32.2889C26.9084 32.0674 27.0841 31.8045 27.204 31.5151C27.3239 31.2256 27.3856 30.9155 27.3856 30.6022V26.598C27.3859 26.4582 27.3585 26.3196 27.3051 26.1903C27.2517 26.061 27.1733 25.9436 27.0744 25.8446C26.9755 25.7457 26.858 25.6673 26.7287 25.6139C26.5994 25.5605 26.4609 25.5332 26.321 25.5334Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <div className="flex-1 flex flex-col gap-y-[10px]">
-                                        <div className="flex flex-wrap items-center gap-[10px]">
-                                            <h6 className="font-bold text-[18px] leading-none text-black">
-                                                {exp.role}
-                                            </h6>
-                                            {exp.employmentType && (
-                                                <span className="bg-[#0456FF26] text-[#0456FF] font-semibold text-[11px] leading-none px-[10px] py-[5px] rounded-full">
-                                                    {exp.employmentType}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <p className="font-normal text-[15px] leading-none text-black">
-                                            {exp.company} {exp.location && `- ${exp.location}`}
-                                        </p>
-                                        <p className="font-normal text-[15px] leading-none text-black">
-                                            {exp.startDate?.slice(0, 7)} -{" "}
-                                            {exp.isCurrent ? "Present" : exp.endDate?.slice(0, 7)}
-                                        </p>
+                                    <div className="flex-1 flex flex-col gap-y-[10px] justify-center">
+                                        {(exp.role || exp.employmentType) && (
+                                            <div className="flex flex-wrap items-center gap-[10px]">
+                                                {exp.role && (
+                                                    <h6 className="font-bold text-[18px] leading-none text-black capitalize">
+                                                        {exp.role}
+                                                    </h6>
+                                                )}
+                                                {exp.employmentType && (
+                                                    <span className="bg-[#0456FF26] text-[#0456FF] font-semibold text-[11px] leading-none px-[10px] py-[5px] rounded-full capitalize">
+                                                        {exp.employmentType}
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+                                        {(exp.company || exp.location) && (
+                                            <p className="font-normal text-[15px] leading-none text-black capitalize">
+                                                {exp.company} {exp.company && exp.location && " - "} {exp.location}
+                                            </p>
+                                        )}
+                                        {(exp.startDate || exp.endDate || exp.isCurrent) && (
+                                            <p className="font-normal text-[15px] leading-none text-black capitalize">
+                                                {exp.startDate?.slice(0, 7)}
+                                                {(exp.startDate || exp.endDate || exp.isCurrent) && " - "}
+                                                {exp.isCurrent ? "Present" : exp.endDate?.slice(0, 7)}
+                                            </p>
+                                        )}
                                         {exp.description && (
-                                            <p className="font-normal text-[14px] leading-[140%] text-black">
+                                            <p className="font-normal text-[14px] leading-[140%] text-black capitalize">
                                                 {exp.description}
                                             </p>
                                         )}
@@ -380,13 +386,11 @@ export default function ExperiencePage() {
                         </div>
                     ))}
                 </div>
-
                 {editingId === "new" && (
                     <div className="border border-[#0456FF26] rounded-[10px] mt-[20px]">
                         {renderForm()}
                     </div>
                 )}
-
                 <div className="flex flex-wrap gap-[10px] justify-between my-[30px] pt-[42px] border-t border-[#0456FF26]">
                     <button
                         onClick={handlePrevious}
@@ -402,7 +406,6 @@ export default function ExperiencePage() {
                     </button>
                 </div>
             </div>
-
             <div className="w-[325px] shrink-0">
                 <ProgressPanel />
             </div>

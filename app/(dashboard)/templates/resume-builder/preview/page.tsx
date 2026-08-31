@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { toast } from "sonner";
 import api from "@/services/api";
 import { useResumeId } from "@/hooks/useResumeId";
@@ -24,8 +25,6 @@ export default function PreviewPage() {
     const [downloading, setDownloading] = useState<"pdf" | "docx" | null>(null);
     const [membership, setMembership] = useState<any>(null);
 
-    const isMembershipActive = membership?.status === "ACTIVE" || membership === "ACTIVE";
-
     const fetchData = useCallback(async () => {
         try {
             const [previewRes, membershipRes] = await withMinDelay(
@@ -38,9 +37,8 @@ export default function PreviewPage() {
                 setHtml(previewRes.data.html || "");
                 setResumeName(previewRes.data.resumeName || "Untitled Resume");
             }
-            if (membershipRes?.data) {
-                const statusObj = membershipRes.data?.data?.status || membershipRes.data?.status;
-                setMembership(statusObj);
+            if (membershipRes?.data?.success) {
+                setMembership(membershipRes.data.status);
             }
         } catch (err) {
             console.error("Failed to load preview", err);
@@ -58,7 +56,7 @@ export default function PreviewPage() {
     const handleDownload = async (format: "pdf" | "docx") => {
         if (!resumeId) return;
 
-        if (!isMembershipActive) {
+        if (!membership) {
             toast.error("An active subscription is required to download resumes.");
             return;
         }
@@ -140,43 +138,36 @@ export default function PreviewPage() {
                     </div>
                 </div>
                 <div className="">
-                    <iframe
-                        srcDoc={html}
-                        className="w-full min-h-[850px] lg:min-h-[1050px] border-none block"
-                        title="Resume Preview"
-                    />
+                    <iframe srcDoc={html} className="w-full min-h-[850px] lg:min-h-[1050px] border-none block" title="Resume Preview" />
                 </div>
+                {!membership && (
+                    <div className="bg-[#0456FF0D] border border-[#CACACA80] rounded-[8px] p-[15px] flex flex-wrap gap-[10px] items-center mt-[50px]">
+                        <div className="w-[36px]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                                <rect width="36" height="36" rx="4" fill="#0456FF" fillOpacity="0.15" />
+                                <path d="M18 21V23M18 21C18.2652 21 18.5196 20.8946 18.7071 20.7071C18.8946 20.5196 19 20.2652 19 20C19 19.7348 18.8946 19.4804 18.7071 19.2929C18.5196 19.1054 18.2652 19 18 19C17.7348 19 17.4804 19.1054 17.2929 19.2929C17.1054 19.4804 17 19.7348 17 20C17 20.2652 17.1054 20.5196 17.2929 20.7071C17.4804 20.8946 17.7348 21 18 21ZM23 15V14C23 12.6739 22.4732 11.4021 21.5355 10.4645C20.5979 9.52678 19.3261 9 18 9C16.6739 9 15.4021 9.52678 14.4645 10.4645C13.5268 11.4021 13 12.6739 13 14V15H23ZM11 27H25C25.2652 27 25.5196 26.8946 25.7071 26.7071C25.8946 26.5196 26 26.2652 26 26V16C26 15.7348 25.8946 15.4804 25.7071 15.2929C25.5196 15.1054 25.2652 15 25 15H11C10.7348 15 10.4804 15.1054 10.2929 15.2929C10.1054 15.4804 10 15.7348 10 16V26C10 26.2652 10.1054 26.5196 10.2929 26.7071C10.4804 26.8946 10.7348 27 11 27Z" stroke="#000024" strokeWidth="2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                        <div className="w-[calc(100%-46px)] leading-[0]">
+                            <h6 className="font-bold text-[15px] leading-[140%] text-[#000024] mb-[6px]">Payment Required to Download</h6>
+                            <p className="font-normal text-[12px] leading-normal text-[#00002499] inline-block">Please complete the payment to download your resume in PDF or DOCX format and unlock all premium features.</p>
+                        </div>
+                    </div>
+                )}
                 <div className="flex flex-wrap gap-[10px] justify-between my-[30px] pt-[42px] border-t border-[#0456FF26]">
                     <button
                         type="button"
                         onClick={handlePrevious}
                         className="h-fit flex gap-[10px] items-center border border-[#0456FF] bg-white py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300"
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="12"
-                            height="14"
-                            viewBox="0 0 16 14"
-                            fill="none"
-                        >
-                            <path
-                                d="M1 7L15 7M7 1L1 7L7 13"
-                                stroke="currentColor"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
+                            <path d="M1 7L15 7M7 1L1 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                         Previous
                     </button>
-                    {!isMembershipActive && (
+                    {!membership && (
                         <div className="flex flex-col gap-y-[10px]">
-                            <button type="button" className="flex gap-[10px] items-center border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="16" viewBox="0 0 15 16" fill="none">
-                                    <path d="M7.125 0C8.38478 0 9.59296 0.500445 10.4838 1.39124C11.3746 2.28204 11.875 3.49022 11.875 4.75H12.6667C13.0866 4.75 13.4893 4.91682 13.7863 5.21375C14.0832 5.51068 14.25 5.91341 14.25 6.33333V14.25C14.25 14.6699 14.0832 15.0727 13.7863 15.3696C13.4893 15.6665 13.0866 15.8333 12.6667 15.8333H1.58333C1.16341 15.8333 0.76068 15.6665 0.463748 15.3696C0.166815 15.0727 0 14.6699 0 14.25L0 6.33333C0 5.91341 0.166815 5.51068 0.463748 5.21375C0.76068 4.91682 1.16341 4.75 1.58333 4.75H2.375C2.375 3.49022 2.87545 2.28204 3.76624 1.39124C4.65704 0.500445 5.86522 0 7.125 0ZM7.04029 7.92063C6.70013 7.9391 6.37502 8.06691 6.11334 8.28503C5.85166 8.50315 5.66739 8.79993 5.58795 9.13121C5.50851 9.46248 5.53815 9.81055 5.67245 10.1236C5.80675 10.4367 6.03854 10.6981 6.33333 10.8688V11.875C6.33333 12.085 6.41674 12.2863 6.56521 12.4348C6.71367 12.5833 6.91504 12.6667 7.125 12.6667C7.33496 12.6667 7.53633 12.5833 7.68479 12.4348C7.83326 12.2863 7.91667 12.085 7.91667 11.875V10.8696C8.21239 10.6993 8.44508 10.4379 8.57998 10.1245C8.71488 9.81104 8.74474 9.46237 8.66511 9.13055C8.58547 8.79873 8.40061 8.50159 8.13815 8.28351C7.87569 8.06543 7.54971 7.93813 7.20892 7.92063C7.15287 7.91462 7.09634 7.91462 7.04029 7.92063ZM7.125 1.58333C6.28515 1.58333 5.47969 1.91696 4.88583 2.51083C4.29196 3.10469 3.95833 3.91015 3.95833 4.75H10.2917C10.2917 3.91015 9.95804 3.10469 9.36417 2.51083C8.77031 1.91696 7.96485 1.58333 7.125 1.58333Z" fill="currentColor" />
-                                </svg>
-                                Proceed to Payment
-                            </button>
+                            <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Proceed to Payment</Link>
                             <p className="font-normal text-[12px] leading-[140%] text-[#000024CC] text-center">Secure payment Cancel anytime</p>
                         </div>
                     )}
@@ -208,7 +199,7 @@ export default function PreviewPage() {
                             </svg>
                             {downloading === "pdf" ? "Downloading..." : "Download PDF"}
                         </div>
-                        {!isMembershipActive && (
+                        {!membership && (
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
                                 <path d="M3.75 7.75V4.75C3.75 2.54 5.54 0.75 7.75 0.75C9.96 0.75 11.75 2.54 11.75 4.75V7.75M7.75 12.75C8.01522 12.75 8.26957 12.6446 8.45711 12.4571C8.64464 12.2696 8.75 12.0152 8.75 11.75C8.75 11.4848 8.64464 11.2304 8.45711 11.0429C8.26957 10.8554 8.01522 10.75 7.75 10.75C7.48478 10.75 7.23043 10.8554 7.04289 11.0429C6.85536 11.2304 6.75 11.4848 6.75 11.75C6.75 12.0152 6.85536 12.2696 7.04289 12.4571C7.23043 12.6446 7.48478 12.75 7.75 12.75ZM7.75 12.75V15.75M2.35 7.75H13.15C14.03 7.75 14.75 8.47 14.75 9.35V16.35C14.75 17.67 13.67 18.75 12.35 18.75H3.15C1.83 18.75 0.75 17.67 0.75 16.35V9.35C0.75 8.47 1.47 7.75 2.35 7.75Z" stroke="currentColor" strokeOpacity="0.8" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -226,13 +217,13 @@ export default function PreviewPage() {
                             </svg>
                             {downloading === "docx" ? "Downloading..." : "Download DOCX"}
                         </div>
-                        {!isMembershipActive && (
+                        {!membership && (
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
                                 <path d="M3.75 7.75V4.75C3.75 2.54 5.54 0.75 7.75 0.75C9.96 0.75 11.75 2.54 11.75 4.75V7.75M7.75 12.75C8.01522 12.75 8.26957 12.6446 8.45711 12.4571C8.64464 12.2696 8.75 12.0152 8.75 11.75C8.75 11.4848 8.64464 11.2304 8.45711 11.0429C8.26957 10.8554 8.01522 10.75 7.75 10.75C7.48478 10.75 7.23043 10.8554 7.04289 11.0429C6.85536 11.2304 6.75 11.4848 6.75 11.75C6.75 12.0152 6.85536 12.2696 7.04289 12.4571C7.23043 12.6446 7.48478 12.75 7.75 12.75ZM7.75 12.75V15.75M2.35 7.75H13.15C14.03 7.75 14.75 8.47 14.75 9.35V16.35C14.75 17.67 13.67 18.75 12.35 18.75H3.15C1.83 18.75 0.75 17.67 0.75 16.35V9.35C0.75 8.47 1.47 7.75 2.35 7.75Z" stroke="currentColor" strokeOpacity="0.8" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         )}
                     </button>
-                    {!isMembershipActive && (
+                    {!membership && (
                         <div className="bg-[#0456FF1A] rounded-[6px] p-3 font-normal text-[14px] leading-[120%] text-[#000024B2]">
                             <p>Complete the payment to enable download</p>
                         </div>
@@ -262,19 +253,76 @@ export default function PreviewPage() {
                             </svg>
                             Check ATS Score
                         </div>
-                        {!isMembershipActive && (
+                        {!membership && (
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" viewBox="0 0 16 20" fill="none">
                                 <path d="M3.75 7.75V4.75C3.75 2.54 5.54 0.75 7.75 0.75C9.96 0.75 11.75 2.54 11.75 4.75V7.75M7.75 12.75C8.01522 12.75 8.26957 12.6446 8.45711 12.4571C8.64464 12.2696 8.75 12.0152 8.75 11.75C8.75 11.4848 8.64464 11.2304 8.45711 11.0429C8.26957 10.8554 8.01522 10.75 7.75 10.75C7.48478 10.75 7.23043 10.8554 7.04289 11.0429C6.85536 11.2304 6.75 11.4848 6.75 11.75C6.75 12.0152 6.85536 12.2696 7.04289 12.4571C7.23043 12.6446 7.48478 12.75 7.75 12.75ZM7.75 12.75V15.75M2.35 7.75H13.15C14.03 7.75 14.75 8.47 14.75 9.35V16.35C14.75 17.67 13.67 18.75 12.35 18.75H3.15C1.83 18.75 0.75 17.67 0.75 16.35V9.35C0.75 8.47 1.47 7.75 2.35 7.75Z" stroke="currentColor" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         )}
                     </button>
-                    {!isMembershipActive && (
+                    {!membership && (
                         <div className="bg-[#0456FF1A] rounded-[6px] p-3 font-normal text-[14px] leading-[120%] text-[#000024B2]">
                             <p>Complete the payment to enable download</p>
                         </div>
                     )}
                 </div>
                 <ProgressPanel />
+                {!membership && (
+                    <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
+                        <ul className="flex flex-col gap-y-[15px]">
+                            <li className="flex flex-wrap gap-[10px]">
+                                <div className="w-[19px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <mask id="mask0_982_145" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="19" height="19">
+                                            <path d="M9.33334 17.6667C10.4279 17.668 11.5119 17.4531 12.5231 17.0342C13.5344 16.6153 14.4529 16.0008 15.2258 15.2258C16.0008 14.4529 16.6153 13.5344 17.0342 12.5231C17.4531 11.5119 17.668 10.4279 17.6667 9.33334C17.668 8.23879 17.4531 7.15477 17.0342 6.14354C16.6153 5.13232 16.0008 4.21383 15.2258 3.44084C14.4529 2.66591 13.5344 2.05135 12.5231 1.63247C11.5119 1.21359 10.4279 0.998657 9.33334 1.00001C8.23879 0.998657 7.15477 1.21359 6.14354 1.63247C5.13232 2.05135 4.21383 2.66591 3.44084 3.44084C2.66591 4.21383 2.05135 5.13232 1.63247 6.14354C1.21359 7.15477 0.998657 8.23879 1.00001 9.33334C0.998657 10.4279 1.21359 11.5119 1.63247 12.5231C2.05135 13.5344 2.66591 14.4529 3.44084 15.2258C4.21383 16.0008 5.13232 16.6153 6.14354 17.0342C7.15477 17.4531 8.23879 17.668 9.33334 17.6667Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                                            <path d="M6 9.3335L8.5 11.8335L13.5 6.8335" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </mask>
+                                        <g mask="url(#mask0_982_145)">
+                                            <path d="M-0.666992 -0.666504H19.333V19.3335H-0.666992V-0.666504Z" fill="#29B33A" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-29px)] leading-[0]">
+                                    <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">100% Secure Payment</h6>
+                                    <p className="font-normal text-[12px] leading-[120%] text-[#00002499] inline-block">Your payments are encrypted and safe</p>
+                                </div>
+                            </li>
+                            <li className="flex flex-wrap gap-[10px]">
+                                <div className="w-[19px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <mask id="mask0_982_145" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="19" height="19">
+                                            <path d="M9.33334 17.6667C10.4279 17.668 11.5119 17.4531 12.5231 17.0342C13.5344 16.6153 14.4529 16.0008 15.2258 15.2258C16.0008 14.4529 16.6153 13.5344 17.0342 12.5231C17.4531 11.5119 17.668 10.4279 17.6667 9.33334C17.668 8.23879 17.4531 7.15477 17.0342 6.14354C16.6153 5.13232 16.0008 4.21383 15.2258 3.44084C14.4529 2.66591 13.5344 2.05135 12.5231 1.63247C11.5119 1.21359 10.4279 0.998657 9.33334 1.00001C8.23879 0.998657 7.15477 1.21359 6.14354 1.63247C5.13232 2.05135 4.21383 2.66591 3.44084 3.44084C2.66591 4.21383 2.05135 5.13232 1.63247 6.14354C1.21359 7.15477 0.998657 8.23879 1.00001 9.33334C0.998657 10.4279 1.21359 11.5119 1.63247 12.5231C2.05135 13.5344 2.66591 14.4529 3.44084 15.2258C4.21383 16.0008 5.13232 16.6153 6.14354 17.0342C7.15477 17.4531 8.23879 17.668 9.33334 17.6667Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                                            <path d="M6 9.3335L8.5 11.8335L13.5 6.8335" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </mask>
+                                        <g mask="url(#mask0_982_145)">
+                                            <path d="M-0.666992 -0.666504H19.333V19.3335H-0.666992V-0.666504Z" fill="#29B33A" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-29px)] leading-[0]">
+                                    <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">Instant Download</h6>
+                                    <p className="font-normal text-[12px] leading-[120%] text-[#00002499] inline-block">Get your resume immediately after payment</p>
+                                </div>
+                            </li>
+                            <li className="flex flex-wrap gap-[10px]">
+                                <div className="w-[19px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <mask id="mask0_982_145" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="19" height="19">
+                                            <path d="M9.33334 17.6667C10.4279 17.668 11.5119 17.4531 12.5231 17.0342C13.5344 16.6153 14.4529 16.0008 15.2258 15.2258C16.0008 14.4529 16.6153 13.5344 17.0342 12.5231C17.4531 11.5119 17.668 10.4279 17.6667 9.33334C17.668 8.23879 17.4531 7.15477 17.0342 6.14354C16.6153 5.13232 16.0008 4.21383 15.2258 3.44084C14.4529 2.66591 13.5344 2.05135 12.5231 1.63247C11.5119 1.21359 10.4279 0.998657 9.33334 1.00001C8.23879 0.998657 7.15477 1.21359 6.14354 1.63247C5.13232 2.05135 4.21383 2.66591 3.44084 3.44084C2.66591 4.21383 2.05135 5.13232 1.63247 6.14354C1.21359 7.15477 0.998657 8.23879 1.00001 9.33334C0.998657 10.4279 1.21359 11.5119 1.63247 12.5231C2.05135 13.5344 2.66591 14.4529 3.44084 15.2258C4.21383 16.0008 5.13232 16.6153 6.14354 17.0342C7.15477 17.4531 8.23879 17.668 9.33334 17.6667Z" fill="white" stroke="white" strokeWidth="2" strokeLinejoin="round" />
+                                            <path d="M6 9.3335L8.5 11.8335L13.5 6.8335" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </mask>
+                                        <g mask="url(#mask0_982_145)">
+                                            <path d="M-0.666992 -0.666504H19.333V19.3335H-0.666992V-0.666504Z" fill="#29B33A" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-29px)] leading-[0]">
+                                    <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">7-Day Money Back</h6>
+                                    <p className="font-normal text-[12px] leading-[120%] text-[#00002499] inline-block">Not satisfied? Get a full refund within 7days.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                )}
             </div>
         </div>
     );

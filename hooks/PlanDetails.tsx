@@ -124,7 +124,7 @@ export default function PlanDetails() {
                         </div>
                         <div className="w-[calc(100%-48px)]">
                             <div className="flex items-center gap-[10px] mb-[13px]">
-                                <h4 className="font-bold text-[16px] leading-none text-[#000024]">{getPlanLabel(membership.plan.durationDays)}</h4>
+                                <h4 className="font-bold text-[16px] leading-none text-[#000024]">{membership ? getPlanLabel(membership.plan.durationDays) : "Free Plan"}</h4>
                                 <span className="border border-[#29B33A] bg-[#E6F9EC] rounded-[20px] font-bold text-[10px] leading-[100%] py-[5px] px-[10px] text-[#29B33A]">
                                     Active
                                 </span>

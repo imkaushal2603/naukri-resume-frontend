@@ -14,8 +14,11 @@ export default function MembershipPaymentButton({
 }: MembershipPaymentButtonProps) {
     const handlePayment = async () => {
         try {
+            const returnPath = window.location.pathname + window.location.search;
+            
             const { data } = await api.post("/payment/create-order", {
                 planId,
+                returnPath,
             });
 
             if (!data.success) {
@@ -38,7 +41,7 @@ export default function MembershipPaymentButton({
     return (
         <button
             onClick={handlePayment}
-            className="w-full flex items-center justify-center gap-[10px] bg-[#0456FF] text-white font-semibold text-[15px] py-[13px] px-[26px] rounded-[8px] cursor-pointer hover:bg-[#0344cc] transition-colors duration-300"
+            className="w-full inline-block border border-[#0456FF] bg-[#0456FF] py-[15px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
         >
             {label}
         </button>

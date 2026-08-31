@@ -260,7 +260,7 @@ export default function DashboardPage() {
                                         </svg>
                                         You're <span className="text-[#0456FF]">Premium!</span>
                                     </h2>
-                                    <span className="font-bold text-[18px] leading-[140%] text-[#000024CC]">{getPlanLabel(membership.plan.durationDays)} is active</span>
+                                    <span className="font-bold text-[18px] leading-[140%] text-[#000024CC]">{membership ? `${getPlanLabel(membership.plan.durationDays)} is active` : "Free Plan"}</span>
                                     <p className="font-medium text-[18px] leading-[140%] text-[#000024CC] my-[10px]">
                                         Enjoy unlimited access to all premium features.
                                     </p>
@@ -557,9 +557,9 @@ export default function DashboardPage() {
                                         </div>
                                         <div className="w-[135px]">
                                             {membership ? (
-                                                <Link href="/plans" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Manage Plan</Link>
+                                                <Link href="/plans" className="flex justify-center items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Manage Plan</Link>
                                             ) : (
-                                                <Link href="/plans" className="flex items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View Plans</Link>
+                                                <Link href="/plans" className="flex justify-center items-center gap-[10px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View Plans</Link>
                                             )}
                                         </div>
                                     </div>

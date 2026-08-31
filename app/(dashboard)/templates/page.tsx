@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "sonner";
 import api from "@/services/api";
 import { useResumeId } from "@/hooks/useResumeId";
 import Loader from "@/components/ui/Loader";
@@ -20,7 +21,28 @@ interface Template {
     templateKey: string;
     preview: string;
     status: number;
+    tier: "free" | "paid";
+    categories: string[];
 }
+
+const FILTERS = [
+    { label: "All", value: "all" },
+    { label: "Free", value: "free" },
+    { label: "Paid", value: "paid" },
+    { label: "With Image", value: "with-image" },
+    { label: "Premium", value: "premium" },
+    { label: "Modern", value: "modern" },
+];
+
+const getFilterParams = (filter: string): { tier?: string; category?: string } => {
+    if (filter === "free" || filter === "paid") {
+        return { tier: filter };
+    }
+    if (filter === "with-image" || filter === "premium" || filter === "modern") {
+        return { category: filter };
+    }
+    return {};
+};
 
 export default function Templates() {
     const router = useRouter();
@@ -30,12 +52,22 @@ export default function Templates() {
     const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [saving, setSaving] = useState<boolean>(false);
+    const [activeFilter, setActiveFilter] = useState<string>("all");
+    const [membership, setMembership] = useState<any>(null);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const templatesRes = await withMinDelay(api.get("/resume/templates"));
+                setLoading(true);
+
+                const { tier, category } = getFilterParams(activeFilter);
+                const params = new URLSearchParams();
+                if (tier) params.set("tier", tier);
+                if (category) params.set("category", category);
+                const query = params.toString() ? `?${params.toString()}` : "";
+
+                const templatesRes = await withMinDelay(api.get(`/resume/templates${query}`));
                 if (templatesRes.data.success) {
                     setTemplates(templatesRes.data.templates);
                 }
@@ -55,10 +87,30 @@ export default function Templates() {
             }
         };
         fetchData();
-    }, [resumeId]);
+    }, [resumeId, activeFilter]);
 
-    const handleSelectTemplate = (templateId: number) => {
-        setSelectedTemplateId(templateId);
+    useEffect(() => {
+        const fetchMembership = async () => {
+            try {
+                const res = await api.get("/membership");
+                if (res.data.success) {
+                    setMembership(res.data.status);
+                }
+            } catch (err) {
+                console.error("Failed to load membership", err);
+            }
+        };
+        fetchMembership();
+    }, []);
+
+    const isPremium = Boolean(membership);
+
+    const handleSelectTemplate = (template: Template) => {
+        if (template.tier === "paid" && !isPremium) {
+            toast.error("This is a premium template. Upgrade your plan to use it.");
+            return;
+        }
+        setSelectedTemplateId(template.id);
     };
 
     const handleUpdate = async () => {
@@ -158,39 +210,46 @@ export default function Templates() {
                         </div>
                     </div>
                 </div>
-                <div className="mt-[50px]">
-                    {loading ? (
-                        <p className="text-sm text-[#00002480]">Loading templates...</p>
-                    ) : templates.length === 0 ? (
+                <div className="flex flex-wrap gap-[10px] my-[50px]">
+                    {FILTERS.map((f) => (
+                        <button
+                            key={f.value}
+                            onClick={() => setActiveFilter(f.value)}
+                            className={`px-4 py-2 rounded-[8px] text-sm font-semibold transition-colors cursor-pointer transition-colors duration-300 ${activeFilter === f.value
+                                ? "bg-[#0456FF] text-white"
+                                : "border border-[#0456FF] text-[#0456FF] hover:bg-[#0456FF] hover:text-white"
+                                }`}
+                        >
+                            {f.label}
+                        </button>
+                    ))}
+                </div>
+                <div>
+                    {templates.length === 0 ? (
                         <p className="text-sm text-[#00002480]">No templates available.</p>
                     ) : (
                         <div className="grid grid-cols-5 gap-[20px]">
                             {templates.map((template) => {
                                 const isCurrent = template.id === currentTemplateId;
                                 const isSelected = template.id === selectedTemplateId;
+                                const isLocked = template.tier === "paid" && !isPremium;
 
                                 return (
-                                    <div
-                                        key={template.id}
-                                        onClick={() => handleSelectTemplate(template.id)}
-                                        className={`relative cursor-pointer rounded-[8px] border-2 p-[10px] transition-all flex flex-col justify-between ${isSelected
-                                            ? "border-[#0456ff]"
-                                            : "border-[#0456FF26]"
-                                            }`}
-                                    >
+                                    <div key={template.id} onClick={() => handleSelectTemplate(template)} className={`relative cursor-pointer rounded-[8px] border-2 p-[10px] transition-all flex flex-col justify-between ${isSelected ? "border-[#0456ff]" : "border-[#0456FF26]"}`}>
                                         {isCurrent && (
                                             <span className="absolute top-2 right-2 bg-[#0456FF] text-white text-[10px] font-semibold px-2 py-[2px] rounded-[4px] z-10">
                                                 Current
                                             </span>
                                         )}
+                                        {isLocked && (
+                                            <span className="absolute top-2 right-2 flex bg-[#0456FF] w-[35px] h-[35px] rounded-full justify-center items-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24" fill="none">
+                                                    <path d="M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                </svg>
+                                            </span>
+                                        )}
                                         {template.preview ? (
-                                            <Image
-                                                src={getImageUrl(template.preview)}
-                                                alt={template.name}
-                                                width={220}
-                                                height={300}
-                                                className="w-full h-auto rounded-[4px] object-cover"
-                                            />
+                                            <Image src={getImageUrl(template.preview)} alt={template.name} width={220} height={300} className="w-full h-auto rounded-[4px] object-cover" />
                                         ) : (
                                             <div className="w-full h-[300px] bg-gray-100 rounded-[4px] flex items-center justify-center text-xs text-gray-400">No preview</div>
                                         )}
@@ -201,7 +260,7 @@ export default function Templates() {
                                                 </svg>
                                             </div>
                                         )}
-                                        < p className="text-center font-medium text-[14px] mt-[10px] font-semibold">{template.name}</p>
+                                        < p className={`text-center font-medium text-[14px] mt-[10px] font-semibold ${isSelected ? "text-[#0456FF]" : "text-[#000024]"}`}>{template.name}</p>
                                     </div>
                                 );
                             })}
@@ -216,7 +275,7 @@ export default function Templates() {
                     >
                         {saving
                             ? (isEditing ? "Updating..." : "Setting up...")
-                            : (isEditing ? "Update" : "Continue with this template")}
+                            : (isEditing ? "Update" : "Use this template")}
                     </button>
                 )}
             </div>
