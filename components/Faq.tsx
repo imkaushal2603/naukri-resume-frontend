@@ -8,7 +8,7 @@ export default function Faq() {
     const faqData = [
         {
             question: "What is Naukri Resume?",
-            answer: "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes. Choose from modern templates, customize your content, preview your resume in real time, and download it in PDF or DOCX format with a premium plan."
+            answer: "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes. Choose from modern templates, customize your content, preview your resume in real time, and download it in PDF format with a premium plan."
         },
         {
             question: "Is Naukri Resume ATS-friendly?",
@@ -20,7 +20,7 @@ export default function Faq() {
         },
         {
             question: "Can I download my resume for free?",
-            answer: "You can create, edit, and preview your resume for free. Downloading your resume in PDF or DOCX format requires an active Premium plan. Premium also includes ATS Score checking, AI suggestions, premium templates, and other advanced features."
+            answer: "You can create, edit, and preview your resume for free. Downloading your resume in PDF format requires an active Premium plan. Premium also includes ATS Score checking, AI suggestions, premium templates, and other advanced features."
         },
         {
             question: "Is my data safe with Naukri Resume?",
