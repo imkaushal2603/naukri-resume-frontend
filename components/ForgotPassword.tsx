@@ -50,9 +50,9 @@ export default function ForgotPassword({
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
             <div className="scrollbar-thin relative w-full max-w-[1000px] bg-white rounded-[10px] shadow-2xl overflow-hidden flex flex-wrap max-h-[90dvh] overflow-y-auto">
-                <div className="w-[55%] p-8 sm:p-10 flex flex-col justify-center">
+                <div className="w-[55%] p-8 sm:p-10 flex flex-col justify-center max-[768px]:w-full">
                     <h2 className="text-[26px] font-bold text-[#000000] leading-none mb-[30px]">Forgot Password?</h2>
-
+                    <button type="button" onClick={onClose} className="absolute top-[20px] right-[40px] text-[#000] cursor-pointer w-[40px] h-[40px] flex items-center justify-center font-semibold z-[1] max-[768px]:right-[20px]">✕</button>
                     {!isSubmitted ? (
                         <form onSubmit={handleRequestReset}>
                             <div>
@@ -87,7 +87,6 @@ export default function ForgotPassword({
                             </p>
                         </div>
                     )}
-
                     <p className="text-[13px] text-center leading-none text-[#00002499] font-medium mt-[33px]">
                         Remembered your password?{" "}
                         <button
@@ -99,14 +98,7 @@ export default function ForgotPassword({
                         </button>
                     </p>
                 </div>
-                <div className="w-[45%] bg-[#0456FF26] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        className="absolute top-[20px] right-[40px] text-[#000] cursor-pointer w-[40px] h-[40px] flex items-center justify-center font-semibold"
-                    >
-                        ✕
-                    </button>
+                <div className="w-[45%] bg-[#0456FF26] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden max-[768px]:hidden">
                     <div className="text-center mt-[60px]">
                         <h3 className="text-[#000024] text-[38px] leading-tight font-bold mb-[12px]">Don't worry!</h3>
                         <p className="text-[15px] leading-normal text-[#000024]">Enter your email address and we'll send you a link to reset your password.</p>

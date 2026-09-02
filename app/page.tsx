@@ -14,7 +14,7 @@ import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
   title: "AI Resume Builder & ATS-Optimized Templates",
-  description: "Create a job-ready, ATS-friendly resume in minutes with Naukari Resume. AI writing assistance, recruiter-approved templates, and instant download.",
+  description: "Create a job-ready, ATS-friendly resume in minutes with Naukri Resume. AI writing assistance, recruiter-approved templates, and instant download.",
   alternates: {
     canonical: "https://naukri-resume.com/",
   }
@@ -24,14 +24,14 @@ export default function Home() {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Naukari Resume",
+    name: "Naukri Resume",
     url: "https://naukri-resume.com/",
   };
 
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "Naukari Resume AI Builder",
+    name: "Naukri Resume AI Builder",
     operatingSystem: "All",
     applicationCategory: "BusinessApplication",
     offers: {
@@ -52,18 +52,18 @@ export default function Home() {
     mainEntity: [
       {
         "@type": "Question",
-        name: "What is Naukari Resume?",
+        name: "What is Naukri Resume?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Naukari Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes.",
+          text: "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes.",
         },
       },
       {
         "@type": "Question",
-        name: "Is Naukari Resume ATS-friendly?",
+        name: "Is Naukri Resume ATS-friendly?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. All Naukari Resume templates are optimized for Applicant Tracking Systems (ATS).",
+          text: "Yes. All Naukri Resume templates are optimized for Applicant Tracking Systems (ATS).",
         },
       },
     ],

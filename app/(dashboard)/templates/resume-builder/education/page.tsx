@@ -147,7 +147,7 @@ export default function Education() {
 
     const renderForm = () => (
         <div className="p-5">
-            <div className="grid grid-cols-3 gap-[27px] mb-4">
+            <div className="grid grid-cols-3 gap-[27px] mb-4 max-[768px]:grid-cols-1">
                 <div>
                     <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
                         Course / Degree *
@@ -189,7 +189,7 @@ export default function Education() {
                     </select>
                 </div>
             </div>
-            <div className="grid grid-cols-3 gap-[27px] mb-4">
+            <div className="grid grid-cols-3 gap-[27px] mb-4 max-[768px]:grid-cols-1">
                 <div>
                     <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">
                         Start Date
@@ -261,18 +261,14 @@ export default function Education() {
     }
 
     return (
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
-                <div className="flex justify-between gap-[20px] mb-[45px]">
-                    <div className="w-[calc(100%-231px)]">
-                        <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">
-                            Education
-                        </h4>
-                        <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">
-                            Add your education details. Start with your latest education.
-                        </p>
+                <div className="flex flex-wrap justify-between gap-[20px] mb-[45px]">
+                    <div className="w-[calc(100%-231px)] max-[768px]:w-full">
+                        <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Education</h4>
+                        <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Add your education details. Start with your latest education.</p>
                     </div>
-                    <div>
+                    <div className="max-[768px]:w-full">
                         <button
                             onClick={openAdd}
                             className="flex gap-[10px] border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300"
@@ -385,13 +381,11 @@ export default function Education() {
                         </div>
                     ))}
                 </div>
-
                 {editingId === "new" && (
                     <div className="border border-[#0456FF26] rounded-[10px] mt-[20px]">
                         {renderForm()}
                     </div>
                 )}
-
                 <div className="flex flex-wrap gap-[10px] justify-between my-[30px] pt-[42px] border-t border-[#0456FF26]">
                     <button
                         onClick={handlePrevious}
@@ -413,8 +407,7 @@ export default function Education() {
                     </button>
                 </div>
             </div>
-
-            <div className="w-[325px] shrink-0">
+            <div className="w-[325px] shrink-0 max-[1300px]:w-full">
                 <ProgressPanel />
             </div>
         </div>

@@ -122,10 +122,10 @@ export default function PreviewPage() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
                 <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
-                    <div>
+                    <div className="max-[768px]:w-full">
                         <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">{resumeName}</h4>
                         <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Preview your resume before downloading.</p>
                     </div>
@@ -173,8 +173,8 @@ export default function PreviewPage() {
                     )}
                 </div>
             </div>
-            <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
-                <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
+            <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full min-[768px]:max-[1300px]:flex-wrap min-[768px]:max-[1300px]:[flex-direction:unset] min-[768px]:max-[1300px]:gap-x-[20px]">
+                <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px] min-[768px]:max-[1300px]:w-[calc(50%-10px)]">
                     <div className="flex flex-wrap gap-[10px] items-center">
                         <div className="w-[30px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -205,7 +205,7 @@ export default function PreviewPage() {
                             </svg>
                         )}
                     </button>
-                    <button
+                    {/* <button
                         type="button"
                         onClick={() => handleDownload("docx")}
                         disabled={downloading !== null}
@@ -222,14 +222,14 @@ export default function PreviewPage() {
                                 <path d="M3.75 7.75V4.75C3.75 2.54 5.54 0.75 7.75 0.75C9.96 0.75 11.75 2.54 11.75 4.75V7.75M7.75 12.75C8.01522 12.75 8.26957 12.6446 8.45711 12.4571C8.64464 12.2696 8.75 12.0152 8.75 11.75C8.75 11.4848 8.64464 11.2304 8.45711 11.0429C8.26957 10.8554 8.01522 10.75 7.75 10.75C7.48478 10.75 7.23043 10.8554 7.04289 11.0429C6.85536 11.2304 6.75 11.4848 6.75 11.75C6.75 12.0152 6.85536 12.2696 7.04289 12.4571C7.23043 12.6446 7.48478 12.75 7.75 12.75ZM7.75 12.75V15.75M2.35 7.75H13.15C14.03 7.75 14.75 8.47 14.75 9.35V16.35C14.75 17.67 13.67 18.75 12.35 18.75H3.15C1.83 18.75 0.75 17.67 0.75 16.35V9.35C0.75 8.47 1.47 7.75 2.35 7.75Z" stroke="currentColor" strokeOpacity="0.8" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         )}
-                    </button>
+                    </button> */}
                     {!membership && (
                         <div className="bg-[#0456FF1A] rounded-[6px] p-3 font-normal text-[14px] leading-[120%] text-[#000024B2]">
                             <p>Complete the payment to enable download</p>
                         </div>
                     )}
                 </div>
-                <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
+                <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px] min-[768px]:max-[1300px]:w-[calc(50%-10px)]">
                     <div className="flex flex-wrap gap-[10px] items-center">
                         <div className="w-[30px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
@@ -267,7 +267,7 @@ export default function PreviewPage() {
                 </div>
                 <ProgressPanel />
                 {!membership && (
-                    <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
+                    <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px] min-[768px]:max-[1300px]:w-full">
                         <ul className="flex flex-col gap-y-[15px]">
                             <li className="flex flex-wrap gap-[10px]">
                                 <div className="w-[19px]">

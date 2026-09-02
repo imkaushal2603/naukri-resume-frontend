@@ -145,10 +145,10 @@ export default function BasicInfoStep() {
     }
 
     return (
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
-                <div className="flex justify-between gap-[20px] mb-[45px]">
-                    <div className="w-[calc(100%-231px)]">
+                <div className="flex flex-wrap justify-between gap-[20px] mb-[45px] max-[768px]:flex-col">
+                    <div className="w-[calc(100%-231px)] max-[768px]:w-full">
                         <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Basic Information</h4>
                         <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Provide your personal details to help employers identify and contact you. This information will appear at the top of your resume.</p>
                     </div>
@@ -161,8 +161,8 @@ export default function BasicInfoStep() {
                         All fields marked are required
                     </div>
                 </div>
-                <div className="flex items-center gap-[20px] mb-[20px] pb-[30px] border-b border-[#0456FF26]">
-                    <div className="relative w-[253px] h-[282px] rounded-[10px] overflow-hidden bg-gray-100 border border-[#0456FF26] flex items-center justify-center shrink-0">
+                <div className="flex flex-wrap items-center gap-[20px] mb-[20px] pb-[30px] border-b border-[#0456FF26]">
+                    <div className="relative w-[253px] h-[282px] rounded-[10px] overflow-hidden bg-gray-100 border border-[#0456FF26] flex items-center justify-center shrink-0 max-[768px]:w-full">
                         {previewUrl ? (
                             <img src={previewUrl} alt="Profile Preview" className="w-full h-full object-cover" />
                         ) : (
@@ -175,7 +175,7 @@ export default function BasicInfoStep() {
                             <input type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
                         </label>
                     </div>
-                    <div>
+                    <div className="max-[768px]:w-full">
                         <h5 className="font-bold text-[20px] leading-none text-black mb-[12px]">Profile Photo</h5>
                         <p className="max-w-[280px] font-normal text-[12px] leading-[130%] text-black mb-[20px]">A professional profile photo helps recruiters recognize you and creates a positive first impression.</p>
                         <label className="border border-[#0456FF] rounded-[6px] px-[20px] py-[10px] flex mb-[15px] font-normal text-[14px] leading-none gap-[14px] w-fit cursor-pointer text-[#0456FF] transition-colors hover:bg-[#0456FF] hover:text-white">
@@ -192,8 +192,8 @@ export default function BasicInfoStep() {
                 </div>
                 <div>
                     <h4 className="font-bold text-[20px] leading-none text-black mb-[20px]">Personal Details</h4>
-                    <div className="flex flex-wrap gap-[30px] row-gap-[20px]">
-                        <div className="w-[calc((100%-60px)/3)]">
+                    <div className="flex flex-wrap gap-[30px] row-gap-[20px] max-[768px]:gap-y-[20px] min-[768px]:max-[1400px]:gap-[10px]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Full Name *</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -204,7 +204,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.fullName || ""} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Email</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -215,7 +215,7 @@ export default function BasicInfoStep() {
                                 <input type="email" value={form.email || ""} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Phone *</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -226,7 +226,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.phone || ""} onChange={(e) => handleChange("phone", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Country *</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -238,7 +238,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.country || ""} onChange={(e) => handleChange("country", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">State *</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -250,7 +250,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.state || ""} onChange={(e) => handleChange("state", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">City *</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -262,7 +262,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.city || ""} onChange={(e) => handleChange("city", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Zip Code</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -274,7 +274,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.zipCode || ""} onChange={(e) => handleChange("zipCode", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">LinkedIn</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -285,7 +285,7 @@ export default function BasicInfoStep() {
                                 <input type="text" value={form.linkedin || ""} onChange={(e) => handleChange("linkedin", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
                             </div>
                         </div>
-                        <div className="w-[calc((100%-60px)/3)]">
+                        <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                             <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">GitHub</label>
                             <div className="relative">
                                 <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
@@ -307,7 +307,7 @@ export default function BasicInfoStep() {
                     </button>
                 </div>
             </div>
-            <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
+            <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
                 <ProgressPanel />
                 <div className="border border-[#CACACA80] flex flex-col px-4 py-3 gap-y-3 rounded-[6px]">
                     <div className="flex flex-wrap gap-[10px]">

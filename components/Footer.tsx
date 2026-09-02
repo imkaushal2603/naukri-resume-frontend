@@ -15,8 +15,8 @@ export default function Footer() {
                 </svg>
             </div>
             <div className="max-w-[1390px] mx-auto px-[15px]">
-                <div className="flex flex-wrap items-center px-[40px]">
-                    <div className="w-[50%] pr-[20px]">
+                <div className="flex flex-wrap items-center px-[40px] max-[768px]:px-[10px]">
+                    <div className="w-[50%] pr-[20px] max-[768px]:pr-0">
                         <Link href="/">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="253" height="63" viewBox="0 0 253 63" fill="none">
                                 <rect width="253" height="63" fill="url(#pattern0_71_1051)" />
@@ -28,7 +28,7 @@ export default function Footer() {
                                 </defs>
                             </svg>
                         </Link>
-                        <h5 className="font-medium text-[20px] leading-[130%] text-[rgba(0,0,36,0.8)] my-[20px]">Buld professional resumes that help you get red faster</h5>
+                        <h5 className="font-medium text-[20px] leading-[130%] text-[rgba(0,0,36,0.8)] my-[20px] max-[768px]:text-[18px]">Buld professional resumes that help you get red faster</h5>
                         <span className="inline-block font-bold text-[18px] leading-[115%] text-[#000024] mb-[15px]">Follow us</span>
                         <ul className="flex flex-wrap gap-[10px]">
                             <li>
@@ -50,7 +50,7 @@ export default function Footer() {
                         </ul>
                     </div>
                     <div className="w-[50%]">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="640" height="304" viewBox="0 0 640 304" fill="none">
+                        <svg className="max-[768px]:w-full min-[768px]:max-[1300px]:w-full" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="640" height="304" viewBox="0 0 640 304" fill="none">
                             <rect width="640" height="304" fill="url(#pattern0_96_33)" />
                             <defs>
                                 <pattern id="pattern0_96_33" patternContentUnits="objectBoundingBox" width="1" height="1">
@@ -61,22 +61,22 @@ export default function Footer() {
                         </svg>
                     </div>
                 </div>
-                <div className="flex flex-wrap items-center gap-[20px] border-t border-[#CACACA] px-10 pt-[30px] mt-[10px]">
-                    <div className="w-[calc((100%-40px)/3)] flex flex-wrap items-center gap-2.5">
+                <div className="flex flex-wrap items-center gap-[20px] border-t border-[#CACACA] px-10 pt-[30px] mt-[10px] max-[768px]:px-[10px]">
+                    <div className="w-[calc((100%-40px)/3)] flex flex-wrap items-center gap-2.5 max-[768px]:w-full max-[768px]:justify-center min-[768px]:max-[1025px]:w-[calc(50%-10px)]">
                         <div className="w-10 h-10 flex items-center justify-center bg-white rounded-full shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="17" viewBox="0 0 14 17" fill="none">
                                 <path d="M5.79167 11.2917L10.5 6.58333L9.3125 5.39583L5.79167 8.91667L4.04167 7.16667L2.85417 8.35417L5.79167 11.2917ZM6.66667 16.6667C4.73611 16.1806 3.1425 15.0728 1.88583 13.3433C0.629167 11.6139 0.000555556 9.69389 0 7.58333V2.5L6.66667 0L13.3333 2.5V7.58333C13.3333 9.69444 12.705 11.6147 11.4483 13.3442C10.1917 15.0736 8.59778 16.1811 6.66667 16.6667ZM6.66667 14.9167C8.11111 14.4583 9.30555 13.5417 10.25 12.1667C11.1944 10.7917 11.6667 9.26389 11.6667 7.58333V3.64583L6.66667 1.77083L1.66667 3.64583V7.58333C1.66667 9.26389 2.13889 10.7917 3.08333 12.1667C4.02778 13.5417 5.22222 14.4583 6.66667 14.9167Z" fill="#0456FF" />
                             </svg>
                         </div>
-                        <div>
+                        <div className="w-[calc(100%-50px)]">
                             <h5 className="font-bold text-[20px] leading-[100%] text-[#000024CC] mb-[6px]">Your data is safe with us.</h5>
                             <p className="inline-block font-medium text-[16px] leading-[100%] text-[#000024CC]">We never share your personal information.</p>
                         </div>
                     </div>
-                    <div className="w-[calc((100%-40px)/3)]">
-                        <p className="text-center font-normal text-[16px] leading-[130%] text-[#66667C]">© 2026 Naukari Resume. All Rights Reserved.<br />A Product by <Link href="https://crowdvolley.com/" target="_blank" className="font-semibold text-[#0456FF] hover:underline">Crowdvolley IT Solutions Pvt. Ltd</Link>.</p>
+                    <div className="w-[calc((100%-40px)/3)] max-[768px]:w-full max-[768px]:justify-center min-[768px]:max-[1025px]:w-[calc(50%-10px)]">
+                        <p className="text-center font-normal text-[16px] leading-[130%] text-[#66667C]">© 2026 Naukri Resume. All Rights Reserved.<br />A Product by <Link href="https://crowdvolley.com/" target="_blank" className="font-semibold text-[#0456FF] hover:underline">Crowdvolley IT Solutions Pvt. Ltd</Link>.</p>
                     </div>
-                    <div className="w-[calc((100%-40px)/3)] flex flex-wrap gap-3 items-center justify-end">
+                    <div className="w-[calc((100%-40px)/3)] flex flex-wrap gap-3 items-center justify-end max-[768px]:w-full max-[768px]:justify-center min-[768px]:max-[1025px]:w-full min-[768px]:max-[1025px]:justify-center">
                         <Link href="" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] hover:text-[#0456FF] transition-colors duration-300">Privacy Policy</Link>
                         <span>|</span>
                         <Link href="" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] hover:text-[#0456FF] transition-colors duration-300">Terms of Use</Link>

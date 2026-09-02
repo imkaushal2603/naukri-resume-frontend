@@ -1,6 +1,6 @@
 export default function ExtendResumeLimit() {
     return (
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
                 <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Need More Resumes? Extend Your Limit</h4>
                 <p className="font-normal text-[15px] leading-[140%] text-[#00002480] block">You've already created all 15 resumes included in your current plan.</p>
@@ -12,12 +12,12 @@ export default function ExtendResumeLimit() {
                         </svg>
                     </div>
                     <div className="w-[calc(100%-36px)]">
-                        <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF]">7-Day Money Back Guarantee</h6>
+                        <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] max-[768px]:mb-[6px]">7-Day Money Back Guarantee</h6>
                         <p className="font-normal text-[12px] leading-[100%] text-[#000024CC] inline-block">Not satisfied? Get a full refund within 7 days of purchase.</p>
                     </div>
                 </div>
-                <div className="flex flex-wrap gap-8 mt-[50px]">
-                    <div className="w-[calc(50%-16px)] border border-[#0456FF26] rounded-[8px] px-[25px] py-[40px]">
+                <div className="flex flex-wrap gap-8 mt-[50px] min-[768px]:max-[1400px]:gap-[20px]">
+                    <div className="w-[calc(50%-16px)] border border-[#0456FF26] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)]">
                         <div className="mb-[20px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="6" fill="#D9E6FF" />
@@ -76,7 +76,7 @@ export default function ExtendResumeLimit() {
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited Preview</span>
                                 </div>
                             </li>
-                            <li className="flex flex-wrap items-center gap-[10px]">
+                            {/* <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
                                         <path d="M12 6.375C12 7.11369 11.8545 7.84514 11.5718 8.52759C11.2891 9.21005 10.8748 9.83015 10.3525 10.3525C9.83015 10.8748 9.21005 11.2891 8.52759 11.5718C7.84514 11.8545 7.11369 12 6.375 12C5.63631 12 4.90486 11.8545 4.22241 11.5718C3.53995 11.2891 2.91985 10.8748 2.39752 10.3525C1.87519 9.83015 1.46086 9.21005 1.17818 8.52759C0.895495 7.84514 0.75 7.11369 0.75 6.375C0.75 4.88316 1.34263 3.45242 2.39752 2.39752C3.45242 1.34263 4.88316 0.75 6.375 0.75C7.86684 0.75 9.29758 1.34263 10.3525 2.39752C11.4074 3.45242 12 4.88316 12 6.375Z" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -85,6 +85,17 @@ export default function ExtendResumeLimit() {
                                 </div>
                                 <div className="w-[calc(100%-25px)]">
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF & DOCX Downloads</span>
+                                </div>
+                            </li> */}
+                            <li className="flex flex-wrap items-center gap-[10px]">
+                                <div className="flex w-[15px] justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                                        <path d="M12 6.375C12 7.11369 11.8545 7.84514 11.5718 8.52759C11.2891 9.21005 10.8748 9.83015 10.3525 10.3525C9.83015 10.8748 9.21005 11.2891 8.52759 11.5718C7.84514 11.8545 7.11369 12 6.375 12C5.63631 12 4.90486 11.8545 4.22241 11.5718C3.53995 11.2891 2.91985 10.8748 2.39752 10.3525C1.87519 9.83015 1.46086 9.21005 1.17818 8.52759C0.895495 7.84514 0.75 7.11369 0.75 6.375C0.75 4.88316 1.34263 3.45242 2.39752 2.39752C3.45242 1.34263 4.88316 0.75 6.375 0.75C7.86684 0.75 9.29758 1.34263 10.3525 2.39752C11.4074 3.45242 12 4.88316 12 6.375Z" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M4.29199 6.77063L5.23262 7.84625C5.29452 7.91708 5.37161 7.97303 5.45814 8.00992C5.54467 8.04681 5.63841 8.06369 5.73238 8.0593C5.82634 8.05491 5.9181 8.02937 6.00082 7.98459C6.08354 7.9398 6.15509 7.87691 6.21012 7.80062L8.45824 4.6875" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-25px)]">
+                                    <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF Downloads</span>
                                 </div>
                             </li>
                             <li className="flex flex-wrap items-center gap-[10px]">
@@ -110,9 +121,9 @@ export default function ExtendResumeLimit() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="inline-block w-full mt-[30px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 50 Resumes</button>
+                        <button type="button" className="inline-block w-full mt-[30px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 50 Resumes</button>
                     </div>
-                    <div className="relative w-[calc(50%-16px)] border border-[#0456FF26] rounded-[8px] px-[25px] py-[40px]">
+                    <div className="relative w-[calc(50%-16px)] border border-[#0456FF26] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)]">
                         <div className="absolute top-[-13px] right-[25px] bg-[#0456FF] text-white font-medium text-[12px] leading-[100%] py-[7px] px-[14px] rounded-[4px]">
                             <span>Recommended</span>
                         </div>
@@ -174,7 +185,7 @@ export default function ExtendResumeLimit() {
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited Preview</span>
                                 </div>
                             </li>
-                            <li className="flex flex-wrap items-center gap-[10px]">
+                            {/* <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
                                         <path d="M12 6.375C12 7.11369 11.8545 7.84514 11.5718 8.52759C11.2891 9.21005 10.8748 9.83015 10.3525 10.3525C9.83015 10.8748 9.21005 11.2891 8.52759 11.5718C7.84514 11.8545 7.11369 12 6.375 12C5.63631 12 4.90486 11.8545 4.22241 11.5718C3.53995 11.2891 2.91985 10.8748 2.39752 10.3525C1.87519 9.83015 1.46086 9.21005 1.17818 8.52759C0.895495 7.84514 0.75 7.11369 0.75 6.375C0.75 4.88316 1.34263 3.45242 2.39752 2.39752C3.45242 1.34263 4.88316 0.75 6.375 0.75C7.86684 0.75 9.29758 1.34263 10.3525 2.39752C11.4074 3.45242 12 4.88316 12 6.375Z" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -183,6 +194,17 @@ export default function ExtendResumeLimit() {
                                 </div>
                                 <div className="w-[calc(100%-25px)]">
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF & DOCX Downloads</span>
+                                </div>
+                            </li> */}
+                            <li className="flex flex-wrap items-center gap-[10px]">
+                                <div className="flex w-[15px] justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                                        <path d="M12 6.375C12 7.11369 11.8545 7.84514 11.5718 8.52759C11.2891 9.21005 10.8748 9.83015 10.3525 10.3525C9.83015 10.8748 9.21005 11.2891 8.52759 11.5718C7.84514 11.8545 7.11369 12 6.375 12C5.63631 12 4.90486 11.8545 4.22241 11.5718C3.53995 11.2891 2.91985 10.8748 2.39752 10.3525C1.87519 9.83015 1.46086 9.21005 1.17818 8.52759C0.895495 7.84514 0.75 7.11369 0.75 6.375C0.75 4.88316 1.34263 3.45242 2.39752 2.39752C3.45242 1.34263 4.88316 0.75 6.375 0.75C7.86684 0.75 9.29758 1.34263 10.3525 2.39752C11.4074 3.45242 12 4.88316 12 6.375Z" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        <path d="M4.29199 6.77063L5.23262 7.84625C5.29452 7.91708 5.37161 7.97303 5.45814 8.00992C5.54467 8.04681 5.63841 8.06369 5.73238 8.0593C5.82634 8.05491 5.9181 8.02937 6.00082 7.98459C6.08354 7.9398 6.15509 7.87691 6.21012 7.80062L8.45824 4.6875" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-25px)]">
+                                    <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF Downloads</span>
                                 </div>
                             </li>
                             <li className="flex flex-wrap items-center gap-[10px]">
@@ -208,11 +230,11 @@ export default function ExtendResumeLimit() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="inline-block w-full mt-[30px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 100 Resumes</button>
+                        <button type="button" className="mt-[30px] w-full inline-block border border-[#0456FF] bg-[#0456FF] py-[15px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 100 Resumes</button>
                     </div>
                 </div>
             </div>
-            <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
+            <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
                 <div className="border border-[#CACACA80] flex flex-col px-[25px] py-[20px] gap-y-[20px] rounded-[6px]">
                     <h6 className="font-bold text-[16px] leading-[120%] text-[#000024]">Why Upgrade?</h6>
                     <div className="flex flex-col gap-y-5">

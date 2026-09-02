@@ -83,8 +83,9 @@ export default function Registration({ isOpen, onClose, onOpenLogin }: Registrat
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-xs p-4">
       <div className="scrollbar-thin relative w-full max-w-[1000px] bg-white rounded-[10px] shadow-2xl overflow-hidden flex flex-wrap max-h-[90dvh] overflow-y-auto">
-        <div className="w-[55%] p-8 sm:p-10 flex flex-col justify-center">
+        <div className="w-[55%] p-8 sm:p-10 flex flex-col justify-center max-[768px]:w-full">
           <h2 className="text-[26px] font-bold text-[#000000] leading-none mb-[30px]">Create Account</h2>
+          <button type="button" onClick={onClose} className="absolute top-[20px] right-[40px] text-[#000] cursor-pointer w-[40px] h-[40px] flex items-center justify-center font-semibold z-[1] max-[768px]:right-[20px]">✕</button>
           <form onSubmit={handleSubmit}>
             <div>
               <label className="block text-[16px] font-normal text-[#000000] leading-none mb-[15px]">Name</label>
@@ -158,8 +159,7 @@ export default function Registration({ isOpen, onClose, onOpenLogin }: Registrat
             <button type="button" onClick={handleLoginClick} className="text-[#0456FF] font-medium cursor-pointer hover:underline">Login</button>
           </p>
         </div>
-        <div className="w-[45%] bg-[#0456FF26] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden">
-          <button type="button" onClick={onClose} className="absolute top-[20px] right-[40px] text-[#000] cursor-pointer w-[40px] h-[40px] flex items-center justify-center font-semibold">✕</button>
+        <div className="w-[45%] bg-[#0456FF26] p-8 sm:p-10 flex flex-col justify-between relative overflow-hidden max-[768px]:hidden">
           <div className="text-center mt-[60px]">
             <h3 className="text-[#000024] text-[42px] leading-none mb-[12px]">Join Us Today!</h3>
             <p className="text-[15px] leading-none text-[#000024]">Create an account to get started</p>

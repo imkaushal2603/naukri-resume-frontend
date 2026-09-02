@@ -53,7 +53,7 @@ export default function Plans() {
     }
 
     return (
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
                 <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Choose the plan that's right for you</h4>
                 <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Upgrade your plan to create up to 15 resumes and unlock all premium features.</p>
@@ -64,12 +64,12 @@ export default function Plans() {
                         </svg>
                     </div>
                     <div className="w-[calc(100%-36px)]">
-                        <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF]">7-Day Money Back Guarantee</h6>
+                        <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] max-[768px]:mb-[6px]">7-Day Money Back Guarantee</h6>
                         <p className="font-normal text-[12px] leading-[100%] text-[#000024CC] inline-block">Not satisfied? Get a full refund within 7 days of purchase.</p>
                     </div>
                 </div>
-                <div className="flex flex-wrap gap-8 mt-[50px]">
-                    <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] ${isActivePlan(1) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
+                <div className="flex flex-wrap gap-8 mt-[50px] min-[768px]:max-[1400px]:gap-[20px]">
+                    <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${isActivePlan(1) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
                         <div className="flex flex-wrap gap-[35px]">
                             <div className="w-[calc(100%_-_119px)]">
                                 <h5 className="font-bold text-[20px] leading-[100%] text-[#000024] mb-[8px]">Weekly Premium</h5>
@@ -99,7 +99,7 @@ export default function Plans() {
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Create up to 15 resumes</span>
                                 </div>
                             </li>
-                            <li className="flex flex-wrap items-center gap-[10px]">
+                            {/* <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                                         <path d="M5 7.5L1.875 4.375L2.75 3.46875L4.375 5.09375V0H5.625V5.09375L7.25 3.46875L8.125 4.375L5 7.5ZM1.25 10C0.90625 10 0.612083 9.87771 0.3675 9.63313C0.122917 9.38854 0.000416667 9.09417 0 8.75V6.875H1.25V8.75H8.75V6.875H10V8.75C10 9.09375 9.87771 9.38813 9.63313 9.63313C9.38854 9.87813 9.09417 10.0004 8.75 10H1.25Z" fill="#0456FF" />
@@ -107,6 +107,16 @@ export default function Plans() {
                                 </div>
                                 <div className="w-[calc(100%-25px)]">
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF & DOCX Downloads</span>
+                                </div>
+                            </li> */}
+                            <li className="flex flex-wrap items-center gap-[10px]">
+                                <div className="flex w-[15px] justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                        <path d="M5 7.5L1.875 4.375L2.75 3.46875L4.375 5.09375V0H5.625V5.09375L7.25 3.46875L8.125 4.375L5 7.5ZM1.25 10C0.90625 10 0.612083 9.87771 0.3675 9.63313C0.122917 9.38854 0.000416667 9.09417 0 8.75V6.875H1.25V8.75H8.75V6.875H10V8.75C10 9.09375 9.87771 9.38813 9.63313 9.63313C9.38854 9.87813 9.09417 10.0004 8.75 10H1.25Z" fill="#0456FF" />
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-25px)]">
+                                    <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF Downloads</span>
                                 </div>
                             </li>
                             <li className="flex flex-wrap items-center gap-[10px]">
@@ -180,7 +190,7 @@ export default function Plans() {
                             <p className="font-medium text-[15px] leading-[100%] text-[#000024B2] inline-block">7-Day Money Back Guarantee</p>
                         </div>
                     </div>
-                    <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] ${isActivePlan(2) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
+                    <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${isActivePlan(2) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
                         <div className="flex flex-wrap gap-[35px]">
                             <div className="w-[calc(100%_-_119px)]">
                                 <h5 className="font-bold text-[20px] leading-[100%] text-[#000024] mb-[8px]">Annual Premium</h5>
@@ -211,7 +221,7 @@ export default function Plans() {
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Create up to 15 resumes</span>
                                 </div>
                             </li>
-                            <li className="flex flex-wrap items-center gap-[10px]">
+                            {/* <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
                                         <path d="M5 7.5L1.875 4.375L2.75 3.46875L4.375 5.09375V0H5.625V5.09375L7.25 3.46875L8.125 4.375L5 7.5ZM1.25 10C0.90625 10 0.612083 9.87771 0.3675 9.63313C0.122917 9.38854 0.000416667 9.09417 0 8.75V6.875H1.25V8.75H8.75V6.875H10V8.75C10 9.09375 9.87771 9.38813 9.63313 9.63313C9.38854 9.87813 9.09417 10.0004 8.75 10H1.25Z" fill="#0456FF" />
@@ -219,6 +229,16 @@ export default function Plans() {
                                 </div>
                                 <div className="w-[calc(100%-25px)]">
                                     <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF & DOCX Downloads</span>
+                                </div>
+                            </li> */}
+                            <li className="flex flex-wrap items-center gap-[10px]">
+                                <div className="flex w-[15px] justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                        <path d="M5 7.5L1.875 4.375L2.75 3.46875L4.375 5.09375V0H5.625V5.09375L7.25 3.46875L8.125 4.375L5 7.5ZM1.25 10C0.90625 10 0.612083 9.87771 0.3675 9.63313C0.122917 9.38854 0.000416667 9.09417 0 8.75V6.875H1.25V8.75H8.75V6.875H10V8.75C10 9.09375 9.87771 9.38813 9.63313 9.63313C9.38854 9.87813 9.09417 10.0004 8.75 10H1.25Z" fill="#0456FF" />
+                                    </svg>
+                                </div>
+                                <div className="w-[calc(100%-25px)]">
+                                    <span className="font-normal text-[15px] leading-[100%] text-[#000024]">Unlimited PDF Downloads</span>
                                 </div>
                             </li>
                             <li className="flex flex-wrap items-center gap-[10px]">
@@ -294,7 +314,7 @@ export default function Plans() {
                     </div>
                 </div>
             </div>
-            <div className="w-[325px] shrink-0 flex flex-col gap-y-5">
+            <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
                 {membership && (
                     <PlanDetails />
                 )}

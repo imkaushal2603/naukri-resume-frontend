@@ -114,7 +114,7 @@ export default function SkillsPage() {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-wrap gap-6">
             <div className="flex-1">
                 <div className="border border-[#0456FF26] rounded-[10px] p-5">
                     <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Skills</h4>
@@ -163,7 +163,6 @@ export default function SkillsPage() {
                         ))}
                     </div>
                 </div>
-
                 <div className="flex flex-wrap gap-[10px] justify-between my-[30px] pt-[42px] border-t border-[#0456FF26]">
                     <button
                         type="button"
@@ -211,8 +210,7 @@ export default function SkillsPage() {
                     </button>
                 </div>
             </div>
-
-            <div className="w-[325px] shrink-0">
+            <div className="w-[325px] shrink-0 max-[1300px]:w-full">
                 <ProgressPanel />
             </div>
         </div>

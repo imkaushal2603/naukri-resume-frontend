@@ -7,12 +7,12 @@ export default function Faq() {
 
     const faqData = [
         {
-            question: "What is Naukari Resume?",
-            answer: "Naukari Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes. Choose from modern templates, customize your content, preview your resume in real time, and download it in PDF or DOCX format with a premium plan."
+            question: "What is Naukri Resume?",
+            answer: "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes. Choose from modern templates, customize your content, preview your resume in real time, and download it in PDF or DOCX format with a premium plan."
         },
         {
-            question: "Is Naukari Resume ATS-friendly?",
-            answer: "Yes. All Naukari Resume templates are optimized for Applicant Tracking Systems (ATS). Our layouts use clean formatting, readable fonts, and proper section structures to improve compatibility with most recruiters' ATS software. You can also use our ATS Score Checker to identify areas for improvement before applying."
+            question: "Is Naukri Resume ATS-friendly?",
+            answer: "Yes. All Naukri Resume templates are optimized for Applicant Tracking Systems (ATS). Our layouts use clean formatting, readable fonts, and proper section structures to improve compatibility with most recruiters' ATS software. You can also use our ATS Score Checker to identify areas for improvement before applying."
         },
         {
             question: "Can I customize colors and fonts?",
@@ -23,7 +23,7 @@ export default function Faq() {
             answer: "You can create, edit, and preview your resume for free. Downloading your resume in PDF or DOCX format requires an active Premium plan. Premium also includes ATS Score checking, AI suggestions, premium templates, and other advanced features."
         },
         {
-            question: "Is my data safe with Naukari Resume?",
+            question: "Is my data safe with Naukri Resume?",
             answer: "Yes. Your privacy and security are important to us. Your resume data is stored securely using encrypted connections, and we never sell or share your personal information with third parties. You remain in full control of your resumes and account at all times."
         }
     ];
@@ -35,9 +35,9 @@ export default function Faq() {
     return (
         <div className="py-[40px]">
             <div className="max-w-[1390px] mx-auto px-[15px]">
-                <h2 className="text-center font-semibold text-[35px] leading-[120%] text-[#000024] mb-[30px]">Frequently Asked <span className="font-bold text-[#0456FF]">Questions</span></h2>
-                <div className="flex flex-wrap items-center gap-[25px]">
-                    <div className="w-[calc(100%-410px)] border border-[#00002440] p-10 rounded-[24px]">
+                <h2 className="text-center font-semibold text-[35px] leading-[120%] text-[#000024] mb-[30px] max-[768px]:text-[30px]">Frequently Asked <span className="font-bold text-[#0456FF]">Questions</span></h2>
+                <div className="flex flex-wrap items-center gap-[25px] max-[768px]:flex-col-reverse min-[768px]:max-[1025px]:flex-col-reverse">
+                    <div className="w-[calc(100%-410px)] border border-[#00002440] p-10 rounded-[24px] max-[768px]:w-full max-[768px]:p-[30px] min-[768px]:max-[1025px]:w-full">
                         <ul className="flex flex-col divide-y divide-black/25">
                             {faqData.map((item, index) => {
                                 const isOpen = openIndex === index;
@@ -61,8 +61,8 @@ export default function Faq() {
                             })}
                         </ul>
                     </div>
-                    <div className="w-[385px]">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="385" height="423" viewBox="0 0 385 423" fill="none">
+                    <div className="w-[385px] max-[768px]:w-full">
+                        <svg className="max-[768px]:w-full max-[768px]:h-[350px]" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="385" height="423" viewBox="0 0 385 423" fill="none">
                             <rect width="385" height="423" fill="url(#pattern0_123_67)" />
                             <defs>
                                 <pattern id="pattern0_123_67" patternContentUnits="objectBoundingBox" width="1" height="1">

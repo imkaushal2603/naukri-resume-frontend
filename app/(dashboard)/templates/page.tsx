@@ -171,12 +171,12 @@ export default function Templates() {
     return (
         <div className="flex flex-wrap gap-[15px]">
             <div>
-                <div className="flex flex-wrap items-center gap-[40px] justify-between">
-                    <div className="w-[40%]">
+                <div className="flex flex-wrap items-center gap-[40px] justify-between max-[768px]:gap-[20px]">
+                    <div className="w-[40%] max-[768px]:w-full">
                         <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[15px]">Choose a Resume Template</h4>
                         <p className="text-[14px] leading-[22px] text-[#00002480]">Select a professionally designed template that matches your career goals and helps your resume stand out.</p>
                     </div>
-                    <div className="w-[calc(60%-55px)] flex flex-wrap items-center justify-end gap-[10px]">
+                    <div className="w-[calc(60%-55px)] flex flex-wrap items-center justify-end gap-[10px] max-[768px]:w-full max-[768px]:[justify-content:initial]">
                         <div className="border border-[#0456FF26] bg-[#0456FF26] rounded-[6px] flex flex-wrap items-center gap-3 px-[13px] py-[10px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
                                 <path fillRule="evenodd" clipRule="evenodd" d="M2.8125 14.4917L7.5 17.2V17.2042L12.1875 14.4958C13.0414 14.0009 13.7505 13.2906 14.244 12.4359C14.7376 11.5812 14.9982 10.612 15 9.625V2.8125C15 2.34167 14.6833 1.925 14.2292 1.80417L7.5 0L0.770833 1.8C0.316667 1.925 0 2.3375 0 2.80833V9.62083C0.00178054 10.6078 0.262447 11.577 0.755971 12.4317C1.2495 13.2864 1.95861 13.9967 2.8125 14.4917ZM1.25 9.62083V2.96667L7.5 1.29167L13.75 2.96667V9.62083C13.7489 10.3884 13.5463 11.1422 13.1624 11.8069C12.7785 12.4716 12.2268 13.0238 11.5625 13.4083L7.5 15.7542L3.4375 13.4083C2.77318 13.0238 2.22148 12.4716 1.83759 11.8069C1.4537 11.1422 1.25108 10.3884 1.25 9.62083ZM5.72167 10.1667C5.92583 10.3708 6.1925 10.4708 6.45917 10.4708C6.72583 10.4708 6.9925 10.3708 7.19667 10.1667L11.4833 5.87917L10.6 4.99583L6.45833 9.1375L4.81667 7.49583L3.93333 8.37917L5.72083 10.1667H5.72167Z" fill="#0456FF" />
@@ -228,7 +228,7 @@ export default function Templates() {
                     {templates.length === 0 ? (
                         <p className="text-sm text-[#00002480]">No templates available.</p>
                     ) : (
-                        <div className="grid grid-cols-5 gap-[20px]">
+                        <div className="grid grid-cols-5 gap-[20px] max-[768px]:grid-cols-1">
                             {templates.map((template) => {
                                 const isCurrent = template.id === currentTemplateId;
                                 const isSelected = template.id === selectedTemplateId;

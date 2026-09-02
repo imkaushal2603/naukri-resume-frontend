@@ -2,9 +2,9 @@ export default function WhyChoose() {
     return (
         <div className="py-[40px]">
             <div className="max-w-[1390px] mx-auto px-[15px]">
-                <h2 className="text-center font-bold text-[35px] leading-none text-[#000024] mb-[40px]">Why choose <span className="font-bold text-[#0456FF]">Naukari Resume?</span></h2>
-                <ul className="flex flex-wrap gap-[100px]">
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                <h2 className="text-center font-bold text-[35px] leading-none text-[#000024] mb-[40px] max-[768px]:text-[30px]">Why choose <span className="font-bold text-[#0456FF]">Naukri Resume?</span></h2>
+                <ul className="flex flex-wrap gap-[100px] max-[768px]:gap-[40px] min-[768px]:max-[1025px]:gap-[40px]">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -13,11 +13,11 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">Modern Templates</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">Professionally designed templates for every industry.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">Modern Templates</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">Professionally designed templates for every industry.</p>
                         </div>
                     </li>
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -28,11 +28,11 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">Easy Customization</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">Edit, rearrange, and update with just a few clicks.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">Easy Customization</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">Edit, rearrange, and update with just a few clicks.</p>
                         </div>
                     </li>
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -41,11 +41,11 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">ATS Optimized</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">Built for ATS with resumes that pass Applicant Tracking Systems.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">ATS Optimized</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">Built for ATS with resumes that pass Applicant Tracking Systems.</p>
                         </div>
                     </li>
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -55,11 +55,11 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">Instant Preview</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">See changes in real-time and perfect your resume.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">Instant Preview</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">See changes in real-time and perfect your resume.</p>
                         </div>
                     </li>
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -68,11 +68,11 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">Al-Powered Content</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">Smart suggestions to highlight your skills and experience.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">Al-Powered Content</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">Smart suggestions to highlight your skills and experience.</p>
                         </div>
                     </li>
-                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5">
+                    <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[768px]:w-full min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
                                 <rect width="50" height="50" rx="10" fill="#0456FF" fillOpacity="0.15" />
@@ -82,8 +82,8 @@ export default function WhyChoose() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-70px)]">
-                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px]">Secure & Private</h4>
-                            <p className="font-normal text-[18px] leading-[120%] text-[#000024]">Your data is encrypted and 100% secure.</p>
+                            <h4 className="font-semibold text-[24px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[22px] min-[768px]:max-[1025px]:text-[22px]">Secure & Private</h4>
+                            <p className="font-normal text-[18px] leading-[120%] text-[#000024] min-[768px]:max-[1025px]:text-[17px]">Your data is encrypted and 100% secure.</p>
                         </div>
                     </li>
                 </ul>

@@ -17,7 +17,7 @@ export default function Testimonials() {
       role: "Software Engineer",
       companyLogo: "/testimonials/tcs.png",
       userImage: "/person.png",
-      quote: '"Naukari Resume helped me create a professional resume that got me interviews from top companies!"',
+      quote: '"Naukri Resume helped me create a professional resume that got me interviews from top companies!"',
       rating: 5,
     },
     {
@@ -26,7 +26,7 @@ export default function Testimonials() {
       role: "Software Engineer",
       companyLogo: "/testimonials/infosys.png",
       userImage: "/person.png",
-      quote: '"Naukari Resume helped me create a professional resume that got me interviews from top companies!"',
+      quote: '"Naukri Resume helped me create a professional resume that got me interviews from top companies!"',
       rating: 5,
     },
     {
@@ -35,7 +35,7 @@ export default function Testimonials() {
       role: "Software Engineer",
       companyLogo: "/testimonials/wipro.png",
       userImage: "/person.png",
-      quote: '"Naukari Resume helped me create a professional resume that got me interviews from top companies!"',
+      quote: '"Naukri Resume helped me create a professional resume that got me interviews from top companies!"',
       rating: 5,
     },
     {
@@ -44,7 +44,7 @@ export default function Testimonials() {
       role: "Software Engineer",
       companyLogo: "/testimonials/amazon.png",
       userImage: "/person.png",
-      quote: '"Naukari Resume helped me create a professional resume that got me interviews from top companies!"',
+      quote: '"Naukri Resume helped me create a professional resume that got me interviews from top companies!"',
       rating: 5,
     },
     {
@@ -62,7 +62,7 @@ export default function Testimonials() {
     <div className="py-[40px] relative overflow-hidden">
       <div className="max-w-[1390px] mx-auto px-[15px]">
         <div className="max-w-[610px] mx-auto text-center mb-[40px]">
-          <h2 className="font-semibold text-[35px] leading-[120%] text-[#000024] mb-[10px]">Loved by Thousands of <span className="font-bold text-[#0456FF]">Job Seekers</span></h2>
+          <h2 className="font-semibold text-[35px] leading-[120%] text-[#000024] mb-[10px] max-[768px]:text-[30px]">Loved by Thousands of <span className="font-bold text-[#0456FF]">Job Seekers</span></h2>
           <p className="font-medium text-[18px] leading-[120%] text-[#000024]">Our AI-powered resume builder has helped professionals create ATS-friendly resumes and land more interviews at top companies.</p>
         </div>
         <div className="relative px-[50px] custom-swiper-container">

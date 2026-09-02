@@ -21,8 +21,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://naukri-resume.com/"),
   title: {
-    default: "Naukari Resume | AI Resume Builder & ATS Friendly Templates",
-    template: "%s | Naukari Resume",
+    default: "Naukri Resume | AI Resume Builder & ATS Friendly Templates",
+    template: "%s | Naukri Resume",
   },
   description: "Build professional, ATS-optimized resumes in minutes with our AI-powered resume builder. Choose from modern templates and get hired faster.",
   keywords: [
@@ -32,9 +32,9 @@ export const metadata: Metadata = {
     "Professional CV Builder",
     "Job Application Resume",
   ],
-  authors: [{ name: "Naukari Resume Team" }],
-  creator: "Naukari Resume",
-  publisher: "Naukari Resume",
+  authors: [{ name: "Naukri Resume Team" }],
+  creator: "Naukri Resume",
+  publisher: "Naukri Resume",
   robots: {
     index: true,
     follow: true,
@@ -50,21 +50,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://naukri-resume.com/",
-    siteName: "Naukari Resume",
-    title: "Naukari Resume | AI Resume Builder & ATS Friendly Templates",
+    siteName: "Naukri Resume",
+    title: "Naukri Resume | AI Resume Builder & ATS Friendly Templates",
     description: "Create ATS-friendly resumes effortlessly. Pick a template, customize with AI, and download your resume to land top interviews.",
     images: [
       {
         url: "/logo.png",
         width: 1200,
         height: 630,
-        alt: "Naukari Resume AI Builder Preview",
+        alt: "Naukri Resume AI Builder Preview",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Naukari Resume | AI Resume Builder",
+    title: "Naukri Resume | AI Resume Builder",
     description:
       "Create ATS-friendly resumes effortlessly with AI suggestions and modern templates.",
     images: ["/logo.png"],
