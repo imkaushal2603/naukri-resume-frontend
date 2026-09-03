@@ -265,7 +265,7 @@ export default function SkillsPage() {
                                 <div>
                                     {suggestions.map((skill) => (
                                         <button key={skill} type="button" onClick={() => handleAddSuggestedSkill(skill)}
-                                            className="flex items-center justify-between w-full border-b border-[#0456FF26] py-[10px] cursor-pointer font-medium text-[12px] leading-[100%] text-[#000024CC]"
+                                            className="flex items-center justify-between w-full border-b border-[#0456FF26] py-[10px] cursor-pointer font-medium text-[12px] leading-[100%] text-[#000024CC] capitalize"
                                         >
                                             {skill}
                                             <span className="text-[16px] leading-none font-bold">
