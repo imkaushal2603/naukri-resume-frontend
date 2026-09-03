@@ -283,11 +283,11 @@ export default function MyResumes() {
 
                                 return (
                                     <div key={resume.id} className="border-b border-[#0456FF26] flex flex-wrap items-center gap-5 py-5">
-                                        <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
+                                        <div className="w-[140px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
                                             {previewPath ? (
                                                 <>
                                                     <Image src={getImageUrl(previewPath)} alt={resume.name || "Resume Preview"} width="120" height="123"
-                                                        className="w-full h-full object-cover rounded-[3px]"
+                                                        className="w-full h-[174px] object-contain rounded-[3px]"
                                                     />
                                                     <button type="button" onClick={() => handlePreview(resume.id)} disabled={previewLoadingId === resume.id}
                                                         className="absolute inset-0 bg-black/25 group-hover:bg-black/55 transition-all duration-200 flex flex-col items-center justify-center gap-y-1 text-white cursor-pointer rounded-[3px]"
@@ -332,7 +332,7 @@ export default function MyResumes() {
                                                 </div>
                                             )}
                                         </div>
-                                        <div className="w-[calc(100%-140px)] flex flex-wrap items-center gap-5">
+                                        <div className="w-[calc(100%-160px)] flex flex-wrap items-center gap-5">
                                             <div className="w-[calc(50%-10px)] max-[768px]:w-full">
                                                 <h4 className="font-bold text-[16px] leading-[100%] text-[#000024] flex flex-wrap items-center gap-[10px]">
                                                     {resume?.name || `Resume #${resume.id}`}

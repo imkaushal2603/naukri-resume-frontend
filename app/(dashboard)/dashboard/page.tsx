@@ -238,7 +238,7 @@ export default function DashboardPage() {
     //     return <Loader />;
     // }
 
-    const displayedResumes = resumes.slice(0, 2);
+    const displayedResumes = resumes.slice(0, 3);
 
     return (
         <div className="relative">
@@ -606,7 +606,7 @@ export default function DashboardPage() {
                                     return (
                                         <div
                                             key={resume.id}
-                                            className={`${index === 0 ? "border-b border-[#0456FF26] py-5" : ""} flex flex-wrap items-center gap-5`}
+                                            className={`${index === 0 ? "border-b border-[#0456FF26] py-5" : index === 1 ? "border-b border-[#0456FF26] pb-5" : ""} flex flex-wrap items-center gap-5`}
                                         >
                                             <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
                                                 {initialSrc ? (
