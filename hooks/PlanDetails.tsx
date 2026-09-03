@@ -402,31 +402,41 @@ export default function PlanDetails() {
                                 Priority Support
                             </li>
                         </ul>
-                        {membership && (
-                            <div className="bg-[#F6F5FD] mt-[25px] rounded-[4px] py-[14px] px-[11px] flex flex-wrap gap-[10px]">
-                                <div className="w-[37px] h-[35px] flex items-center justify-center bg-[#0456FF1A] border border-[#CACACA80] rounded-[4px]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                        <path d="M18.6388 16.3505V10.7455C18.638 9.25357 18.1344 7.80547 17.2093 6.63499C16.2842 5.46451 14.9916 4.63997 13.5403 4.29448V3.80198C13.5403 3.39063 13.3769 2.99612 13.086 2.70525C12.7951 2.41439 12.4006 2.25098 11.9893 2.25098C11.5779 2.25098 11.1834 2.41439 10.8926 2.70525C10.6017 2.99612 10.4383 3.39063 10.4383 3.80198V4.30048C8.99201 4.64997 7.70518 5.47545 6.78451 6.64431C5.86384 7.81317 5.36277 9.25757 5.36179 10.7455V16.3505L3.25879 18.4535V19.425H20.7418V18.4535L18.6388 16.3505Z" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <path d="M9.66334 19.4248C9.65882 19.7331 9.71563 20.0392 9.83048 20.3253C9.94534 20.6115 10.1159 20.8719 10.3323 21.0915C10.5488 21.3111 10.8067 21.4855 11.0911 21.6046C11.3755 21.7236 11.6808 21.7849 11.9891 21.7849C12.2974 21.7849 12.6027 21.7236 12.8871 21.6046C13.1715 21.4855 13.4294 21.3111 13.6458 21.0915C13.8622 20.8719 14.0328 20.6115 14.1477 20.3253C14.2625 20.0392 14.3194 19.7331 14.3148 19.4248" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                </div>
-                                <div className="w-[calc(100%-47px)]">
-                                    <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">Plan Expiry Reminder</h6>
-                                    <p className="font-normal text-[12px] leading-[140%] text-[#000024CC] mb-[18px]">
-                                        Your plan will expire on {new Date(membership.endDate).toLocaleDateString("en-US", {
-                                            day: "numeric",
-                                            month: "short",
-                                            year: "numeric",
-                                        })}, {new Date(membership.endDate).toLocaleTimeString("en-US", {
-                                            hour: "numeric",
-                                            minute: "2-digit",
-                                            hour12: true,
-                                        })}. Renew your plan to avoid any interruption.
-                                    </p>
-                                    <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Renew Plan</Link>
-                                </div>
-                            </div>
-                        )}
+                        {membership && (() => {
+                            const hoursRemaining = (new Date(membership.endDate).getTime() - Date.now()) / (1000 * 60 * 60);
+
+                            if (hoursRemaining <= 24 && hoursRemaining >= 0) {
+                                return (
+                                    <div className="bg-[#F6F5FD] mt-[25px] rounded-[4px] py-[14px] px-[11px] flex flex-wrap gap-[10px]">
+                                        <div className="w-[37px] h-[35px] flex items-center justify-center bg-[#0456FF1A] border border-[#CACACA80] rounded-[4px]">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                <path d="M18.6388 16.3505V10.7455C18.638 9.25357 18.1344 7.80547 17.2093 6.63499C16.2842 5.46451 14.9916 4.63997 13.5403 4.29448V3.80198C13.5403 3.39063 13.3769 2.99612 13.086 2.70525C12.7951 2.41439 12.4006 2.25098 11.9893 2.25098C11.5779 2.25098 11.1834 2.41439 10.8926 2.70525C10.6017 2.99612 10.4383 3.39063 10.4383 3.80198V4.30048C8.99201 4.64997 7.70518 5.47545 6.78451 6.64431C5.86384 7.81317 5.36277 9.25757 5.36179 10.7455V16.3505L3.25879 18.4535V19.425H20.7418V18.4535L18.6388 16.3505Z" stroke="#fb2c36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                <path d="M9.66334 19.4248C9.65882 19.7331 9.71563 20.0392 9.83048 20.3253C9.94534 20.6115 10.1159 20.8719 10.3323 21.0915C10.5488 21.3111 10.8067 21.4855 11.0911 21.6046C11.3755 21.7236 11.6808 21.7849 11.9891 21.7849C12.2974 21.7849 12.6027 21.7236 12.8871 21.6046C13.1715 21.4855 13.4294 21.3111 13.6458 21.0915C13.8622 20.8719 14.0328 20.6115 14.1477 20.3253C14.2625 20.0392 14.3194 19.7331 14.3148 19.4248" stroke="#fb2c36" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <div className="w-[calc(100%-47px)]">
+                                            <h6 className="font-bold text-[14px] leading-[100%] text-[#000024] mb-[6px]">Plan Expiry Reminder</h6>
+                                            <p className="font-normal text-[12px] leading-[140%] text-red-500 mb-[18px]">
+                                                Your plan will expire on {new Date(membership.endDate).toLocaleDateString("en-US", {
+                                                    day: "numeric",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                })}, {new Date(membership.endDate).toLocaleTimeString("en-US", {
+                                                    hour: "numeric",
+                                                    minute: "2-digit",
+                                                    hour12: true,
+                                                })}. Renew your plan to avoid any interruption.
+                                            </p>
+                                            <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
+                                                Renew Plan
+                                            </Link>
+                                        </div>
+                                    </div>
+                                );
+                            }
+
+                            return null;
+                        })()}
                     </div>
                 </>
             )}
