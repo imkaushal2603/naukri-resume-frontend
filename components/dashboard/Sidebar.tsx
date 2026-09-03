@@ -233,7 +233,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 <p className="text-[14px] leading-[140%] font-medium text-[#000024CC]">Unlock powerful features to build job-winning resumes and get hired faster.</p>
                             )}
                             {membership ? (
-                                <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Manage Plan</Link>
+                                <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View Plan</Link>
                             ) : (
                                 <Link href="/plans" className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">View all Plans</Link>
                             )}

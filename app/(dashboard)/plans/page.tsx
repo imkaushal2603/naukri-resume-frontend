@@ -59,15 +59,28 @@ export default function Plans() {
                 <div className="flex-1">
                     <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Choose the plan that's right for you</h4>
                     <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Upgrade your plan to create up to 15 resumes and unlock all premium features.</p>
-                    <div className="bg-[#F4F1FE] max-w-[385px] mt-[25px] rounded-[8px] px-5 py-[10px] flex flex-wrap items-center gap-[15px]">
-                        <div className="w-[21px]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
-                                <path d="M16.281 8.78061C16.4218 8.63978 16.501 8.44877 16.501 8.24961C16.501 8.05045 16.4218 7.85944 16.281 7.71861C16.1402 7.57778 15.9492 7.49866 15.75 7.49866C15.5508 7.49866 15.3598 7.57778 15.219 7.71861L9.75 13.1891L7.281 10.7186C7.21127 10.6489 7.12849 10.5936 7.03738 10.5558C6.94627 10.5181 6.84862 10.4987 6.75 10.4987C6.65139 10.4987 6.55374 10.5181 6.46263 10.5558C6.37152 10.5936 6.28873 10.6489 6.219 10.7186C6.14927 10.7883 6.09396 10.8711 6.05622 10.9622C6.01848 11.0533 5.99905 11.151 5.99905 11.2496C5.99905 11.3482 6.01848 11.4459 6.05622 11.537C6.09396 11.6281 6.14927 11.7109 6.219 11.7806L9.219 14.7806C9.28867 14.8505 9.37144 14.9059 9.46255 14.9437C9.55367 14.9815 9.65135 15.0009 9.75 15.0009C9.84865 15.0009 9.94633 14.9815 10.0375 14.9437C10.1286 14.9059 10.2113 14.8505 10.281 14.7806L16.281 8.78061ZM10.9155 0.125612C10.7924 0.0437015 10.6479 0 10.5 0C10.3521 0 10.2076 0.0437015 10.0845 0.125612C7.2527 2.03465 4.02468 3.27632 0.6435 3.75711C0.464851 3.78274 0.301434 3.87193 0.183233 4.00831C0.0650325 4.1447 -2.40585e-05 4.31913 6.67408e-09 4.49961V11.2496C6.67408e-09 17.0861 3.4605 21.3446 10.23 23.9501C10.4038 24.0172 10.5962 24.0172 10.77 23.9501C17.5395 21.3446 21 17.0846 21 11.2496V4.49961C21 4.31891 20.9347 4.14429 20.8162 4.00787C20.6977 3.87146 20.5339 3.78241 20.355 3.75711C16.9743 3.2761 13.7469 2.03444 10.9155 0.125612ZM1.5 5.14161C4.47125 4.63725 7.32092 3.57778 9.9 2.01861L10.5 1.64511L11.1 2.01861C13.6791 3.57778 16.5288 4.63725 19.5 5.14161V11.2496C19.5 16.3376 16.548 20.0441 10.5 22.4441C4.452 20.0441 1.5 16.3391 1.5 11.2496V5.14161Z" fill="#0456FF" />
-                            </svg>
+                    <div className="flex gap-5 flex-wrap mt-[25px]">
+                        <div className="bg-[#F4F1FE] max-w-[385px] rounded-[8px] px-5 py-[10px] flex flex-wrap items-center gap-[15px] max-[768px]:w-full">
+                            <div className="w-[21px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                                    <path d="M16.281 8.78061C16.4218 8.63978 16.501 8.44877 16.501 8.24961C16.501 8.05045 16.4218 7.85944 16.281 7.71861C16.1402 7.57778 15.9492 7.49866 15.75 7.49866C15.5508 7.49866 15.3598 7.57778 15.219 7.71861L9.75 13.1891L7.281 10.7186C7.21127 10.6489 7.12849 10.5936 7.03738 10.5558C6.94627 10.5181 6.84862 10.4987 6.75 10.4987C6.65139 10.4987 6.55374 10.5181 6.46263 10.5558C6.37152 10.5936 6.28873 10.6489 6.219 10.7186C6.14927 10.7883 6.09396 10.8711 6.05622 10.9622C6.01848 11.0533 5.99905 11.151 5.99905 11.2496C5.99905 11.3482 6.01848 11.4459 6.05622 11.537C6.09396 11.6281 6.14927 11.7109 6.219 11.7806L9.219 14.7806C9.28867 14.8505 9.37144 14.9059 9.46255 14.9437C9.55367 14.9815 9.65135 15.0009 9.75 15.0009C9.84865 15.0009 9.94633 14.9815 10.0375 14.9437C10.1286 14.9059 10.2113 14.8505 10.281 14.7806L16.281 8.78061ZM10.9155 0.125612C10.7924 0.0437015 10.6479 0 10.5 0C10.3521 0 10.2076 0.0437015 10.0845 0.125612C7.2527 2.03465 4.02468 3.27632 0.6435 3.75711C0.464851 3.78274 0.301434 3.87193 0.183233 4.00831C0.0650325 4.1447 -2.40585e-05 4.31913 6.67408e-09 4.49961V11.2496C6.67408e-09 17.0861 3.4605 21.3446 10.23 23.9501C10.4038 24.0172 10.5962 24.0172 10.77 23.9501C17.5395 21.3446 21 17.0846 21 11.2496V4.49961C21 4.31891 20.9347 4.14429 20.8162 4.00787C20.6977 3.87146 20.5339 3.78241 20.355 3.75711C16.9743 3.2761 13.7469 2.03444 10.9155 0.125612ZM1.5 5.14161C4.47125 4.63725 7.32092 3.57778 9.9 2.01861L10.5 1.64511L11.1 2.01861C13.6791 3.57778 16.5288 4.63725 19.5 5.14161V11.2496C19.5 16.3376 16.548 20.0441 10.5 22.4441C4.452 20.0441 1.5 16.3391 1.5 11.2496V5.14161Z" fill="#0456FF" />
+                                </svg>
+                            </div>
+                            <div className="w-[calc(100%-36px)] leading-[0]">
+                                <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] mb-[4px]">7-Day Money Back Guarantee</h6>
+                                <p className="font-normal text-[12px] leading-[120%] text-[#000024CC] inline-block">Not satisfied? Get a full refund within 7 days of purchase.</p>
+                            </div>
                         </div>
-                        <div className="w-[calc(100%-36px)]">
-                            <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] max-[768px]:mb-[6px]">7-Day Money Back Guarantee</h6>
-                            <p className="font-normal text-[12px] leading-[100%] text-[#000024CC] inline-block">Not satisfied? Get a full refund within 7 days of purchase.</p>
+                        <div className="bg-[#F4F1FE] max-w-[385px] rounded-[8px] px-5 py-[10px] flex flex-wrap items-center gap-[15px]">
+                            <div className="w-[21px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none">
+                                    <path d="M7 7H20M20 7L16 3M20 7L16 11M17 17H4M4 17L8 13M4 17L8 21" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                            </div>
+                            <div className="w-[calc(100%-36px)] leading-[0]">
+                                <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] mb-[4px]">Plan Change Policy</h6>
+                                <p className="font-normal text-[12px] leading-[120%] text-[#000024CC] inline-block">Upgrades or downgrades to your current plan are non-refundable and take effect immediately.</p>
+                            </div>
                         </div>
                     </div>
                     <div className="flex flex-wrap gap-8 mt-[50px] min-[768px]:max-[1400px]:gap-[20px]">
@@ -207,8 +220,8 @@ export default function Plans() {
                                     <h3 className="font-extrabold text-[30px] leading-[100%] text-[#0456FF]">₹1,195 <span className="font-extrabold text-[15px] leading-[100%] text-[#000024] inline-block">/ Year</span></h3>
                                 </div>
                                 <div className="w-[calc(50%-10px)] flex flex-wrap gap-[18px] justify-end">
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#29B33A]">Save 40%</span>
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024B2]">₹1,990</span>
+                                    <span className="font-bold text-[12px] leading-[100%] text-[#29B33A]">Save 88.45%</span>
+                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024B2]">₹10,348</span>
                                 </div>
                             </div>
                             <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
