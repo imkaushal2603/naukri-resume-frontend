@@ -164,7 +164,7 @@ export default function SummaryPage() {
                         <button type="button" onClick={handleSave} disabled={saving}
                             className="flex gap-[10px] items-center border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50"
                         >
-                            {saving ? "Saving..." : "Save & Continue"}
+                            {saving ? "Saving..." : "Save & Preview"}
                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
                                 <path d="M15 7L1 7M9 1L15 7L9 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
