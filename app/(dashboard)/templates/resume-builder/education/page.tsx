@@ -137,7 +137,45 @@ export default function Education() {
         }
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
+        if (editingId !== null) {
+            const hasAnyData = Object.entries(form).some(([key, val]) => {
+                if (key === "id" || key === "isCurrent") return false;
+                return typeof val === "string" && val.trim() !== "";
+            });
+
+            if (hasAnyData) {
+                if (!form.degree.trim() || !form.school.trim()) {
+                    toast.error("Please fill in Course/Degree and Institute before proceeding.");
+                    return;
+                }
+
+                const payload = {
+                    ...form,
+                    endDate: form.isCurrent ? null : form.endDate,
+                };
+
+                setSaving(true);
+                try {
+                    if (editingId !== "new") {
+                        await api.put(`/resume/builder/${resumeId}/education/${editingId}`, payload);
+                        toast.success("Education updated successfully!");
+                    } else {
+                        await api.post(`/resume/builder/${resumeId}/education`, payload);
+                        toast.success("Education added successfully!");
+                    }
+                    await refreshProgress();
+                } catch (err: any) {
+                    console.error("Failed to auto-save education on Next step", err);
+                    toast.error(err.response?.data?.message || "Failed to save education details.");
+                    setSaving(false);
+                    return;
+                } finally {
+                    setSaving(false);
+                }
+            }
+        }
+
         router.push(`/templates/resume-builder/experience?resumeId=${resumeId}`);
     };
 

@@ -115,9 +115,20 @@ export default function SkillsPage() {
         try {
             await api.post(`/resume/builder/${resumeId}/skills`, { name: skillName });
             toast.success(`Added "${skillName}"`);
-            setSuggestions((prev) => prev.filter((s) => s !== skillName));
+
+            const remaining = suggestions.filter((s) => s !== skillName);
+
+            if (remaining.length === 0) {
+                setSuggestionsLoading(true);
+            }
+            setSuggestions(remaining);
+
             await fetchSkills();
             await refreshProgress();
+
+            if (remaining.length === 0) {
+                fetchSuggestions();
+            }
         } catch (err: any) {
             console.error("Failed to add suggested skill", err);
             toast.error(err.response?.data?.message || "Failed to add skill.");

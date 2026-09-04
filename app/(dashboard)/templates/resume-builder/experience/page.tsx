@@ -58,6 +58,10 @@ export default function ExperiencePage() {
     const [editingId, setEditingId] = useState<number | "new" | null>(null);
     const [form, setForm] = useState<Experience>(emptyForm);
     const [saving, setSaving] = useState(false);
+    const [descSuggestions, setDescSuggestions] = useState<string[]>([]);
+    const [selectedBullets, setSelectedBullets] = useState<Set<string>>(new Set());
+    const [descSuggestionsLoading, setDescSuggestionsLoading] = useState(false);
+    const [previousBullets, setPreviousBullets] = useState<string[]>([]);
 
     const fetchList = async () => {
         try {
@@ -71,10 +75,40 @@ export default function ExperiencePage() {
         }
     };
 
+    const fetchDescriptionSuggestions = async (excludeBullets: string[] = []) => {
+        if (!resumeId || !form.role.trim()) return;
+        setDescSuggestionsLoading(true);
+        try {
+            const res = await api.post(`/resume/builder/${resumeId}/experience/description-suggestions`, {
+                role: form.role,
+                company: form.company,
+                employmentType: form.employmentType,
+                excludeBullets,
+            });
+            if (res.data.success) {
+                setDescSuggestions(res.data.bullets || []);
+                setSelectedBullets(new Set());
+            }
+        } catch (err) {
+            console.error("Failed to load description suggestions", err);
+        } finally {
+            setDescSuggestionsLoading(false);
+        }
+    };
+
     useEffect(() => {
         if (!resumeId) return;
         fetchList();
     }, [resumeId]);
+
+    useEffect(() => {
+        if (editingId !== null && form.role.trim()) {
+            fetchDescriptionSuggestions();
+        } else {
+            setDescSuggestions([]);
+        }
+        setPreviousBullets([]);
+    }, [editingId]);
 
     const handleChange = (field: keyof Experience, value: unknown) => {
         setForm((prev) => {
@@ -150,7 +184,77 @@ export default function ExperiencePage() {
         }
     };
 
-    const handleNext = () => {
+    const handleRoleBlur = () => {
+        if (editingId !== null && form.role.trim()) {
+            fetchDescriptionSuggestions();
+        }
+    };
+
+    const handleAddBullet = (bullet: string) => {
+        const bulletLine = `• ${bullet}`;
+        const newDescription = form.description
+            ? `${form.description}\n${bulletLine}`
+            : bulletLine;
+
+        handleChange("description", newDescription.slice(0, 1000));
+
+        const remaining = descSuggestions.filter((b) => b !== bullet);
+        const updatedPrevious = [...previousBullets, bullet];
+
+        if (remaining.length === 0) {
+            setDescSuggestionsLoading(true);
+        }
+        setDescSuggestions(remaining);
+        setPreviousBullets(updatedPrevious);
+
+        if (remaining.length === 0) {
+            fetchDescriptionSuggestions([...updatedPrevious, ...remaining]);
+        }
+    };
+
+    const handleRefreshSuggestions = () => {
+        fetchDescriptionSuggestions([...previousBullets, ...descSuggestions]);
+    };
+
+    const handleNext = async () => {
+        if (editingId !== null) {
+            const hasAnyData = Object.entries(form).some(([key, val]) => {
+                if (key === "id" || key === "isCurrent") return false;
+                return typeof val === "string" && val.trim() !== "";
+            });
+
+            if (hasAnyData) {
+                if (!form.role.trim() || !form.company.trim()) {
+                    toast.error("Please fill in Job Title and Company Name before proceeding.");
+                    return;
+                }
+
+                const payload = {
+                    ...form,
+                    endDate: form.isCurrent ? "" : form.endDate,
+                };
+
+                setSaving(true);
+                try {
+                    if (editingId !== "new") {
+                        await api.put(`/resume/builder/${resumeId}/experience/${editingId}`, payload);
+                        toast.success("Experience updated successfully!");
+                    } else {
+                        await api.post(`/resume/builder/${resumeId}/experience`, payload);
+                        toast.success("Experience added successfully!");
+                    }
+                    await refreshProgress();
+                } catch (err: any) {
+                    console.error("Failed to auto-save experience on Next step", err);
+                    toast.error(err.response?.data?.message || "Failed to save experience details.");
+                    setSaving(false);
+                    return;
+                } finally {
+                    setSaving(false);
+                }
+            }
+        }
+
         router.push(`/templates/resume-builder/skills?resumeId=${resumeId}`);
     };
 
@@ -163,7 +267,7 @@ export default function ExperiencePage() {
             <div className="grid grid-cols-3 gap-[27px] mb-4 max-[768px]:grid-cols-1">
                 <div>
                     <label className="font-bold text-[12px] leading-none text-[#000024] mb-[8px] inline-block">Job Title *</label>
-                    <input type="text" value={form.role} onChange={(e) => handleChange("role", e.target.value)}
+                    <input type="text" value={form.role} onChange={(e) => handleChange("role", e.target.value)} onBlur={handleRoleBlur}
                         className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] px-[20px] text-[14px] leading-none text-black font-bold outline-none focus:border-[#0456FF]"
                     />
                 </div>
@@ -348,7 +452,61 @@ export default function ExperiencePage() {
                         </button>
                     </div>
                 </div>
-                <div className="w-[325px] shrink-0 max-[1300px]:w-full">
+                <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
+                    {form.role.trim() && (
+                        <div className="w-full bg-white border border-[#CACACA80] rounded-[12px] p-5">
+                            <div className="flex items-center gap-[8px] mb-[13px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                                    <circle cx="16" cy="16" r="16" fill="#0456FF" fillOpacity="0.15" />
+                                    <path d="M14.3775 10.8092C14.6342 10.0575 15.6975 10.0575 15.9542 10.8092L16.6258 12.7758C16.8314 13.3784 17.1724 13.9259 17.6225 14.3761C18.0727 14.8264 18.62 15.1675 19.2225 15.3733L21.1892 16.045C21.9417 16.3017 21.9417 17.365 21.1892 17.6217L19.2225 18.2933C18.6201 18.499 18.0728 18.84 17.6227 19.2902C17.1725 19.7403 16.8315 20.2876 16.6258 20.89L15.9542 22.8567C15.6975 23.6092 14.6342 23.6092 14.3775 22.8567L13.7058 20.89C13.5001 20.2876 13.1591 19.7403 12.709 19.2902C12.2589 18.84 11.7116 18.499 11.1092 18.2933L9.1425 17.6217C8.39 17.365 8.39 16.3017 9.1425 16.045L11.1092 15.3733C11.7116 15.1676 12.2589 14.8266 12.709 14.3765C13.1591 13.9264 13.5001 13.3791 13.7058 12.7767L14.3775 10.8092ZM21.8325 8.5L22.2575 9.74167L23.4992 10.1667L22.2575 10.5917L21.8325 11.8333L21.4075 10.5917L20.1658 10.1667L21.4075 9.74167L21.8325 8.5Z" stroke="#0456FF" strokeWidth="1.66667" strokeLinejoin="round" />
+                                </svg>
+                                <h5 className="font-bold text-[16px] text-[#000024] leading-[120%]">Ai Description Suggestions</h5>
+                                <span className="text-[#0456FF] bg-[#0456FF26] rounded-[2px] font-bold text-[12px] leading-[100%] py-[4px] px-[8px] inline-block">Beta</span>
+                            </div>
+                            <p className="text-[13px] text-[#00002480] mb-[15px]">
+                                Based on the role "{form.role}", here's what you might have done. Select the ones that apply.
+                            </p>
+                            {descSuggestionsLoading ? (
+                                <div className="flex flex-col gap-[10px]">
+                                    {Array.from({ length: 4 }).map((_, i) => (
+                                        <div key={i} className="h-6 w-full bg-[#0456FF1A] rounded animate-pulse" />
+                                    ))}
+                                </div>
+                            ) : descSuggestions.length > 0 ? (
+                                <>
+                                    <div className="flex flex-col gap-[10px] mb-[15px]">
+                                        {descSuggestions.map((bullet) => (
+                                            <button
+                                                key={bullet}
+                                                type="button"
+                                                onClick={() => handleAddBullet(bullet)}
+                                                className="flex items-start justify-between gap-[10px] text-left w-full border-b border-[#0456FF26] pb-[10px] cursor-pointer group"
+                                            >
+                                                <span className="text-[13px] text-[#000024] leading-[140%]">{bullet}</span>
+                                                <span className="shrink-0 mt-[2px] text-[#0456FF]">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                        <path d="M4.21875 6.71875H6.71875M6.71875 6.71875H9.21875M6.71875 6.71875V4.21875M6.71875 6.71875V9.21875M6.71875 12.9688C10.1706 12.9688 12.9688 10.1706 12.9688 6.71875C12.9688 3.26688 10.1706 0.46875 6.71875 0.46875C3.26688 0.46875 0.46875 3.26688 0.46875 6.71875C0.46875 10.1706 3.26688 12.9688 6.71875 12.9688Z" stroke="#0456FF" strokeWidth="0.9375" strokeLinecap="round" strokeLinejoin="round" />
+                                                    </svg>
+                                                </span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <button onClick={handleRefreshSuggestions} disabled={descSuggestionsLoading}
+                                        className="flex gap-[10px] items-center w-full justify-center mt-[20px] border border-[#0456FF] bg-white py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                            <path d="M13.875 4.5C12.831 2.11575 10.2577 0.75 7.4835 0.75C3.97425 0.75 1.08975 3.414 0.75 6.825" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M10.8668 4.80005H13.8442C13.8975 4.80015 13.9502 4.78974 13.9995 4.76944C14.0487 4.74913 14.0934 4.71931 14.1311 4.68169C14.1688 4.64407 14.1987 4.59939 14.2191 4.55021C14.2395 4.50102 14.25 4.4483 14.25 4.39505V1.42505M1.125 10.5C2.169 12.8843 4.74225 14.25 7.5165 14.25C11.0258 14.25 13.9102 11.586 14.25 8.17505" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            <path d="M4.13325 10.2H1.15575C1.1025 10.1999 1.04976 10.2103 1.00053 10.2306C0.951309 10.2509 0.906574 10.2807 0.868887 10.3183C0.8312 10.3559 0.8013 10.4006 0.7809 10.4498C0.7605 10.499 0.75 10.5517 0.75 10.605V13.575" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                        Refresh Suggestions
+                                    </button>
+                                </>
+                            ) : (
+                                <p className="text-sm text-gray-400">No suggestions available.</p>
+                            )}
+                        </div>
+                    )}
                     <ProgressPanel />
                 </div>
             </div>

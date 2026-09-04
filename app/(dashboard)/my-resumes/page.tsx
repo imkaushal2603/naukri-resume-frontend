@@ -62,7 +62,7 @@ export default function MyResumes() {
     const [previewLoadingId, setPreviewLoadingId] = useState<number | null>(null);
     const [downloadingId, setDownloadingId] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const RESUMES_PER_PAGE = 5;
+    const RESUMES_PER_PAGE = 3;
     const totalPages = Math.ceil(resumes.length / RESUMES_PER_PAGE);
     const paginatedResumes = resumes.slice(
         (currentPage - 1) * RESUMES_PER_PAGE,

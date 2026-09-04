@@ -24,29 +24,70 @@ export default function SummaryPage() {
     const [summary, setSummary] = useState("");
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+    const [previousSummaries, setPreviousSummaries] = useState<string[]>([]);
+
+    const fetchSummary = async () => {
+        try {
+            const res = await withMinDelay(
+                api.get(`/resume/builder/${resumeId}/summary`)
+            );
+            if (res.data?.success) {
+                setResumeName(res.data.resumeName || "");
+                setSummary(res.data.summary || "");
+            }
+        } catch (err) {
+            console.error("Failed to load summary", err);
+            toast.error("Failed to load summary.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchSuggestions = async (excludeSummaries: string[] = []) => {
+        if (!resumeId) return;
+        setSuggestionsLoading(true);
+        try {
+            const res = await api.post(`/resume/builder/${resumeId}/summary/suggestions`, {
+                excludeSummaries,
+            });
+            if (res.data.success) {
+                setSuggestions(res.data.suggestions || []);
+            }
+        } catch (err) {
+            console.error("Failed to load summary suggestions", err);
+        } finally {
+            setSuggestionsLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (!resumeId) return;
-
-        const fetchSummary = async () => {
-            try {
-                const res = await withMinDelay(
-                    api.get(`/resume/builder/${resumeId}/summary`)
-                );
-                if (res.data?.success) {
-                    setResumeName(res.data.resumeName || "");
-                    setSummary(res.data.summary || "");
-                }
-            } catch (err) {
-                console.error("Failed to load summary", err);
-                toast.error("Failed to load summary.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchSummary();
+        fetchSuggestions();
     }, [resumeId]);
+
+    const handleUseSuggestion = (suggestion: string) => {
+        setSummary(suggestion.slice(0, 1000));
+
+        const remaining = suggestions.filter((s) => s !== suggestion);
+        const updatedPrevious = [...previousSummaries, suggestion];
+
+        if (remaining.length === 0) {
+            setSuggestionsLoading(true);
+        }
+        setSuggestions(remaining);
+        setPreviousSummaries(updatedPrevious);
+
+        if (remaining.length === 0) {
+            fetchSuggestions([...updatedPrevious, ...remaining]);
+        }
+    };
+
+    const handleRefreshSuggestions = () => {
+        fetchSuggestions([...previousSummaries, ...suggestions]);
+    };
 
     const handleSave = async () => {
         if (!resumeId) return;
@@ -115,20 +156,8 @@ export default function SummaryPage() {
                         <button type="button" onClick={handlePrevious}
                             className="flex gap-[10px] items-center border border-[#0456FF] bg-white py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="12"
-                                height="14"
-                                viewBox="0 0 16 14"
-                                fill="none"
-                            >
-                                <path
-                                    d="M1 7L15 7M7 1L1 7L7 13"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
+                                <path d="M1 7L15 7M7 1L1 7L7 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                             Previous
                         </button>
@@ -136,25 +165,45 @@ export default function SummaryPage() {
                             className="flex gap-[10px] items-center border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50"
                         >
                             {saving ? "Saving..." : "Save & Continue"}
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="12"
-                                height="14"
-                                viewBox="0 0 16 14"
-                                fill="none"
-                            >
-                                <path
-                                    d="M15 7L1 7M9 1L15 7L9 13"
-                                    stroke="currentColor"
-                                    strokeWidth="2"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="14" viewBox="0 0 16 14" fill="none">
+                                <path d="M15 7L1 7M9 1L15 7L9 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                         </button>
                     </div>
                 </div>
-                <div className="w-[325px] shrink-0 max-[1300px]:w-full">
+                <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
+                    {(suggestionsLoading || suggestions.length > 0) && (
+                        <div className="w-full bg-white border border-[#CACACA80] rounded-[12px] p-5">
+                            <div className="flex items-center gap-[8px] mb-[13px]">
+                                <h5 className="font-bold text-[16px] text-[#000024] leading-[120%]">Ai Summary Suggestions</h5>
+                                <span className="text-[#0456FF] bg-[#0456FF26] rounded-[2px] font-bold text-[12px] leading-[100%] py-[4px] px-[8px] inline-block">Beta</span>
+                            </div>
+                            <p className="font-normal text-[12px] leading-[120%] text-[#00002499] mb-[15px]">Based on your work history. Click a version to use it.</p>
+                            {suggestionsLoading ? (
+                                <div className="flex flex-col gap-[12px]">
+                                    {Array.from({ length: 3 }).map((_, i) => (
+                                        <div key={i} className="h-[70px] w-full bg-[#0456FF1A] rounded-[6px] animate-pulse" />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex flex-col gap-[12px]">
+                                    {suggestions.map((s, i) => (
+                                        <button key={i} type="button" onClick={() => handleUseSuggestion(s)}
+                                            className="text-left border border-[#0456FF26] rounded-[6px] p-[12px] cursor-pointer hover:border-[#0456FF] hover:bg-[#0456FF0D] transition-colors duration-200"
+                                        >
+                                            <p className="font-normal text-[12px] leading-[140%] text-[#000024CC] mb-[8px]">{s}</p>
+                                            <span className="font-semibold text-[11px] text-[#0456FF]">Use this version →</span>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            <button onClick={handleRefreshSuggestions} disabled={suggestionsLoading}
+                                className="flex gap-[10px] items-center w-full justify-center mt-[15px] border border-[#0456FF] bg-white py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300"
+                            >
+                                Refresh Suggestions
+                            </button>
+                        </div>
+                    )}
                     <ProgressPanel />
                 </div>
             </div>

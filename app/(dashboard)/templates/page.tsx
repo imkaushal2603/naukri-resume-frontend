@@ -257,8 +257,8 @@ export default function Templates() {
                                             )}
                                             {isSelected && (
                                                 <div className="absolute bottom-[8px] right-[8px]">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 24 24" fill="none">
-                                                        <path d="M4 12.6111L8.92308 17.5L20 6.5" stroke="#0456ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" fill="none">
+                                                        <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z" fill="#0456FF"/>
                                                     </svg>
                                                 </div>
                                             )}

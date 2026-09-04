@@ -608,15 +608,10 @@ export default function DashboardPage() {
                                             key={resume.id}
                                             className={`${index === 0 ? "border-b border-[#0456FF26] py-5" : index === 1 ? "border-b border-[#0456FF26] pb-5" : ""} flex flex-wrap items-center gap-5`}
                                         >
-                                            <div className="w-[120px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
+                                            <div className="w-[140px] bg-[#F9F8FD] border border-[#CACACA80] p-[5px] rounded-[5px] relative group overflow-hidden">
                                                 {initialSrc ? (
                                                     <>
-                                                        <Image
-                                                            src={initialSrc}
-                                                            alt={resume.name || "Resume Preview"}
-                                                            width="120"
-                                                            height="123"
-                                                            className="w-full h-full object-cover rounded-[3px]"
+                                                        <Image src={initialSrc} alt={resume.name || "Resume Preview"} width="120" height="123" className="w-full h-[174px] object-contain rounded-[3px]"
                                                             onError={(e) => {
                                                                 if (defaultPreview) {
                                                                     (e.target as HTMLImageElement).src = getImageUrl(defaultPreview);
@@ -669,7 +664,7 @@ export default function DashboardPage() {
                                                     </div>
                                                 )}
                                             </div>
-                                            <div className="w-[calc(100%-140px)] flex flex-wrap items-center gap-5">
+                                            <div className="w-[calc(100%-160px)] flex flex-wrap items-center gap-5">
                                                 <div className="w-[calc(50%-10px)] max-[768px]:w-full">
                                                     <h4 className="font-bold text-[16px] leading-[100%] text-[#000024] flex flex-wrap items-center gap-[10px]">
                                                         {resume?.name || `Resume #${resume.id}`}
