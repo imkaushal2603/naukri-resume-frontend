@@ -18,6 +18,7 @@ function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
 
 interface Resume {
     id: number;
+    publicId: string;
     name?: string;
     updatedAt?: string;
     resume_templates?: {
@@ -67,14 +68,14 @@ export default function DashboardPage() {
     const [resumes, setResumes] = useState<Resume[]>([]);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
-    const [deletingId, setDeletingId] = useState<number | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
     const [previewModal, setPreviewModal] = useState<{ open: boolean; html: string; resumeName: string }>({
         open: false,
         html: "",
         resumeName: "",
     });
-    const [previewLoadingId, setPreviewLoadingId] = useState<number | null>(null);
-    const [downloadingId, setDownloadingId] = useState<number | null>(null);
+    const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
+    const [downloadingId, setDownloadingId] = useState<string | null>(null);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     useEffect(() => {
@@ -134,17 +135,17 @@ export default function DashboardPage() {
         return `${rawBase}/api${cleanPath}`;
     };
 
-    const handleEdit = (resumeId: number) => {
-        router.push(`/templates/resume-builder/basic-info?resumeId=${resumeId}`);
+    const handleEdit = (publicId: string) => {
+        router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
     };
 
-    const handleDelete = (resumeId: number) => {
+    const handleDelete = (publicId: string) => {
         toast("Are you sure you want to delete this resume?", {
             description: "This action cannot be undone.",
             duration: Infinity,
             action: {
                 label: "Delete",
-                onClick: () => confirmDelete(resumeId),
+                onClick: () => confirmDelete(publicId),
             },
             cancel: {
                 label: "Cancel",
@@ -157,12 +158,12 @@ export default function DashboardPage() {
         });
     };
 
-    const confirmDelete = async (resumeId: number) => {
-        setDeletingId(resumeId);
+    const confirmDelete = async (publicId: string) => {
+        setDeletingId(publicId);
         try {
-            const res = await api.delete(`/resume/builder/${resumeId}`);
+            const res = await api.delete(`/resume/builder/${publicId}`);
             if (res.data.success) {
-                setResumes((prev) => prev.filter((r) => r.id !== resumeId));
+                setResumes((prev) => prev.filter((r) => r.publicId !== publicId));
                 toast.success("Resume deleted successfully.");
             }
         } catch (err: any) {
@@ -173,10 +174,10 @@ export default function DashboardPage() {
         }
     };
 
-    const handlePreview = async (resumeId: number) => {
-        setPreviewLoadingId(resumeId);
+    const handlePreview = async (publicId: string) => {
+        setPreviewLoadingId(publicId);
         try {
-            const res = await api.get(`/resume/builder/${resumeId}/preview`);
+            const res = await api.get(`/resume/builder/${publicId}/preview`);
             if (res.data.success) {
                 setPreviewModal({
                     open: true,
@@ -196,10 +197,10 @@ export default function DashboardPage() {
         setPreviewModal({ open: false, html: "", resumeName: "" });
     };
 
-    const handleDownload = async (resumeId: number, resumeName: string) => {
-        setDownloadingId(resumeId);
+    const handleDownload = async (publicId: string, resumeName: string) => {
+        setDownloadingId(publicId);
         try {
-            const res = await api.get(`/resume/builder/${resumeId}/download?format=pdf`, {
+            const res = await api.get(`/resume/builder/${publicId}/download?format=pdf`, {
                 responseType: "blob",
             });
             const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -620,11 +621,11 @@ export default function DashboardPage() {
                                                         />
                                                         <button
                                                             type="button"
-                                                            onClick={() => handlePreview(resume.id)}
-                                                            disabled={previewLoadingId === resume.id}
+                                                            onClick={() => handlePreview(resume.publicId)}
+                                                            disabled={previewLoadingId === resume.publicId}
                                                             className="absolute inset-0 bg-black/25 group-hover:bg-black/55 transition-all duration-200 flex flex-col items-center justify-center gap-y-1 text-white cursor-pointer rounded-[3px]"
                                                         >
-                                                            {previewLoadingId === resume.id ? (
+                                                            {previewLoadingId === resume.publicId ? (
                                                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                                                             ) : (
                                                                 <>
@@ -687,7 +688,7 @@ export default function DashboardPage() {
                                                 <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center max-[768px]:w-full max-[768px]:justify-start max-[768px]:gap-2">
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleEdit(resume.id)}
+                                                        onClick={() => handleEdit(resume.publicId)}
                                                         className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="13" viewBox="0 0 11 13" fill="none">
@@ -697,8 +698,8 @@ export default function DashboardPage() {
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleDownload(resume.id, resume.name || `Resume-${resume.id}`)}
-                                                        disabled={downloadingId === resume.id}
+                                                        onClick={() => handleDownload(resume.publicId, resume.name || `Resume-${resume.id}`)}
+                                                        disabled={downloadingId === resume.publicId}
                                                         className={`flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#29B33A] cursor-pointer ${membership ? "text-[#29B33A]" : "text-[#FF0000]"}`}
                                                     >
                                                         {membership ? (
@@ -715,7 +716,7 @@ export default function DashboardPage() {
                                                     <button
                                                         type="button"
                                                         disabled={isDeleting}
-                                                        onClick={() => handleDelete(resume.id)}
+                                                        onClick={() => handleDelete(resume.publicId)}
                                                         className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
                                                     >
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none">

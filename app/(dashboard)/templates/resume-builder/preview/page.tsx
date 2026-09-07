@@ -111,15 +111,15 @@ export default function PreviewPage() {
 
     // if (loading) return <Loader />;
 
-    if (!resumeId) {
-        return (
-            <div className="p-5 border border-[#0456FF26] rounded-[10px] text-center">
-                <p className="text-sm font-semibold text-red-500">
-                    No active resume ID found. Please select a resume first.
-                </p>
-            </div>
-        );
-    }
+    // if (!resumeId) {
+    //     return (
+    //         <div className="p-5 border border-[#0456FF26] rounded-[10px] text-center">
+    //             <p className="text-sm font-semibold text-red-500">
+    //                 No active resume ID found. Please select a resume first.
+    //             </p>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className="relative">

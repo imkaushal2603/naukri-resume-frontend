@@ -135,7 +135,7 @@ export default function Templates() {
         try {
             const res = await api.post("/resume/builder", { templateId: selectedTemplateId });
             if (res.data.success) {
-                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.id}`);
+                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
             }
         } catch (err: any) {
             console.error("Failed to select template", err.response?.data || err.message);
