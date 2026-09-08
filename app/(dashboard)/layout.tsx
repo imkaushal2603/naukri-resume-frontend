@@ -14,8 +14,8 @@ export default function DashboardLayout({
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
-        <ResumeProvider>
-            <Suspense fallback={null}>
+        <Suspense fallback={null}>
+            <ResumeProvider>
                 <div className="flex min-h-screen">
                     <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
                     <div className="flex-1 flex flex-col min-w-0 min-[1025px]:pl-[265px]">
@@ -24,7 +24,7 @@ export default function DashboardLayout({
                         <Footer />
                     </div>
                 </div>
-            </Suspense>
-        </ResumeProvider>
+            </ResumeProvider>
+        </Suspense>
     );
 }
