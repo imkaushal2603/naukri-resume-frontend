@@ -255,12 +255,13 @@ export default function MyResumes() {
             {loading && <Loader overlay />}
             <div className="flex flex-wrap gap-6">
                 <div className="flex-1">
-                    <div className="flex justify-between gap-[20px] mb-[25px] max-[768px]:flex-wrap">
-                        <div className="w-[calc(100%-231px)] max-[768px]:w-full">
+                    <div className="flex gap-[20px] mb-[25px] max-[768px]:flex-wrap">
+                        <div className="w-[calc(50%-20px)] max-[768px]:w-full">
                             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">My Resumes</h4>
                             <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Manage, edit or delete your existing resume.</p>
                         </div>
-                        <div className="w-[220px] text-end max-[768px]:w-full max-[768px]:text-left">
+                        <div className="w-[50%] flex justify-end items-center gap-[10px] max-[768px]:w-full max-[768px]:text-left">
+                            <button className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Your Resume</button>
                             <button onClick={handleCreateNewResume} disabled={creating}
                                 className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
                             >
