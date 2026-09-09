@@ -130,16 +130,18 @@ export default function MyResumes() {
     try {
         const res = await api.post("/resume/builder", {});
 
-        console.log("Create Resume Response:", res);
-        console.log("Resume Data:", res.data);
+        console.log("CREATE RESUME RESPONSE:", res.data);
+        console.log("NEW RESUME PUBLIC ID:", res.data.resume?.publicId);
 
         if (res.data.success && res.data.resume?.publicId) {
-            // Wait 2 seconds before redirecting
-            await new Promise((resolve) => setTimeout(resolve, 2000));
+            const resumeId = res.data.resume.publicId;
 
-            router.push(
-                `/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`
-            );
+            const url = `/templates/resume-builder/basic-info?resumeId=${resumeId}`;
+
+            console.log("NEW RESUME ID:", resumeId);
+            console.log("NAVIGATING TO:", url);
+
+            router.push(url);
         }
     } catch (err: any) {
         const message = err.response?.data?.message;
@@ -160,7 +162,12 @@ export default function MyResumes() {
 };
 
     const handleEdit = (publicId: string) => {
-        router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
+        const url = `/templates/resume-builder/basic-info?resumeId=${publicId}`;
+
+        console.log("CLICKED RESUME ID:", publicId);
+        console.log("NAVIGATING TO:", url);
+
+        router.push(url);
     };
 
     const handleDelete = (publicId: string) => {
