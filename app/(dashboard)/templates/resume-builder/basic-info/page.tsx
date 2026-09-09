@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -60,6 +62,14 @@ export default function BasicInfoStep() {
         fetchData();
     }, [resumeId]);
 
+    useEffect(() => {
+        return () => {
+            if (previewUrl && previewUrl.startsWith("blob:")) {
+                URL.revokeObjectURL(previewUrl);
+            }
+        };
+    }, [previewUrl]);
+
     const handleChange = (field: keyof BasicInfo, value: string) => {
         setForm((prev) => ({ ...prev, [field]: value }));
     };
@@ -73,18 +83,27 @@ export default function BasicInfoStep() {
             return;
         }
 
+        if (previewUrl && previewUrl.startsWith("blob:")) {
+            URL.revokeObjectURL(previewUrl);
+        }
+
         setSelectedFile(file);
         setPreviewUrl(URL.createObjectURL(file));
     };
 
     const requiredFields: (keyof BasicInfo)[] = ["fullName", "phone", "country", "state", "city"];
 
-    const fieldLabels: Record<string, string> = {
-        name: "Full Name",
+    const fieldLabels: Record<keyof BasicInfo, string> = {
+        fullName: "Full Name",
+        email: "Email",
         phone: "Phone",
+        profilePhoto: "Profile Photo",
         country: "Country",
         state: "State",
         city: "City",
+        zipCode: "Zip Code",
+        linkedin: "LinkedIn",
+        github: "GitHub",
     };
 
     const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -120,7 +139,7 @@ export default function BasicInfoStep() {
             const formData = new FormData();
 
             Object.entries(form).forEach(([key, value]) => {
-                if (key !== "profilePhoto" && value !== undefined && value !== null) {
+                if (key !== "profilePhoto" && value !== undefined && value !== null && value !== "") {
                     formData.append(key, value as string);
                 }
             });
@@ -224,7 +243,7 @@ export default function BasicInfoStep() {
                                 <div className="relative">
                                     <div className="absolute w-[42px] h-full flex justify-center items-center bg-[#0456FF26] rounded-l-[6px]">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <path d="M8 1.9C8.27578 1.9 8.54885 1.95432 8.80364 2.05985C9.05842 2.16539 9.28992 2.32007 9.48492 2.51508C9.67993 2.71008 9.83461 2.94158 9.94015 3.19636C10.0457 3.45115 10.1 3.72422 10.1 4C10.1 4.27578 10.0457 4.54885 9.94015 4.80364C9.83461 5.05842 9.67993 5.28992 9.48492 5.48492C9.28992 5.67993 9.05842 5.83461 8.80364 5.94015C8.54885 6.04568 8.27578 6.1 8 6.1C7.44305 6.1 6.9089 5.87875 6.51508 5.48492C6.12125 5.0911 5.9 4.55695 5.9 4C5.9 3.44305 6.12125 2.9089 6.51508 2.51508C6.9089 2.12125 7.44305 1.9 8 1.9ZM8 10.9C10.97 10.9 14.1 12.36 14.1 13V14.1H1.9V13C1.9 12.36 5.03 10.9 8 10.9ZM8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 9C5.33 9 0 10.34 0 13V16H16V13C16 10.34 10.67 9 8 9Z" fill="#0456FF" />
+                                            <path d="M1.5 3C0.671573 3 0 3.67157 0 4.5V11.5C0 12.3284 0.671573 13 1.5 13H14.5C15.3284 13 16 12.3284 16 11.5V4.5C16 3.67157 15.3284 3 14.5 3H1.5ZM1.5 4.5H14.5V5.21739L8 9.28261L1.5 5.21739V4.5ZM14.5 11.5H1.5V6.78261L7.52786 10.5498C7.81846 10.7314 8.18154 10.7314 8.47214 10.5498L14.5 6.78261V11.5Z" fill="#0456FF" />
                                         </svg>
                                     </div>
                                     <input type="email" value={form.email || ""} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
