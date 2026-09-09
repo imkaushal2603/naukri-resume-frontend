@@ -126,6 +126,11 @@ export default function MyResumes() {
         setCreating(true);
         try {
             const res = await api.post("/resume/builder", {});
+            console.log("========== CREATE RESUME ==========");
+            console.log("API RESPONSE:", res.data);
+            console.log("NEW RESUME:", res.data?.resume);
+            console.log("NEW PUBLIC ID:", res.data?.resume?.publicId);
+            console.log("===================================");
             if (res.data.success && res.data.resume?.publicId) {
                 router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
             }
