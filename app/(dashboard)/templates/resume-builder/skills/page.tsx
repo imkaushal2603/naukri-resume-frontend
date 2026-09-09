@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState, KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

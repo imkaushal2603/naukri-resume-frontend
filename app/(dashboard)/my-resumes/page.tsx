@@ -127,7 +127,7 @@ export default function MyResumes() {
         try {
             const res = await api.post("/resume/builder", {});
             if (res.data.success && res.data.resume?.publicId) {
-                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
+                router.replace(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
             }
         } catch (err: any) {
             const message = err.response?.data?.message;

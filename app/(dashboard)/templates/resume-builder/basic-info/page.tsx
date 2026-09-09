@@ -1,7 +1,5 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useEffect, useState, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -42,6 +40,20 @@ export default function BasicInfoStep() {
     const [saving, setSaving] = useState(false);
 
     useEffect(() => {
+        console.log('🔄 resumeId changed, resetting all state:', resumeId);
+
+        if (previewUrl && previewUrl.startsWith("blob:")) {
+            URL.revokeObjectURL(previewUrl);
+        }
+
+        setForm({});
+        setSelectedFile(null);
+        setPreviewUrl(null);
+        setLoading(true);
+        setSaving(false);
+    }, [resumeId]);
+
+    useEffect(() => {
         const fetchData = async () => {
             if (!resumeId) return;
             try {
@@ -61,14 +73,6 @@ export default function BasicInfoStep() {
         };
         fetchData();
     }, [resumeId]);
-
-    useEffect(() => {
-        return () => {
-            if (previewUrl && previewUrl.startsWith("blob:")) {
-                URL.revokeObjectURL(previewUrl);
-            }
-        };
-    }, [previewUrl]);
 
     const handleChange = (field: keyof BasicInfo, value: string) => {
         setForm((prev) => ({ ...prev, [field]: value }));
