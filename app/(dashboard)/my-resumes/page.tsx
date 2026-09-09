@@ -141,7 +141,7 @@ export default function MyResumes() {
             console.log("NEW RESUME ID:", resumeId);
             console.log("NAVIGATING TO:", url);
 
-            router.push(url);
+            window.location.href = url;
         }
     } catch (err: any) {
         const message = err.response?.data?.message;
@@ -167,7 +167,7 @@ export default function MyResumes() {
         console.log("CLICKED RESUME ID:", publicId);
         console.log("NAVIGATING TO:", url);
 
-        router.push(url);
+        window.location.href = url;
     };
 
     const handleDelete = (publicId: string) => {
