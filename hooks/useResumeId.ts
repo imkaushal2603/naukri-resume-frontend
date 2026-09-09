@@ -1,8 +1,7 @@
 "use client";
-
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export const useResumeId = (): string | null => {
-    const searchParams = useSearchParams();
-    return searchParams.get("resumeId");
+    const params = useParams();
+    return (params?.resumeId as string) ?? null;
 };

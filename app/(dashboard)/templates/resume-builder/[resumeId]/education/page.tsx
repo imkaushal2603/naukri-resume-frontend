@@ -179,11 +179,11 @@ export default function Education() {
             }
         }
 
-        router.push(`/templates/resume-builder/experience?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/experience`);
     };
 
     const handlePrevious = () => {
-        router.push(`/templates/resume-builder/basic-info?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/basic-info`);
     };
 
     const renderForm = () => (

@@ -259,11 +259,11 @@ export default function ExperiencePage() {
             }
         }
 
-        router.push(`/templates/resume-builder/skills?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/skills`);
     };
 
     const handlePrevious = () => {
-        router.push(`/templates/resume-builder/education?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/education`);
     };
 
     const renderForm = () => (

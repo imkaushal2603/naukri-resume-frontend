@@ -154,7 +154,7 @@ export default function BasicInfoStep() {
             toast.success("Basic information saved successfully!");
 
             if (resumeId) {
-                router.push(`/templates/resume-builder/education?resumeId=${resumeId}`);
+                router.push(`/templates/resume-builder/${resumeId}/education`);
             }
         } catch (err: any) {
             console.error("Failed to save basic info", err);

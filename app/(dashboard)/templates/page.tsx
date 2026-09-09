@@ -120,7 +120,7 @@ export default function Templates() {
             const res = await api.put(`/resume/builder/${resumeId}`, { templateId: selectedTemplateId });
             if (res.data.success) {
                 api.post(`/resume/builder/${resumeId}/thumbnail`).catch(() => { });
-                router.push(`/templates/resume-builder/preview?resumeId=${resumeId}`);
+                router.push(`/templates/resume-builder/${resumeId}/preview`);
             }
         } catch (err: any) {
             console.error("Failed to update template", err.response?.data || err.message);
@@ -135,7 +135,7 @@ export default function Templates() {
         try {
             const res = await api.post("/resume/builder", { templateId: selectedTemplateId });
             if (res.data.success) {
-                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
+                router.push(`/templates/resume-builder/${res.data.resume.publicId}/basic-info`);
             }
         } catch (err: any) {
             console.error("Failed to select template", err.response?.data || err.message);

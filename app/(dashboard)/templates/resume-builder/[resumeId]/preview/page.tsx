@@ -106,7 +106,7 @@ export default function PreviewPage() {
     };
 
     const handlePrevious = () => {
-        router.push(`/templates/resume-builder/summary?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/summary`);
     };
 
     // if (loading) return <Loader />;

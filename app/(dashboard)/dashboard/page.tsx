@@ -136,7 +136,7 @@ export default function DashboardPage() {
     };
 
     const handleEdit = (publicId: string) => {
-        router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
+        router.push(`/templates/resume-builder/${publicId}/basic-info`);
     };
 
     const handleDelete = (publicId: string) => {

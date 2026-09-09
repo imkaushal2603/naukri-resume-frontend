@@ -158,11 +158,11 @@ export default function SkillsPage() {
     };
 
     const handleNext = () => {
-        router.push(`/templates/resume-builder/summary?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/summary`);
     };
 
     const handlePrevious = () => {
-        router.push(`/templates/resume-builder/experience?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/experience`);
     };
 
     // if (loading) {

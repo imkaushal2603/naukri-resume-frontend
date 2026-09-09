@@ -127,9 +127,7 @@ export default function MyResumes() {
         try {
             const res = await api.post("/resume/builder", {});
             if (res.data.success && res.data.resume?.publicId) {
-                let url = `/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`;
-                window.location.href = url;
-                // router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
+                router.push(`/templates/resume-builder/${res.data.resume.publicId}/basic-info`);
             }
         } catch (err: any) {
             const message = err.response?.data?.message;
@@ -145,9 +143,7 @@ export default function MyResumes() {
     };
 
     const handleEdit = (publicId: string) => {
-        let url = `/templates/resume-builder/basic-info?resumeId=${publicId}`;
-        window.location.href = url;
-        // router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
+        router.push(`/templates/resume-builder/${publicId}/basic-info`);
     };
 
     const handleDelete = (publicId: string) => {
@@ -269,7 +265,7 @@ export default function MyResumes() {
             });
             if (res.data.success && res.data.publicId) {
                 toast.success("Resume parsed! Review and complete your details.");
-                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.publicId}`);
+                router.push(`/templates/resume-builder/${res.data.publicId}/basic-info`);
             }
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Failed to parse resume.");

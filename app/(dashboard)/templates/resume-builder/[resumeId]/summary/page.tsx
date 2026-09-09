@@ -105,7 +105,7 @@ export default function SummaryPage() {
             });
             toast.success("Summary saved successfully!");
             await refreshProgress();
-            router.push(`/templates/resume-builder/preview?resumeId=${resumeId}`);
+            router.push(`/templates/resume-builder/${resumeId}/preview`);
         } catch (err: any) {
             console.error("Failed to save summary", err);
             toast.error(err.response?.data?.message || "Failed to save summary.");
@@ -115,7 +115,7 @@ export default function SummaryPage() {
     };
 
     const handlePrevious = () => {
-        router.push(`/templates/resume-builder/skills?resumeId=${resumeId}`);
+        router.push(`/templates/resume-builder/${resumeId}/skills`);
     };
 
     // if (loading) {
