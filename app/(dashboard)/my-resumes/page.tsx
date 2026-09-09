@@ -118,29 +118,46 @@ export default function MyResumes() {
     }, [resumes, currentPage]);
 
     const handleCreateNewResume = async () => {
-        if (resumes.length >= maxResumes) {
-            toast.error(`You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`);
-            return;
+    if (resumes.length >= maxResumes) {
+        toast.error(
+            `You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`
+        );
+        return;
+    }
+
+    setCreating(true);
+
+    try {
+        const res = await api.post("/resume/builder", {});
+
+        console.log("Create Resume Response:", res);
+        console.log("Resume Data:", res.data);
+
+        if (res.data.success && res.data.resume?.publicId) {
+            // Wait 2 seconds before redirecting
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            router.push(
+                `/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`
+            );
+        }
+    } catch (err: any) {
+        const message = err.response?.data?.message;
+
+        if (message?.includes("only create up to")) {
+            toast.error(`${message} Upgrade your plan to create more.`);
+        } else {
+            toast.error(message || "Failed to create new resume.");
         }
 
-        setCreating(true);
-        try {
-            const res = await api.post("/resume/builder", {});
-            if (res.data.success && res.data.resume?.publicId) {
-                router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
-            }
-        } catch (err: any) {
-            const message = err.response?.data?.message;
-            if (message?.includes("only create up to")) {
-                toast.error(`${message} Upgrade your plan to create more.`);
-            } else {
-                toast.error(message || "Failed to create new resume.");
-            }
-            console.error("Failed to create new resume", err.response?.data || err.message);
-        } finally {
-            setCreating(false);
-        }
-    };
+        console.error(
+            "Failed to create new resume",
+            err.response?.data || err.message
+        );
+    } finally {
+        setCreating(false);
+    }
+};
 
     const handleEdit = (publicId: string) => {
         router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
