@@ -20,32 +20,40 @@ interface ResumeContextType {
     refreshProgress: () => Promise<void>;
 }
 
+const DEFAULT_SECTIONS: SectionStatus = {
+    basicInfo: false,
+    education: false,
+    experience: false,
+    skills: false,
+    summary: false,
+};
+
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 
 export const ResumeProvider = ({ children }: { children: React.ReactNode }) => {
     const resumeId = useResumeId();
-    const [sections, setSections] = useState<SectionStatus>({
-        basicInfo: false,
-        education: false,
-        experience: false,
-        skills: false,
-        summary: false,
-    });
+    const [sections, setSections] = useState<SectionStatus>(DEFAULT_SECTIONS);
 
     const refreshProgress = async () => {
-        if (!resumeId) return;
+        if (!resumeId) {
+            setSections(DEFAULT_SECTIONS);
+            return;
+        }
+
         try {
             const res = await api.get(`/resume/builder/${resumeId}/progress`);
             if (res.data?.success) {
                 setSections(res.data.sections);
             }
-            await api.post(`/resume/builder/${resumeId}/thumbnail`);
+            await api.post(`/resume/builder/${resumeId}/thumbnail`).catch(() => { });
         } catch (err) {
             console.error("Failed to fetch resume progress", err);
+            setSections(DEFAULT_SECTIONS);
         }
     };
 
     useEffect(() => {
+        setSections(DEFAULT_SECTIONS);
         refreshProgress();
     }, [resumeId]);
 
