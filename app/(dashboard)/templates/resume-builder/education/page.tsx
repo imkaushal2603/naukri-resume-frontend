@@ -82,7 +82,10 @@ export default function Education() {
     const openEdit = (edu: Education) => {
         setForm({
             ...edu,
+            school: edu.school || "",
+            degree: edu.degree || "",
             educationLevel: edu.educationLevel || "",
+            gpa: edu.gpa || "",
             startDate: edu.startDate ? edu.startDate.slice(0, 10) : "",
             endDate: edu.endDate ? edu.endDate.slice(0, 10) : "",
         });

@@ -41,7 +41,13 @@ export default function BasicInfoStep() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!resumeId) return;
+            if (!resumeId) {
+                setForm({});
+                setSelectedFile(null);
+                setPreviewUrl(null);
+                setLoading(false);
+                return;
+            }
             try {
                 const res = await withMinDelay(api.get(`/resume/builder/${resumeId}/basic-info`));
                 if (res.data.success) {
@@ -87,6 +93,9 @@ export default function BasicInfoStep() {
         city: "City",
     };
 
+    const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const isValidIndianPhone = (phone: string) => /^[6-9]\d{9}$/.test(phone);
+
     const handleSave = async () => {
         if (!resumeId) {
             toast.error("Resume ID missing.");
@@ -99,6 +108,16 @@ export default function BasicInfoStep() {
             toast.error(
                 `Please fill in required fields: ${missing.map((f) => fieldLabels[f]).join(", ")}`
             );
+            return;
+        }
+
+        if (form.email && !isValidEmail(form.email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+
+        if (form.phone && !isValidIndianPhone(form.phone)) {
+            toast.error("Please enter a valid 10-digit Indian phone number.");
             return;
         }
 

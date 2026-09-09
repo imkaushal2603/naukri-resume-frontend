@@ -128,7 +128,11 @@ export default function ExperiencePage() {
     const openEdit = (exp: Experience) => {
         setForm({
             ...exp,
+            company: exp.company || "",
+            role: exp.role || "",
+            location: exp.location || "",
             employmentType: exp.employmentType || "",
+            description: exp.description || "",
             startDate: exp.startDate ? exp.startDate.slice(0, 10) : "",
             endDate: exp.endDate ? exp.endDate.slice(0, 10) : "",
         });
