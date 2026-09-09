@@ -118,56 +118,36 @@ export default function MyResumes() {
     }, [resumes, currentPage]);
 
     const handleCreateNewResume = async () => {
-    if (resumes.length >= maxResumes) {
-        toast.error(
-            `You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`
-        );
-        return;
-    }
-
-    setCreating(true);
-
-    try {
-        const res = await api.post("/resume/builder", {});
-
-        console.log("CREATE RESUME RESPONSE:", res.data);
-        console.log("NEW RESUME PUBLIC ID:", res.data.resume?.publicId);
-
-        if (res.data.success && res.data.resume?.publicId) {
-            const resumeId = res.data.resume.publicId;
-
-            const url = `/templates/resume-builder/basic-info?resumeId=${resumeId}`;
-
-            console.log("NEW RESUME ID:", resumeId);
-            console.log("NAVIGATING TO:", url);
-
-            window.location.href = url;
-        }
-    } catch (err: any) {
-        const message = err.response?.data?.message;
-
-        if (message?.includes("only create up to")) {
-            toast.error(`${message} Upgrade your plan to create more.`);
-        } else {
-            toast.error(message || "Failed to create new resume.");
+        if (resumes.length >= maxResumes) {
+            toast.error(`You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`);
+            return;
         }
 
-        console.error(
-            "Failed to create new resume",
-            err.response?.data || err.message
-        );
-    } finally {
-        setCreating(false);
-    }
-};
+        setCreating(true);
+        try {
+            const res = await api.post("/resume/builder", {});
+            if (res.data.success && res.data.resume?.publicId) {
+                let url = `/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`;
+                window.location.href = url;
+                // router.push(`/templates/resume-builder/basic-info?resumeId=${res.data.resume.publicId}`);
+            }
+        } catch (err: any) {
+            const message = err.response?.data?.message;
+            if (message?.includes("only create up to")) {
+                toast.error(`${message} Upgrade your plan to create more.`);
+            } else {
+                toast.error(message || "Failed to create new resume.");
+            }
+            console.error("Failed to create new resume", err.response?.data || err.message);
+        } finally {
+            setCreating(false);
+        }
+    };
 
     const handleEdit = (publicId: string) => {
-        const url = `/templates/resume-builder/basic-info?resumeId=${publicId}`;
-
-        console.log("CLICKED RESUME ID:", publicId);
-        console.log("NAVIGATING TO:", url);
-
+        let url = `/templates/resume-builder/basic-info?resumeId=${publicId}`;
         window.location.href = url;
+        // router.push(`/templates/resume-builder/basic-info?resumeId=${publicId}`);
     };
 
     const handleDelete = (publicId: string) => {
