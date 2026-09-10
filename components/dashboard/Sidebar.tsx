@@ -22,12 +22,12 @@ const mainNavItems: NavItem[] = [
 ];
 
 const builderNavItems: NavItem[] = [
-    { name: "Basic Info", href: "/templates/resume-builder/basic-info" },
-    { name: "Education", href: "/templates/resume-builder/education" },
-    { name: "Experience", href: "/templates/resume-builder/experience" },
-    { name: "Skills", href: "/templates/resume-builder/skills" },
-    { name: "Summary", href: "/templates/resume-builder/summary" },
-    { name: "Preview", href: "/templates/resume-builder/preview" },
+    { name: "Basic Info", href: "basic-info" },
+    { name: "Education", href: "education" },
+    { name: "Experience", href: "experience" },
+    { name: "Skills", href: "skills" },
+    { name: "Summary", href: "summary" },
+    { name: "Preview", href: "preview" },
 ];
 
 interface Membership {
@@ -113,13 +113,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     )}
                     <nav className="py-[20px] px-[16px] space-y-1.5">
                         {(isBuilderFlow ? builderNavItems : mainNavItems).map((item) => {
-                            const isActive = isBuilderFlow && resumeId
-                                ? pathname === `/templates/resume-builder/${resumeId}${item.href}`
-                                : pathname === item.href;
-
-                            const targetHref = isBuilderFlow && resumeId
-                                ? `/templates/resume-builder/${resumeId}${item.href}`
-                                : item.href;
+                            const isActive = isBuilderFlow && resumeId ? pathname === `/templates/resume-builder/${resumeId}/${item.href}` : pathname === item.href;
+                            console.log("isActive", isActive, pathname, item.href, resumeId);
+                            const targetHref = isBuilderFlow && resumeId ? `/templates/resume-builder/${resumeId}/${item.href}` : item.href;
+                            console.log("targetHref", targetHref);
 
                             return (
                                 <div key={item.href}>

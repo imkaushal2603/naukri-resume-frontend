@@ -1,10 +1,34 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Sidebar from "@/components/dashboard/Sidebar";
 import Header from "@/components/dashboard/Header";
 import Footer from "@/components/dashboard/Footer";
 import { ResumeProvider } from "@/context/ResumeContext";
+import { useAuth } from "@/context/AuthContext";
+import Loader from "@/components/ui/Loader";
+
+function DashboardGate({ children }: { children: React.ReactNode }) {
+    const { isAuthenticated, loading } = useAuth();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading && !isAuthenticated) {
+            router.replace("/");
+        }
+    }, [loading, isAuthenticated, router]);
+
+    if (loading || !isAuthenticated) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader />
+            </div>
+        );
+    }
+
+    return <>{children}</>;
+}
 
 export default function DashboardLayout({
     children,
@@ -16,14 +40,16 @@ export default function DashboardLayout({
     return (
         <Suspense fallback={null}>
             <ResumeProvider>
-                <div className="flex min-h-screen">
-                    <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-                    <div className="flex-1 flex flex-col min-w-0 min-[1025px]:pl-[265px]">
-                        <Header onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
-                        <main className="flex-1 p-8 overflow-y-auto max-[1025px]:px-5">{children}</main>
-                        <Footer />
+                <DashboardGate>
+                    <div className="flex min-h-screen">
+                        <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+                        <div className="flex-1 flex flex-col min-w-0 min-[1025px]:pl-[265px]">
+                            <Header onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
+                            <main className="flex-1 p-8 overflow-y-auto max-[1025px]:px-5">{children}</main>
+                            <Footer />
+                        </div>
                     </div>
-                </div>
+                </DashboardGate>
             </ResumeProvider>
         </Suspense>
     );

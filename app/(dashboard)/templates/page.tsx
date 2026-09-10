@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
 import api from "@/services/api";
-import { useResumeId } from "@/hooks/useResumeId";
+import { useSearchParams } from "next/navigation";
 import Loader from "@/components/ui/Loader";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
@@ -46,7 +46,8 @@ const getFilterParams = (filter: string): { tier?: string; category?: string } =
 
 export default function Templates() {
     const router = useRouter();
-    const resumeId = useResumeId();
+    const searchParams = useSearchParams();
+    const resumeId = searchParams.get("resumeId");
     const [templates, setTemplates] = useState<Template[]>([]);
     const [currentTemplateId, setCurrentTemplateId] = useState<number | null>(null);
     const [selectedTemplateId, setSelectedTemplateId] = useState<number | null>(null);
@@ -258,7 +259,7 @@ export default function Templates() {
                                             {isSelected && (
                                                 <div className="absolute bottom-[8px] right-[8px]">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32" fill="none">
-                                                        <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z" fill="#0456FF"/>
+                                                        <path d="M16,2A14,14,0,1,0,30,16,14,14,0,0,0,16,2ZM14,21.5908l-5-5L10.5906,15,14,18.4092,21.41,11l1.5957,1.5859Z" fill="#0456FF" />
                                                     </svg>
                                                 </div>
                                             )}
