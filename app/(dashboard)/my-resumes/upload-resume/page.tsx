@@ -133,7 +133,7 @@ export default function UploadResume() {
                     </div>
                     <div className="w-full">
                         <input ref={fileInputRef} type="file" accept=".pdf,.docx" className="hidden" onChange={handleFileUpload} />
-                        <button onClick={() => fileInputRef.current?.click()} disabled={uploading || resumes.length >= maxResumes} className="flex w-full text-center justify-center gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Existing Resume</button>
+                        <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex w-full text-center justify-center gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Existing Resume</button>
                     </div>
                     <span className="text-[14px] leading-normal text-[#000024] absolute bottom-[40px]">Supports PDF, DOC, DOCX (Max 5 MB)</span>
                 </div>
