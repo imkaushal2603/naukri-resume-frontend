@@ -114,9 +114,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                     <nav className="py-[20px] px-[16px] space-y-1.5">
                         {(isBuilderFlow ? builderNavItems : mainNavItems).map((item) => {
                             const isActive = isBuilderFlow && resumeId ? pathname === `/templates/resume-builder/${resumeId}/${item.href}` : pathname === item.href;
-                            console.log("isActive", isActive, pathname, item.href, resumeId);
                             const targetHref = isBuilderFlow && resumeId ? `/templates/resume-builder/${resumeId}/${item.href}` : item.href;
-                            console.log("targetHref", targetHref);
 
                             return (
                                 <div key={item.href}>

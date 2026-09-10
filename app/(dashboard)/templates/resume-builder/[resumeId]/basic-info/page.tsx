@@ -105,7 +105,10 @@ export default function BasicInfoStep() {
     };
 
     const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    const isValidIndianPhone = (phone: string) => /^[6-9]\d{9}$/.test(phone);
+    const isValidPhone = (phone: string) => {
+        const digits = phone.replace(/[\s\-()]/g, "");
+        return /^\+?\d{7,15}$/.test(digits);
+    };
 
     const handleSave = async () => {
         if (!resumeId) {
@@ -127,8 +130,8 @@ export default function BasicInfoStep() {
             return;
         }
 
-        if (form.phone && !isValidIndianPhone(form.phone)) {
-            toast.error("Please enter a valid 10-digit Indian phone number.");
+        if (form.phone && !isValidPhone(form.phone)) {
+            toast.error("Please enter a valid phone number.");
             return;
         }
 

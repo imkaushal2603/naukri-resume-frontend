@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
@@ -63,8 +63,6 @@ export default function MyResumes() {
     const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
     const [downloadingId, setDownloadingId] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [uploading, setUploading] = useState(false);
     const RESUMES_PER_PAGE = 3;
     const totalPages = Math.ceil(resumes.length / RESUMES_PER_PAGE);
     const paginatedResumes = resumes.slice(
@@ -252,29 +250,6 @@ export default function MyResumes() {
         }
     };
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        setUploading(true);
-        try {
-            const formData = new FormData();
-            formData.append("resume", file);
-            const res = await api.post("/resume/builder/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            if (res.data.success && res.data.publicId) {
-                toast.success("Resume parsed! Review and complete your details.");
-                router.push(`/templates/resume-builder/${res.data.publicId}/basic-info`);
-            }
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || "Failed to parse resume.");
-        } finally {
-            setUploading(false);
-            if (fileInputRef.current) fileInputRef.current.value = "";
-        }
-    };
-
     return (
         <div className="relative">
             {loading && <Loader overlay />}
@@ -287,8 +262,7 @@ export default function MyResumes() {
                         </div>
                         <div className="w-[50%] flex justify-end items-center gap-[10px] max-[768px]:w-full max-[768px]:text-left">
                             <div>
-                                <input ref={fileInputRef} type="file" accept=".pdf,.docx" className="hidden" onChange={handleFileUpload} />
-                                <button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">{uploading ? "Parsing..." : "Upload Your Resume"}</button>
+                                <Link href="/my-resumes/upload-resume" className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Your Resume</Link>
                             </div>
                             <button onClick={handleCreateNewResume} disabled={creating}
                                 className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"

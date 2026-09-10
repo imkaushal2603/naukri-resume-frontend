@@ -7,7 +7,6 @@ import Header from "@/components/dashboard/Header";
 import Footer from "@/components/dashboard/Footer";
 import { ResumeProvider } from "@/context/ResumeContext";
 import { useAuth } from "@/context/AuthContext";
-import Loader from "@/components/ui/Loader";
 
 function DashboardGate({ children }: { children: React.ReactNode }) {
     const { isAuthenticated, loading } = useAuth();
@@ -20,11 +19,7 @@ function DashboardGate({ children }: { children: React.ReactNode }) {
     }, [loading, isAuthenticated, router]);
 
     if (loading || !isAuthenticated) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
-                <Loader />
-            </div>
-        );
+        return null;
     }
 
     return <>{children}</>;
@@ -45,7 +40,9 @@ export default function DashboardLayout({
                         <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
                         <div className="flex-1 flex flex-col min-w-0 min-[1025px]:pl-[265px]">
                             <Header onMenuClick={() => setIsSidebarOpen((prev) => !prev)} />
-                            <main className="flex-1 p-8 overflow-y-auto max-[1025px]:px-5">{children}</main>
+                            <main className="flex-1 p-8 overflow-y-auto max-[1025px]:px-5">
+                                {children}
+                            </main>
                             <Footer />
                         </div>
                     </div>
