@@ -168,7 +168,7 @@ export default function PlanDetails() {
                                 <p className="font-normal text-[12px] leading-[100%] text-[#000024] mt-[8px]">You can create up to {maxResumes} resumes in this plan.</p>
                             </div>
                             <Link href="/plans" className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
-                                View Current Plan
+                                {resumes.length === maxResumes ? "Update Plan" : "View Current Plan"}
                             </Link>
                         </div>
                     ) :

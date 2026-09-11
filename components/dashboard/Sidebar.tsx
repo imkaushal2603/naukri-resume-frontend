@@ -191,8 +191,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                             </span>
                                             <span>{item.name}</span>
                                         </div>
-                                        {item.badge && (
-                                            <span className="text-[10px] font-bold bg-[#F2EFFE] text-[#0456FF] px-[10px] py-[5px] rounded-full leading-none">{item.badge}</span>
+                                        {!membership && item.badge && (
+                                            <span className="text-[10px] font-bold bg-[#F2EFFE] text-[#0456FF] px-[10px] py-[5px] rounded-full leading-none">
+                                                {item.badge}
+                                            </span>
                                         )}
                                     </Link>
                                 </div>

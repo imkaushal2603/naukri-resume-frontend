@@ -76,6 +76,8 @@ export default function DashboardPage() {
     });
     const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
     const [downloadingId, setDownloadingId] = useState<string | null>(null);
+    const [maxResumes, setMaxResumes] = useState<number>(15);
+    const [creating, setCreating] = useState<boolean>(false);
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
     useEffect(() => {
@@ -86,6 +88,9 @@ export default function DashboardPage() {
                     const resumes = res.data.resumes || [];
                     setResumes(resumes);
                     setShowTargetDiv(resumes.length === 0);
+                    if (res.data.maxResumes) {
+                        setMaxResumes(res.data.maxResumes);
+                    }
                 }
             } catch (err) {
                 console.error("Failed to check resumes", err);
@@ -233,6 +238,31 @@ export default function DashboardPage() {
     const getPlanLabel = (durationDays: number) => {
         if (durationDays === 365) return "Annual Access";
         return `${durationDays}-Day Access`;
+    };
+
+    const handleCreateNewResume = async () => {
+        if (resumes.length >= maxResumes) {
+            toast.error(`You've reached the maximum limit of ${maxResumes} resumes. Extend your limit to create more.`);
+            return;
+        }
+
+        setCreating(true);
+        try {
+            const res = await api.post("/resume/builder", {});
+            if (res.data.success && res.data.resume?.publicId) {
+                router.push(`/templates/resume-builder/${res.data.resume.publicId}/basic-info`);
+            }
+        } catch (err: any) {
+            const message = err.response?.data?.message;
+            if (message?.includes("only create up to")) {
+                toast.error(`${message} Upgrade your plan to create more.`);
+            } else {
+                toast.error(message || "Failed to create new resume.");
+            }
+            console.error("Failed to create new resume", err.response?.data || err.message);
+        } finally {
+            setCreating(false);
+        }
     };
 
     // if (loading) {
@@ -568,9 +598,17 @@ export default function DashboardPage() {
                     <div className="border border-[#CACACA80] shadow-[0_3px_8px_rgba(0,0,0,0.24)] rounded-[10px] p-5">
                         <div className="flex flex-wrap items-center justify-between gap-5">
                             <h4 className="font-bold text-[22px] leading-[120%] text-black mb-[10px]">My Resumes</h4>
-                            {resumes.length > 0 && (
-                                <Link href="/my-resumes" className="inline-block items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300">View All</Link>
-                            )}
+                            <div className="flex gap-[8px] flex-wrap">
+                                <button onClick={handleCreateNewResume} disabled={creating}
+                                    className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
+                                >
+                                    Create New Resume
+                                </button>
+                                <Link href="/my-resumes/upload-resume" className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Your Resume</Link>
+                                {resumes.length > 0 && (
+                                    <Link href="/my-resumes" className="inline-block items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300">View All</Link>
+                                )}
+                            </div>
                         </div>
                         {displayedResumes.length === 0 ? (
                             <div className="flex flex-wrap gap-[10px] justify-center items-center">

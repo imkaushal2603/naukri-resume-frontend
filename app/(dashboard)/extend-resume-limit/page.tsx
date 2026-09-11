@@ -1,6 +1,52 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import api from "@/services/api";
+import Loader from "@/components/ui/Loader";
+import MembershipPaymentButton from "@/components/MembershipPaymentButton";
+
+function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
+    return Promise.all([
+        promise,
+        new Promise((resolve) => setTimeout(resolve, ms)),
+    ]).then(([result]) => result as T);
+}
+
+interface ResumeLimitAddon {
+    id: number;
+    name: string;
+    price: string;
+    extraLimit: number;
+    status: "current" | "included" | "available";
+}
+
 export default function ExtendResumeLimit() {
+    const [addons, setAddons] = useState<ResumeLimitAddon[]>([]);
+    const [addonsLoading, setAddonsLoading] = useState<boolean>(true);
+
+    useEffect(() => {
+        const fetchAddons = async () => {
+            try {
+                const res = await withMinDelay(api.get("/resume/limit-addons"));
+                console.log("Fetched add-ons:", res.data);
+                if (res.data.success) {
+                    setAddons(res.data.addons);
+                }
+            } catch (err) {
+                console.error("Failed to load add-ons", err);
+            } finally {
+                setAddonsLoading(false);
+            }
+        };
+        fetchAddons();
+    }, []);
+
+    const addon50 = addons.find((a) => a.id === 1);
+    const addon100 = addons.find((a) => a.id === 2);
+
     return (
         <div className="flex flex-wrap gap-6">
+            {addonsLoading && <Loader overlay />}
             <div className="flex-1">
                 <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Need More Resumes? Extend Your Limit</h4>
                 <p className="font-normal text-[15px] leading-[140%] text-[#00002480] block">You've already created all 15 resumes included in your current plan.</p>
@@ -31,7 +77,7 @@ export default function ExtendResumeLimit() {
                             <p className="font-normal text-[15px] leading-[100%] text-[#000024CC] inline-block">One-time payment</p>
                         </div>
                         <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
-                        <ul className="flex flex-col gap-y-[6px]">
+                        <ul className="flex flex-col gap-y-[6px] mb-[20px]">
                             <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -121,7 +167,19 @@ export default function ExtendResumeLimit() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="inline-block w-full mt-[30px] border border-[#0456FF] bg-[#0456FF] py-[13px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 50 Resumes</button>
+                        {addon50 && addon50.status !== "available" ? (
+                            <button
+                                disabled
+                                className="w-full flex items-center justify-center gap-[10px] bg-[#E6F9EC] text-[#29B33A] font-semibold text-[14px] py-[13px] px-[26px] rounded-[5px] cursor-not-allowed"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20 6L9 17L4 12" stroke="#29B33A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                {addon50.status === "current" ? "Purchased" : "Included in your plan"}
+                            </button>
+                        ) : (
+                            <MembershipPaymentButton addonId={1} label="Upgrade to 50 Resumes" />
+                        )}
                     </div>
                     <div className="relative w-[calc(50%-16px)] border border-[#0456FF26] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)]">
                         <div className="absolute top-[-13px] right-[25px] bg-[#0456FF] text-white font-medium text-[12px] leading-[100%] py-[7px] px-[14px] rounded-[4px]">
@@ -140,7 +198,7 @@ export default function ExtendResumeLimit() {
                             <p className="font-normal text-[15px] leading-[100%] text-[#000024CC] inline-block">One-time payment</p>
                         </div>
                         <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
-                        <ul className="flex flex-col gap-y-[6px]">
+                        <ul className="flex flex-col gap-y-[6px] mb-[20px]">
                             <li className="flex flex-wrap items-center gap-[10px]">
                                 <div className="flex w-[15px] justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
@@ -230,7 +288,19 @@ export default function ExtendResumeLimit() {
                                 </div>
                             </li>
                         </ul>
-                        <button type="button" className="mt-[30px] w-full inline-block border border-[#0456FF] bg-[#0456FF] py-[15px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">Upgrade to 100 Resumes</button>
+                        {addon100 && addon100.status !== "available" ? (
+                            <button
+                                disabled
+                                className="w-full flex items-center justify-center gap-[10px] bg-[#E6F9EC] text-[#29B33A] font-semibold text-[14px] py-[13px] px-[26px] rounded-[5px] cursor-not-allowed"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                    <path d="M20 6L9 17L4 12" stroke="#29B33A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                {addon100.status === "current" ? "Purchased" : "Included in your plan"}
+                            </button>
+                        ) : (
+                            <MembershipPaymentButton addonId={2} label="Upgrade to 100 Resumes" />
+                        )}
                     </div>
                 </div>
             </div>

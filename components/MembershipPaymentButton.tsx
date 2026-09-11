@@ -5,19 +5,22 @@ import api from "@/services/api";
 
 interface MembershipPaymentButtonProps {
     planId?: number;
+    addonId?: number;
     label?: string;
 }
 
 export default function MembershipPaymentButton({
-    planId = 1,
+    planId,
+    addonId,
     label = "Upgrade Plan",
 }: MembershipPaymentButtonProps) {
     const handlePayment = async () => {
         try {
             const returnPath = window.location.pathname + window.location.search;
-            
+
             const { data } = await api.post("/payment/create-order", {
                 planId,
+                addonId,
                 returnPath,
             });
 
