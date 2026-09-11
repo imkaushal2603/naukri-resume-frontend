@@ -13,48 +13,41 @@ function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     ]).then(([result]) => result as T);
 }
 
-interface Membership {
-    startDate: string;
-    endDate: string;
-    membershipPlanId: number;
-    status: string;
-    plan: {
-        id: number;
-        name: string;
-        price: string;
-        durationDays: number;
-    };
+interface MembershipPlanOption {
+    id: number;
+    name: string;
+    price: string;
+    durationDays: number;
+    status: "current" | "included" | "available";
 }
 
 export default function Plans() {
-    const [membership, setMembership] = useState<Membership | null>(null);
-    const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
+    const [plans, setPlans] = useState<MembershipPlanOption[]>([]);
+    const [plansLoading, setPlansLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        const fetchMembership = async () => {
+        const fetchPlans = async () => {
             try {
-                const res = await withMinDelay(api.get("/membership"));
+                const res = await withMinDelay(api.get("/payment/plans"));
                 if (res.data.success) {
-                    setMembership(res.data.status);
+                    setPlans(res.data.plans);
                 }
             } catch (err) {
-                console.error("Failed to load membership", err);
+                console.error("Failed to load plans", err);
             } finally {
-                setMembershipLoading(false);
+                setPlansLoading(false);
             }
         };
-        fetchMembership();
+        fetchPlans();
     }, []);
 
-    const isActivePlan = (planId: number) => membership?.membershipPlanId === planId;
-
-    // if (membershipLoading) {
-    //     return <Loader />;
-    // }
+    const weeklyPlan = plans.find((p) => p.id === 1);
+    const annualPlan = plans.find((p) => p.id === 2);
+    const hasActivePlan = plans.some((p) => p.status === "current");
 
     return (
         <div className="relative">
-            {membershipLoading && <Loader overlay />}
+            {plansLoading && <Loader overlay />}
             <div className="flex flex-wrap gap-6">
                 <div className="flex-1">
                     <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Choose the plan that's right for you</h4>
@@ -71,20 +64,9 @@ export default function Plans() {
                                 <p className="font-normal text-[12px] leading-[120%] text-[#000024CC] inline-block">Not satisfied? Get a full refund within 7 days of purchase.</p>
                             </div>
                         </div>
-                        <div className="bg-[#F4F1FE] max-w-[385px] rounded-[8px] px-5 py-[10px] flex flex-wrap items-center gap-[15px]">
-                            <div className="w-[21px]">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none">
-                                    <path d="M7 7H20M20 7L16 3M20 7L16 11M17 17H4M4 17L8 13M4 17L8 21" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                                </svg>
-                            </div>
-                            <div className="w-[calc(100%-36px)] leading-[0]">
-                                <h6 className="font-bold text-[14px] leading-[100%] text-[#0456FF] mb-[4px]">Plan Change Policy</h6>
-                                <p className="font-normal text-[12px] leading-[120%] text-[#000024CC] inline-block">Upgrades or downgrades to your current plan are non-refundable and take effect immediately.</p>
-                            </div>
-                        </div>
                     </div>
                     <div className="flex flex-wrap gap-8 mt-[50px] min-[768px]:max-[1400px]:gap-[20px]">
-                        <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${isActivePlan(1) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
+                        <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${weeklyPlan?.status === "current" ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
                             <div className="flex flex-wrap gap-[35px]">
                                 <div className="w-[calc(100%_-_119px)]">
                                     <h5 className="font-bold text-[20px] leading-[100%] text-[#000024] mb-[8px]">Weekly Premium</h5>
@@ -185,7 +167,7 @@ export default function Plans() {
                                     </div>
                                 </li>
                             </ul>
-                            {isActivePlan(1) ? (
+                            {weeklyPlan && weeklyPlan.status !== "available" ? (
                                 <button
                                     disabled
                                     className="w-full flex items-center justify-center gap-[10px] bg-[#E6F9EC] text-[#29B33A] font-semibold text-[15px] py-[13px] px-[26px] rounded-[8px] cursor-not-allowed"
@@ -193,7 +175,7 @@ export default function Plans() {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
                                         <path d="M20 6L9 17L4 12" stroke="#29B33A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                    Current Plan
+                                    {weeklyPlan.status === "current" ? "Current Plan" : "Included in your plan"}
                                 </button>
                             ) : (
                                 <MembershipPaymentButton planId={1} label="Choose Weekly Plan" />
@@ -205,7 +187,7 @@ export default function Plans() {
                                 <p className="font-medium text-[15px] leading-[100%] text-[#000024B2] inline-block">7-Day Money Back Guarantee</p>
                             </div>
                         </div>
-                        <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${isActivePlan(2) ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
+                        <div className={`w-[calc(50%-16px)] rounded-[8px] px-[25px] py-[40px] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc(50%-10px)] ${annualPlan?.status === "current" ? "border-2 border-[#0456FF]" : "border border-[#0456FF26]"}`}>
                             <div className="flex flex-wrap gap-[35px]">
                                 <div className="w-[calc(100%_-_119px)]">
                                     <h5 className="font-bold text-[20px] leading-[100%] text-[#000024] mb-[8px]">Annual Premium</h5>
@@ -307,7 +289,7 @@ export default function Plans() {
                                     </div>
                                 </li>
                             </ul>
-                            {isActivePlan(2) ? (
+                            {annualPlan && annualPlan.status !== "available" ? (
                                 <button
                                     disabled
                                     className="w-full flex items-center justify-center gap-[10px] bg-[#E6F9EC] text-[#29B33A] font-semibold text-[15px] py-[13px] px-[26px] rounded-[8px] cursor-not-allowed"
@@ -315,7 +297,7 @@ export default function Plans() {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
                                         <path d="M20 6L9 17L4 12" stroke="#29B33A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                    Current Plan
+                                    {annualPlan.status === "current" ? "Current Plan" : "Included in your plan"}
                                 </button>
                             ) : (
                                 <MembershipPaymentButton planId={2} label="Choose Annual Plan" />
@@ -330,10 +312,10 @@ export default function Plans() {
                     </div>
                 </div>
                 <div className="w-[325px] shrink-0 flex flex-col gap-y-5 max-[1300px]:w-full">
-                    {membership && (
+                    {hasActivePlan && (
                         <PlanDetails />
                     )}
-                    {!membership && (
+                    {!hasActivePlan && (
                         <>
                             <div className="border border-[#CACACA80] flex flex-col px-[25px] py-[20px] gap-y-[20px] rounded-[6px]">
                                 <h6 className="font-bold text-[16px] leading-[120%] text-[#000024]">Why Upgrade?</h6>

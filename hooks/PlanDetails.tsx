@@ -115,22 +115,24 @@ export default function PlanDetails() {
                 </div>
             ) : (
                 <>
-                    {membership ? (
-                        <div className="border border-[#CACACA80] rounded-[5px] py-[15px] px-[21px] min-[1025px]:max-[1300px]:w-[calc(50%-10px)]">
-                            <h5 className="font-semibold text-[16px] leading-[120%] text-black mb-[20px] border-b border-[#CACACA80] pb-[10px]">Your Plan Overview</h5>
-                            <div className="flex flex-wrap gap-5">
-                                <div className="w-[28px]">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="31" viewBox="0 0 28 31" fill="none">
-                                        <path d="M26.5611 3.2434L14 0L1.43889 3.2434C1.0252 3.35092 0.659875 3.58733 0.399679 3.91588C0.139482 4.24444 -0.00101865 4.64674 5.56013e-06 5.0603V17.3432C0.00332924 19.1216 0.489906 20.868 1.41115 22.4081C2.3324 23.9482 3.65607 25.2281 5.25 26.1199L14 31L22.75 26.1199C24.3439 25.2281 25.6676 23.9482 26.5889 22.4081C27.5101 20.868 27.9967 19.1216 28 17.3432V5.0603C28 4.21192 27.4089 3.46864 26.5611 3.2434ZM13.4322 18.3192C13.2513 18.4934 13.0366 18.6315 12.8004 18.7255C12.5642 18.8195 12.3111 18.8677 12.0556 18.8673C11.5578 18.8673 11.06 18.6871 10.6789 18.3192L7.34223 15.0983L8.99111 13.5067L12.0556 16.4648L19.7867 9.00194L21.4356 10.5936L13.4322 18.3192Z" fill="#29B33A" />
-                                    </svg>
-                                </div>
-                                <div className="w-[calc(100%-48px)]">
-                                    <div className="flex items-center gap-[10px] mb-[13px]">
-                                        <h4 className="font-bold text-[16px] leading-none text-[#000024]">{membership ? getPlanLabel(membership.plan.durationDays) : "Free Plan"}</h4>
+                    <div className="border border-[#CACACA80] rounded-[5px] py-[15px] px-[21px] min-[1025px]:max-[1300px]:w-[calc(50%-10px)]">
+                        <h5 className="font-semibold text-[16px] leading-[120%] text-black mb-[20px] border-b border-[#CACACA80] pb-[10px]">Your Plan Overview</h5>
+                        <div className="flex flex-wrap gap-5">
+                            <div className="w-[28px]">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="31" viewBox="0 0 28 31" fill="none">
+                                    <path d="M26.5611 3.2434L14 0L1.43889 3.2434C1.0252 3.35092 0.659875 3.58733 0.399679 3.91588C0.139482 4.24444 -0.00101865 4.64674 5.56013e-06 5.0603V17.3432C0.00332924 19.1216 0.489906 20.868 1.41115 22.4081C2.3324 23.9482 3.65607 25.2281 5.25 26.1199L14 31L22.75 26.1199C24.3439 25.2281 25.6676 23.9482 26.5889 22.4081C27.5101 20.868 27.9967 19.1216 28 17.3432V5.0603C28 4.21192 27.4089 3.46864 26.5611 3.2434ZM13.4322 18.3192C13.2513 18.4934 13.0366 18.6315 12.8004 18.7255C12.5642 18.8195 12.3111 18.8677 12.0556 18.8673C11.5578 18.8673 11.06 18.6871 10.6789 18.3192L7.34223 15.0983L8.99111 13.5067L12.0556 16.4648L19.7867 9.00194L21.4356 10.5936L13.4322 18.3192Z" fill="#29B33A" />
+                                </svg>
+                            </div>
+                            <div className="w-[calc(100%-48px)]">
+                                <div className="flex items-center gap-[10px] mb-[13px]">
+                                    <h4 className="font-bold text-[16px] leading-none text-[#000024]">{membership ? getPlanLabel(membership.plan.durationDays) : "Free Plan"}</h4>
+                                    {membership &&
                                         <span className="border border-[#29B33A] bg-[#E6F9EC] rounded-[20px] font-bold text-[10px] leading-[100%] py-[5px] px-[10px] text-[#29B33A]">
                                             Active
                                         </span>
-                                    </div>
+                                    }
+                                </div>
+                                {membership &&
                                     <p className="font-normal text-[12px] leading-[100%] mb-[11px] text-[#000024]">
                                         Valid till {new Date(membership.endDate).toLocaleDateString("en-US", {
                                             day: "numeric",
@@ -142,7 +144,9 @@ export default function PlanDetails() {
                                             hour12: true,
                                         })}
                                     </p>
-                                    {(() => {
+                                }
+                                {membership &&
+                                    (() => {
                                         const daysRemaining = Math.max(
                                             0,
                                             Math.ceil(
@@ -154,24 +158,35 @@ export default function PlanDetails() {
                                                 ({daysRemaining} {daysRemaining === 1 ? "Day" : "Days"} remaining)
                                             </p>
                                         );
-                                    })()}
-                                </div>
+                                    })()
+                                }
                             </div>
-                            <div className="my-[20px]">
-                                <div className="flex justify-between items-center mb-[10px]">
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024]">Resumes Created</span>
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024]">{resumes.length} / {maxResumes}</span>
-                                </div>
-                                <div className="w-full h-[8px] bg-[#E8E9F0] rounded-full overflow-hidden">
-                                    <div className="h-full bg-[#29B33A] rounded-full transition-all duration-300" style={{ width: `${Math.min(100, (resumes.length / maxResumes) * 100)}%`, backgroundColor: getUsageStatus(resumes.length, maxResumes).color, }} />
-                                </div>
-                                <p className="font-normal text-[12px] leading-[100%] text-[#000024] mt-[8px]">You can create up to {maxResumes} resumes in this plan.</p>
-                            </div>
-                            <Link href="/plans" className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
-                                {resumes.length === maxResumes ? "Update Plan" : "View Current Plan"}
-                            </Link>
                         </div>
-                    ) :
+                        <div className="my-[20px]">
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <span className="font-bold text-[12px] leading-[100%] text-[#000024]">Resumes Created</span>
+                                <span className="font-bold text-[12px] leading-[100%] text-[#000024]">{resumes.length} / {maxResumes}</span>
+                            </div>
+                            <div className="w-full h-[8px] bg-[#E8E9F0] rounded-full overflow-hidden">
+                                <div className="h-full bg-[#29B33A] rounded-full transition-all duration-300" style={{ width: `${Math.min(100, (resumes.length / maxResumes) * 100)}%`, backgroundColor: getUsageStatus(resumes.length, maxResumes).color, }} />
+                            </div>
+                            <p className="font-normal text-[12px] leading-[100%] text-[#000024] mt-[8px]">You can create up to {maxResumes} resumes in this plan.</p>
+                        </div>
+                        {membership ? (
+                            <Link href={resumes.length === maxResumes ? "/extend-resume-limit" : "/plans"}
+                                className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
+                            >
+                                {resumes.length === maxResumes ? "Extend Limit" : "View Current Plan"}
+                            </Link>
+                        ) : (
+                            <Link href="/plans"
+                                className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
+                            >
+                                Upgrade Plan
+                            </Link>
+                        )}
+                    </div>
+                    {!membership &&
                         <div className="border border-[#CACACA80] rounded-[5px] py-[15px] px-[21px] min-[1025px]:max-[1300px]:w-[calc(50%-10px)]">
                             <h5 className="font-semibold text-[18px] leading-[120%] text-black mb-[10px]">Your Current Plan</h5>
                             <ul className="flex flex-col gap-y-[8px]">
@@ -295,15 +310,6 @@ export default function PlanDetails() {
                                     </div>
                                 </li>
                             </ul>
-                            <div>
-                                <Link href="/plans" className="w-full flex items-center justify-center gap-[10px] mt-[10px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M8.95763 7.91663C8.53929 7.91663 8.27929 8.18746 8.13596 8.37496C7.99846 8.55329 7.86096 8.80079 7.71929 9.05496L7.61846 9.23663L7.57096 9.31996L7.48846 9.33913L7.29013 9.38413C7.01763 9.44579 6.74596 9.50746 6.53763 9.58913C6.30763 9.67996 5.99596 9.85579 5.87513 10.2433C5.75679 10.6233 5.90596 10.9441 6.03596 11.1516C6.1568 11.3433 6.34013 11.5566 6.52763 11.7758L6.66096 11.9325L6.73013 12.0133L6.7193 12.1258L6.69929 12.3341C6.67096 12.6275 6.64346 12.9108 6.65346 13.1375C6.66346 13.375 6.72013 13.735 7.04346 13.9791C7.3768 14.2325 7.74346 14.1775 7.97679 14.1108C8.19179 14.0491 8.44596 13.9316 8.70179 13.8141L8.88679 13.7283L8.95763 13.6966L8.98846 13.7108L9.02846 13.7283L9.21429 13.8141C9.46929 13.9316 9.72346 14.0491 9.93846 14.1108C10.1718 14.1775 10.5385 14.2325 10.8718 13.98C11.1943 13.735 11.2518 13.375 11.2618 13.1375C11.2718 12.9108 11.2451 12.6266 11.216 12.3333L11.196 12.1258L11.186 12.0133C11.2026 11.9916 11.2254 11.9647 11.2543 11.9325L11.3876 11.7758C11.5751 11.5566 11.7585 11.3425 11.8793 11.1508C12.0093 10.9441 12.1585 10.6233 12.0401 10.2425C11.9201 9.85663 11.6076 9.67996 11.3776 9.58913C11.1693 9.50746 10.8976 9.44579 10.6251 9.38413L10.4268 9.33913L10.3435 9.31996L10.2968 9.23663L10.196 9.05496C10.0543 8.80079 9.9168 8.55329 9.7793 8.37496C9.63596 8.18746 9.37596 7.91663 8.95763 7.91663ZM8.79179 9.69829C8.85402 9.58496 8.90929 9.4869 8.95763 9.40413C9.00541 9.4869 9.06068 9.58496 9.12346 9.69829L9.20513 9.84496L9.22429 9.87829C9.28929 9.99829 9.39763 10.1966 9.57846 10.3341C9.76263 10.4741 9.98513 10.5225 10.1143 10.5508L10.151 10.5591L10.3093 10.5941C10.456 10.6275 10.5751 10.6541 10.676 10.68C10.6101 10.7616 10.5243 10.8625 10.4126 10.9933L10.3043 11.12L10.2793 11.1491C10.1893 11.2525 10.0443 11.42 9.97679 11.6358C9.91013 11.8491 9.93346 12.0691 9.94763 12.2075L9.9518 12.2466L9.96846 12.4158C9.98346 12.5725 9.99513 12.6975 10.0035 12.7991C9.91596 12.7616 9.81763 12.7158 9.70013 12.6616L9.55096 12.5933L9.51763 12.5775C9.39763 12.5208 9.19013 12.4233 8.95763 12.4233C8.72513 12.4233 8.51763 12.5208 8.39763 12.5775L8.3643 12.5933L8.21513 12.6616C8.09902 12.7155 7.99791 12.7616 7.91179 12.8C7.92013 12.6975 7.93179 12.5725 7.94679 12.4158L7.96346 12.2466L7.96763 12.2075C7.9818 12.0691 8.00513 11.8491 7.93846 11.6358C7.8718 11.4191 7.72596 11.2525 7.63596 11.1491L7.61096 11.12L7.50263 10.9933C7.41363 10.8899 7.32585 10.7854 7.23929 10.68C7.34013 10.655 7.4593 10.6275 7.60596 10.5941L7.76429 10.5583L7.80096 10.55C7.93013 10.5225 8.15263 10.4741 8.3368 10.3333C8.51763 10.1966 8.62596 9.99829 8.69096 9.87913L8.71013 9.84579L8.79179 9.69829Z" fill="currentColor" />
-                                        <path fillRule="evenodd" clipRule="evenodd" d="M8.95782 0C8.36948 0 7.99532 0.416667 7.74365 0.789167C7.48865 1.16833 7.22282 1.71417 6.90698 2.36083L5.02115 6.225C4.83865 6.59833 4.72115 6.8375 4.61948 7.00333C4.58657 7.0612 4.54684 7.11492 4.50115 7.16333C4.47835 7.17342 4.45357 7.17826 4.42865 7.1775C4.38206 7.148 4.33851 7.11394 4.29865 7.07583C4.16365 6.95083 3.99532 6.76 3.72865 6.45667L3.70448 6.42917C3.22782 5.88583 2.83782 5.44167 2.51615 5.14167C2.35952 4.98899 2.18523 4.85555 1.99698 4.74417C1.79164 4.62097 1.55335 4.56394 1.31448 4.58083C1.1226 4.59913 0.936287 4.65549 0.766444 4.74664C0.5966 4.83779 0.446635 4.96188 0.325316 5.11167C0.0294826 5.46917 -0.00385071 5.96917 0.000315953 6.40083C0.00364929 6.8675 0.0619826 7.48667 0.133649 8.25667L0.331983 10.3583C0.486149 11.9967 0.606983 13.2792 0.815316 14.2758C1.02865 15.2908 1.34865 16.095 1.96115 16.72C2.58198 17.3558 3.34448 17.6458 4.28782 17.7842C5.19448 17.9167 6.34032 17.9167 7.77532 17.9167H10.1403C11.5753 17.9167 12.7211 17.9167 13.6278 17.7833C14.5711 17.6458 15.3336 17.3558 15.9545 16.72C16.5661 16.095 16.887 15.2908 17.0995 14.2758C17.3086 13.2792 17.4295 11.9967 17.5836 10.3583L17.782 8.25667C17.8545 7.48667 17.9128 6.8675 17.9153 6.40083C17.9195 5.96917 17.8861 5.46917 17.5903 5.11167C17.469 4.96188 17.319 4.83779 17.1492 4.74664C16.9793 4.65549 16.793 4.59913 16.6012 4.58083C16.3623 4.56394 16.124 4.62097 15.9186 4.74417C15.7304 4.85555 15.5561 4.98899 15.3995 5.14167C15.0778 5.44167 14.6878 5.88583 14.2112 6.42917L14.1861 6.45667C13.9195 6.76 13.752 6.95083 13.617 7.07583C13.5774 7.1139 13.5341 7.14795 13.4878 7.1775C13.4626 7.17839 13.4375 7.17354 13.4145 7.16333C13.3688 7.11492 13.3291 7.0612 13.2961 7.00333C13.1945 6.8375 13.077 6.59833 12.8945 6.225L11.0086 2.36083C10.6928 1.71333 10.427 1.16833 10.172 0.789167C9.92032 0.415833 9.54698 0 8.95782 0ZM8.00865 2.95333C8.35198 2.25 8.58032 1.785 8.78032 1.4875C8.83103 1.40798 8.89057 1.33446 8.95782 1.26833C8.99115 1.29917 9.04948 1.36167 9.13532 1.4875C9.33532 1.785 9.56365 2.25 9.90698 2.95333L11.7845 6.8C11.9495 7.13917 12.0936 7.43333 12.2312 7.65833C12.3728 7.8875 12.5578 8.13167 12.8478 8.2775C13.1086 8.40917 13.4028 8.4575 13.6945 8.41083C14.022 8.35917 14.2703 8.17333 14.4653 7.99333C14.6545 7.81833 14.8653 7.57833 15.1053 7.305L15.1261 7.28167C15.6328 6.70417 15.982 6.3075 16.2528 6.055C16.3861 5.93 16.4745 5.86583 16.5286 5.83583C16.5648 5.85041 16.5971 5.87324 16.6228 5.9025L16.6236 5.90833C16.632 5.93333 16.6686 6.05167 16.6653 6.39167C16.6628 6.7975 16.6103 7.3625 16.5345 8.17167L16.3428 10.2008C16.1845 11.8875 16.0695 13.1 15.8761 14.0192C15.6853 14.9275 15.4345 15.4642 15.0611 15.8467C14.6961 16.22 14.2278 16.4333 13.447 16.5467C12.6411 16.665 11.587 16.6667 10.0911 16.6667H7.82448C6.32865 16.6667 5.27448 16.665 4.46865 16.5475C3.68782 16.4333 3.21948 16.22 2.85448 15.8467C2.48115 15.4642 2.22948 14.9275 2.03948 14.0192C1.84615 13.1 1.73115 11.8875 1.57282 10.2008L1.38115 8.17167C1.30615 7.3625 1.25282 6.79667 1.24948 6.39083C1.24698 6.05167 1.28448 5.9325 1.29115 5.9075L1.29365 5.90333C1.31875 5.87368 1.35042 5.85028 1.38615 5.835C1.44032 5.86583 1.52865 5.93 1.66282 6.055C1.93365 6.3075 2.28282 6.70417 2.78948 7.28167L2.81032 7.305C3.05032 7.57833 3.26115 7.81917 3.45032 7.99333C3.64532 8.17333 3.89365 8.36 4.22115 8.41167C4.51282 8.4575 4.80698 8.40917 5.06782 8.2775C5.35782 8.13167 5.54282 7.8875 5.68448 7.65833C5.82198 7.43333 5.96615 7.13917 6.13115 6.8L8.00865 2.95333ZM8.99448 1.24167L8.98615 1.245C8.99171 1.24167 8.99448 1.24056 8.99448 1.24167Z" fill="currentColor" />
-                                    </svg>
-                                    Upgrade to Premium
-                                </Link>
-                            </div>
                         </div>
                     }
                     <div className="border border-[#CACACA80] rounded-[5px] py-[15px] px-[21px] min-[1025px]:max-[1300px]:w-[calc(50%-10px)]">
