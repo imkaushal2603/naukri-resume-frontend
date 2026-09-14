@@ -8,29 +8,13 @@ import Link from "next/link";
 import api from "@/services/api";
 import Loader from "@/components/ui/Loader";
 import PlanDetails from "@/hooks/PlanDetails";
+import { useResume } from "@/context/ResumeContext";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
         promise,
         new Promise((resolve) => setTimeout(resolve, ms)),
     ]).then(([result]) => result as T);
-}
-
-interface Resume {
-    id: number;
-    publicId: string;
-    name?: string;
-    createdAt?: string;
-    updatedAt?: string;
-    progressPercentage?: number;
-    isDraft?: boolean;
-    previewImage?: string | null;
-    resume_templates?: {
-        id: number;
-        name: string;
-        templateKey: string;
-        preview?: string;
-    };
 }
 
 interface Membership {
@@ -48,9 +32,6 @@ interface Membership {
 
 export default function MyResumes() {
     const router = useRouter();
-    const [resumes, setResumes] = useState<Resume[]>([]);
-    const [maxResumes, setMaxResumes] = useState<number>(15);
-    const [loading, setLoading] = useState<boolean>(true);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
     const [creating, setCreating] = useState<boolean>(false);
@@ -63,6 +44,7 @@ export default function MyResumes() {
     const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
     const [downloadingId, setDownloadingId] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const { resumes, maxResumes, resumesLoading: loading, refreshResumes } = useResume();
     const RESUMES_PER_PAGE = 3;
     const totalPages = Math.ceil(resumes.length / RESUMES_PER_PAGE);
     const paginatedResumes = resumes.slice(
@@ -70,27 +52,6 @@ export default function MyResumes() {
         currentPage * RESUMES_PER_PAGE
     );
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-    const fetchResumes = async () => {
-        try {
-            setLoading(true);
-            const res = await withMinDelay(api.get("/resume"));
-            if (res.data.success) {
-                setResumes(res.data.resumes || res.data.data || []);
-                if (res.data.maxResumes) {
-                    setMaxResumes(res.data.maxResumes);
-                }
-            }
-        } catch (err) {
-            console.error("Failed to load resumes", err);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchResumes();
-    }, []);
 
     useEffect(() => {
         const fetchMembership = async () => {
@@ -168,8 +129,8 @@ export default function MyResumes() {
         try {
             const res = await api.delete(`/resume/builder/${publicId}`);
             if (res.data.success) {
-                setResumes((prev) => prev.filter((r) => r.publicId !== publicId));
                 toast.success("Resume deleted successfully.");
+                await refreshResumes();
             }
         } catch (err: any) {
             console.error("Failed to delete resume", err);

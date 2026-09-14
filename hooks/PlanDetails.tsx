@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useResume } from "@/context/ResumeContext";
 import api from "@/services/api";
 import Link from "next/link";
 
@@ -7,18 +8,6 @@ function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
         promise,
         new Promise((resolve) => setTimeout(resolve, ms)),
     ]).then(([result]) => result as T);
-}
-
-interface Resume {
-    id: number;
-    name?: string;
-    updatedAt?: string;
-    resume_templates?: {
-        id: number;
-        name: string;
-        templateKey: string;
-        preview?: string;
-    };
 }
 
 interface Membership {
@@ -35,30 +24,9 @@ interface Membership {
 }
 
 export default function PlanDetails() {
-    const [resumes, setResumes] = useState<Resume[]>([]);
-    const [maxResumes, setMaxResumes] = useState<number>(15);
-    const [loading, setLoading] = useState<boolean>(true);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
-
-    useEffect(() => {
-        const checkResumes = async () => {
-            try {
-                const res = await withMinDelay(api.get("/resume"));
-                if (res.data.success) {
-                    setResumes(res.data.resumes || []);
-                    if (res.data.maxResumes) {
-                        setMaxResumes(res.data.maxResumes);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to check resumes", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        checkResumes();
-    }, []);
+    const { resumes, maxResumes } = useResume();
 
     useEffect(() => {
         const fetchMembership = async () => {

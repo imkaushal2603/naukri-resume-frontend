@@ -8,6 +8,7 @@ import { useResume } from "@/context/ResumeContext";
 import { useResumeId } from "@/hooks/useResumeId";
 import ProgressPanel from "@/components/dashboard/ProgressPanel";
 import Loader from "@/components/ui/Loader";
+import { useSearchParams } from "next/navigation";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
@@ -32,16 +33,21 @@ interface BasicInfo {
 export default function BasicInfoStep() {
     const router = useRouter();
     const resumeId = useResumeId();
-    const { refreshProgress } = useResume();
+    const { refreshProgress, refreshResumes } = useResume();
     const [form, setForm] = useState<Partial<BasicInfo>>({});
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const searchParams = useSearchParams();
+    const templateId = searchParams.get("templateId");
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!resumeId) return;
+            if (!resumeId || resumeId === "new") {
+                setLoading(false);
+                return;
+            }
             try {
                 const res = await withMinDelay(api.get(`/resume/builder/${resumeId}/basic-info`));
                 if (res.data.success) {
@@ -111,11 +117,6 @@ export default function BasicInfoStep() {
     };
 
     const handleSave = async () => {
-        if (!resumeId) {
-            toast.error("Resume ID missing.");
-            return;
-        }
-
         const missing = requiredFields.filter((field) => !form[field]?.toString().trim());
 
         if (missing.length > 0) {
@@ -149,14 +150,25 @@ export default function BasicInfoStep() {
                 formData.append("profilePhoto", selectedFile);
             }
 
-            await api.put(`/resume/builder/${resumeId}/basic-info`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
+            const isNew = !resumeId || resumeId === "new";
 
-            await refreshProgress();
-            toast.success("Basic information saved successfully!");
-
-            if (resumeId) {
+            if (isNew) {
+                if (templateId) {
+                    formData.append("templateId", templateId);
+                }
+                const res = await api.post(`/resume/builder/basic-info`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                const newPublicId = res.data.resume.publicId;
+                toast.success("Basic information saved successfully!");
+                await refreshResumes();
+                router.push(`/templates/resume-builder/${newPublicId}/education`);
+            } else {
+                await api.put(`/resume/builder/${resumeId}/basic-info`, formData, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                });
+                await refreshProgress();
+                toast.success("Basic information saved successfully!");
                 router.push(`/templates/resume-builder/${resumeId}/education`);
             }
         } catch (err: any) {

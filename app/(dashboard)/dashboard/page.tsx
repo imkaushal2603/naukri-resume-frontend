@@ -8,25 +8,13 @@ import api from "@/services/api";
 import Image from "next/image";
 import Loader from "@/components/ui/Loader";
 import PlanDetails from "@/hooks/PlanDetails";
+import { useResume } from "@/context/ResumeContext";
 
 function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
     return Promise.all([
         promise,
         new Promise((resolve) => setTimeout(resolve, ms)),
     ]).then(([result]) => result as T);
-}
-
-interface Resume {
-    id: number;
-    publicId: string;
-    name?: string;
-    updatedAt?: string;
-    resume_templates?: {
-        id: number;
-        name: string;
-        templateKey: string;
-        preview?: string;
-    };
 }
 
 interface Membership {
@@ -62,10 +50,6 @@ const features: Feature[] = [
 
 export default function DashboardPage() {
     const router = useRouter();
-    const [showTargetDiv, setShowTargetDiv] = useState(true);
-    const [checkingResumes, setCheckingResumes] = useState(true);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [resumes, setResumes] = useState<Resume[]>([]);
     const [membership, setMembership] = useState<Membership | null>(null);
     const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -76,32 +60,12 @@ export default function DashboardPage() {
     });
     const [previewLoadingId, setPreviewLoadingId] = useState<string | null>(null);
     const [downloadingId, setDownloadingId] = useState<string | null>(null);
-    const [maxResumes, setMaxResumes] = useState<number>(15);
     const [creating, setCreating] = useState<boolean>(false);
+    const { resumes, maxResumes, resumesLoading, refreshResumes } = useResume();
+    const showTargetDiv = resumes.length === 0;
+    const checkingResumes = resumesLoading;
+    const loading = resumesLoading;
     const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-    useEffect(() => {
-        const checkResumes = async () => {
-            try {
-                const res = await withMinDelay(api.get("/resume"));
-                if (res.data.success) {
-                    const resumes = res.data.resumes || [];
-                    setResumes(resumes);
-                    setShowTargetDiv(resumes.length === 0);
-                    if (res.data.maxResumes) {
-                        setMaxResumes(res.data.maxResumes);
-                    }
-                }
-            } catch (err) {
-                console.error("Failed to check resumes", err);
-                setShowTargetDiv(true);
-            } finally {
-                setCheckingResumes(false);
-                setLoading(false);
-            }
-        };
-        checkResumes();
-    }, []);
 
     useEffect(() => {
         const fetchMembership = async () => {
@@ -168,8 +132,8 @@ export default function DashboardPage() {
         try {
             const res = await api.delete(`/resume/builder/${publicId}`);
             if (res.data.success) {
-                setResumes((prev) => prev.filter((r) => r.publicId !== publicId));
                 toast.success("Resume deleted successfully.");
+                await refreshResumes();
             }
         } catch (err: any) {
             console.error("Failed to delete resume", err);
@@ -250,6 +214,7 @@ export default function DashboardPage() {
         try {
             const res = await api.post("/resume/builder", {});
             if (res.data.success && res.data.resume?.publicId) {
+                await refreshResumes();
                 router.push(`/templates/resume-builder/${res.data.resume.publicId}/basic-info`);
             }
         } catch (err: any) {
