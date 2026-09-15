@@ -34,6 +34,7 @@ interface ATSResumeResult {
     rating: string;
     categories: ATSCheckCategory[];
     issues: ATSIssue[];
+    suggestedSkills: string[];
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -144,10 +145,10 @@ export default function ATSChecker() {
                     <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Check how your resume performs in Applicant Tracking Systems</h4>
                     <p className="font-normal text-[15px] leading-[140%] text-[#00002480] mb-[30px]">Get AI-powered analysis and tips to improve your resume and get more interviews.</p>
                     <div className="flex flex-wrap gap-[20px]">
-                        <div className="w-[calc(33.33%-13.33px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
-                            <label htmlFor="resume-select" className="inline-block font-semibold text-[15px] leading-[100%] mb-[15px] text-[#000024]">Select a resume</label>
+                        <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
+                            <label htmlFor="resume-select" className="w-full inline-block font-semibold text-[15px] leading-[100%] mb-[15px] text-[#000024]">Select a resume</label>
                             <select id="resume-select" value={selectedResumeId} onChange={(e) => { setSelectedResumeId(e.target.value); setResult(null); }} disabled={loading || resumes.length === 0}
-                                className="w-full max-w-[400px] border border-[#0456FF26] rounded-[6px] py-[12px] px-[16px] font-normal text-[14px] text-[#000024] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#0456FF]">
+                                className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] px-[16px] font-normal text-[14px] text-[#000024] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#0456FF]">
                                 <option value="" disabled>{loading ? "Loading resumes..." : resumes.length === 0 ? "No resumes found" : "Choose a resume"}</option>
                                 {resumes.map((resume) => {
                                     const val = resume.publicId || resume.id;
@@ -160,7 +161,7 @@ export default function ATSChecker() {
                                 })}
                             </select>
                             <button type="button" onClick={handleCheckATS} disabled={!selectedResumeId || checking}
-                                className="w-full flex items-center justify-center gap-[10px] mt-[30px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                                className="w-full flex items-center justify-center gap-[10px] mt-[20px] border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white cursor-pointer hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                     <g clipPath="url(#clip0_321_302)">
                                         <path d="M14.9476 6.47439C14.8205 5.38858 14.408 4.35583 13.752 3.48126C13.0813 2.56467 12.2261 1.79863 11.2415 1.23244C10.2569 0.666241 9.1647 0.312429 8.03513 0.193763C6.89458 0.0677458 5.74055 0.225326 4.67553 0.65251C3.61052 1.07969 2.66747 1.76326 1.93013 2.64251C1.02965 3.69993 0.41666 4.97143 0.150216 6.33452C-0.116227 7.69761 -0.0271451 9.10635 0.408881 10.425C1.27263 12.7419 3.42701 14.5513 6.85201 14.8081C7.45388 14.8613 8.05951 14.8613 8.66138 14.8081C9.26702 14.7511 9.86384 14.6229 10.4395 14.4263C10.4945 14.4064 10.5395 14.366 10.5652 14.3135C10.5909 14.261 10.5951 14.2006 10.577 14.145C10.5586 14.0904 10.5194 14.0453 10.4679 14.0194C10.4164 13.9936 10.3568 13.9891 10.302 14.0069C9.75611 14.1854 9.19047 14.2966 8.61763 14.3381C8.04489 14.391 7.4685 14.391 6.89576 14.3381C3.76451 14.0256 1.76763 12.3538 1.00388 10.2063C0.627611 8.99861 0.565828 7.71491 0.824384 6.47671C1.08294 5.23851 1.65327 4.08679 2.48138 3.13064C3.14369 2.34839 3.98787 1.74067 4.93985 1.36079C5.89182 0.980918 6.92248 0.840509 7.94138 0.951888C8.97455 1.05547 9.97547 1.37001 10.8822 1.87604C11.7889 2.38207 12.5821 3.06881 13.2126 3.89376C13.8286 4.66277 14.2304 5.58081 14.3776 6.55501C14.5128 7.55329 14.4489 8.56847 14.1895 9.54189C14.0009 10.2919 13.7011 11.0094 13.3001 11.6706C12.892 12.3245 12.3579 12.8907 11.7289 13.3363C11.7073 13.3501 11.6888 13.3682 11.6745 13.3894C11.6602 13.4107 11.6504 13.4346 11.6457 13.4598C11.641 13.485 11.6416 13.5109 11.6473 13.5358C11.653 13.5608 11.6637 13.5844 11.6789 13.605C11.709 13.6459 11.7535 13.6738 11.8034 13.6831C11.8533 13.6924 11.9049 13.6823 11.9476 13.655C12.6406 13.192 13.2328 12.5938 13.6889 11.8963C14.1295 11.2052 14.4631 10.4515 14.6783 9.66064C14.9776 8.62689 15.0689 7.54314 14.947 6.47314" fill="currentColor" />
@@ -176,7 +177,7 @@ export default function ATSChecker() {
                             </button>
                         </div>
                         {result && (
-                            <div className="w-[calc(33.33%-13.33px)] border border-[#0456FF26] rounded-[6px] p-[15px] flex flex-col items-center gap-y-[20px]">
+                            <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px] flex flex-col items-center gap-y-[20px]">
                                 <h5 className="font-semibold text-[15px] leading-[100%]">Your ATS Score</h5>
                                 <CircularScore percentage={result.percentage} size={140} fontSize={28} />
                                 <div>
@@ -186,22 +187,6 @@ export default function ATSChecker() {
                                 </div>
                             </div>
                         )}
-                        {suggestionIssues.length > 0 && (
-                            <div className="w-[calc(33.33%-13.33px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
-                                <h5 className="font-semibold text-[15px] leading-[100%] mb-[15px] text-[#0456FF]">AI Suggestions ({suggestionIssues.length})</h5>
-                                <ul className="flex flex-col gap-[8px]">
-                                    {suggestionIssues.map((issue, i) => (
-                                        <li key={i} className="items-center font-semibold text-[14px] leading-[140%] text-[#000024] flex gap-[8px]">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                                                <path d="M5.77688 9.57122L3.125 6.91872L4.00875 6.03497L5.77688 7.80247L9.31188 4.26685L10.1962 5.15122L5.77688 9.57122Z" fill="#29B33A" />
-                                                <path fillRule="evenodd" clipRule="evenodd" d="M0 6.875C0 3.07812 3.07812 0 6.875 0C10.6719 0 13.75 3.07812 13.75 6.875C13.75 10.6719 10.6719 13.75 6.875 13.75C3.07812 13.75 0 10.6719 0 6.875ZM6.875 12.5C6.13631 12.5 5.40486 12.3545 4.72241 12.0718C4.03995 11.7891 3.41985 11.3748 2.89752 10.8525C2.37519 10.3301 1.96086 9.71005 1.67818 9.02759C1.39549 8.34514 1.25 7.61369 1.25 6.875C1.25 6.13631 1.39549 5.40486 1.67818 4.72241C1.96086 4.03995 2.37519 3.41985 2.89752 2.89752C3.41985 2.37519 4.03995 1.96086 4.72241 1.67818C5.40486 1.39549 6.13631 1.25 6.875 1.25C8.36684 1.25 9.79758 1.84263 10.8525 2.89752C11.9074 3.95242 12.5 5.38316 12.5 6.875C12.5 8.36684 11.9074 9.79758 10.8525 10.8525C9.79758 11.9074 8.36684 12.5 6.875 12.5Z" fill="#29B33A" />
-                                            </svg>
-                                            {issue.message}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
                     </div>
                     {result && (
                         <div className="mt-[20px] flex flex-col gap-[20px]">
@@ -209,7 +194,7 @@ export default function ATSChecker() {
                                 {result.categories.map((cat) => {
                                     const catPercentage = Math.round((cat.score / cat.maxScore) * 100);
                                     return (
-                                        <div key={cat.type} className="border border-[#0456FF26] rounded-[6px] p-4 flex flex-col items-center text-center w-[calc(20%-13px)] gap-y-[20px]">
+                                        <div key={cat.type} className="border border-[#0456FF26] rounded-[6px] p-4 flex flex-col items-center text-center w-[calc(25%-12px)] gap-y-[20px]">
                                             {cat.type === "contact" && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
                                                     <circle cx="17.5" cy="17.5" r="17.5" fill="#0456FF" fillOpacity="0.15" />
@@ -297,13 +282,57 @@ export default function ATSChecker() {
                                 })}
                             </div>
                             <div className="flex flex-wrap gap-[20px]">
+                                {result.suggestedSkills.length > 0 && (
+                                    <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[10px] p-5">
+                                        <h5 className="flex gap-[8px] items-center font-bold text-[18px] text-[#000024] mb-[10px]">
+                                            Suggested Skills to Add
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                                <path d="M7.5 15C3.35775 15 0 11.6422 0 7.5C0 3.35775 3.35775 0 7.5 0C11.6422 0 15 3.35775 15 7.5C15 11.6422 11.6422 15 7.5 15ZM7.5 13.5C9.0913 13.5 10.6174 12.8679 11.7426 11.7426C12.8679 10.6174 13.5 9.0913 13.5 7.5C13.5 5.9087 12.8679 4.38258 11.7426 3.25736C10.6174 2.13214 9.0913 1.5 7.5 1.5C5.9087 1.5 4.38258 2.13214 3.25736 3.25736C2.13214 4.38258 1.5 5.9087 1.5 7.5C1.5 9.0913 2.13214 10.6174 3.25736 11.7426C4.38258 12.8679 5.9087 13.5 7.5 13.5ZM6.75 9.75H8.25V11.25H6.75V9.75ZM8.25 8.51625V9H6.75V7.875C6.75 7.67609 6.82902 7.48532 6.96967 7.34467C7.11032 7.20402 7.30109 7.125 7.5 7.125C7.71306 7.12499 7.92173 7.06447 8.10174 6.9505C8.28175 6.83652 8.4257 6.67377 8.51683 6.48119C8.60796 6.2886 8.64253 6.0741 8.61651 5.86263C8.59049 5.65117 8.50496 5.45144 8.36987 5.28668C8.23478 5.12193 8.05568 4.99892 7.85341 4.93198C7.65115 4.86503 7.43403 4.8569 7.22732 4.90853C7.02061 4.96016 6.83281 5.06942 6.68577 5.22361C6.53874 5.3778 6.43851 5.57057 6.39675 5.7795L4.92525 5.48475C5.01647 5.02881 5.22713 4.60528 5.53569 4.25744C5.84425 3.9096 6.23964 3.64994 6.68144 3.50499C7.12324 3.36004 7.59561 3.33501 8.05026 3.43246C8.50491 3.52991 8.92552 3.74633 9.26911 4.05962C9.6127 4.3729 9.86694 4.7718 10.0058 5.21555C10.1447 5.65929 10.1633 6.13196 10.0596 6.58523C9.95599 7.0385 9.73384 7.45612 9.41589 7.7954C9.09794 8.13467 8.6956 8.38343 8.25 8.51625Z" fill="#000024" fillOpacity="0.6" />
+                                            </svg>
+                                        </h5>
+                                        <p className="font-normal text-[12px] leading-[100%] text-[#000024] mb-[21px]">Add these skills to make your resume even stronger.</p>
+                                        <div className="flex flex-wrap gap-[8px]">
+                                            {result.suggestedSkills.map((skill, i) => (
+                                                <span key={i} className="bg-[#0456FF26] text-[#0456FF] rounded-[100px] font-normal text-[12px] leading-[100%] flex py-[8px] px-[12px] items-center justify-center">
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {suggestionIssues.length > 0 && (
+                                    <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
+                                        <h5 className="font-semibold text-[15px] leading-[100%] mb-[15px] text-[#0456FF]">AI Suggestions ({suggestionIssues.length})</h5>
+                                        <ul className="flex flex-col gap-[5px]">
+                                            {suggestionIssues.map((issue, i) => (
+                                                <li key={i} className="items-baseline font-semibold text-[14px] leading-[140%] text-[#000024] flex gap-[8px]">
+                                                    <svg className="min-w-[14px]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+                                                        <path d="M5.77688 9.57122L3.125 6.91872L4.00875 6.03497L5.77688 7.80247L9.31188 4.26685L10.1962 5.15122L5.77688 9.57122Z" fill="#29B33A" />
+                                                        <path fillRule="evenodd" clipRule="evenodd" d="M0 6.875C0 3.07812 3.07812 0 6.875 0C10.6719 0 13.75 3.07812 13.75 6.875C13.75 10.6719 10.6719 13.75 6.875 13.75C3.07812 13.75 0 10.6719 0 6.875ZM6.875 12.5C6.13631 12.5 5.40486 12.3545 4.72241 12.0718C4.03995 11.7891 3.41985 11.3748 2.89752 10.8525C2.37519 10.3301 1.96086 9.71005 1.67818 9.02759C1.39549 8.34514 1.25 7.61369 1.25 6.875C1.25 6.13631 1.39549 5.40486 1.67818 4.72241C1.96086 4.03995 2.37519 3.41985 2.89752 2.89752C3.41985 2.37519 4.03995 1.96086 4.72241 1.67818C5.40486 1.39549 6.13631 1.25 6.875 1.25C8.36684 1.25 9.79758 1.84263 10.8525 2.89752C11.9074 3.95242 12.5 5.38316 12.5 6.875C12.5 8.36684 11.9074 9.79758 10.8525 10.8525C9.79758 11.9074 8.36684 12.5 6.875 12.5Z" fill="#29B33A" />
+                                                    </svg>
+                                                    {issue.message}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                                 {errorIssues.length > 0 && (
-                                    <div className="w-[calc(50%-10px)] border border-[#DC262626] bg-[#FEF2F2] rounded-[10px] p-5">
-                                        <h5 className="font-bold text-[15px] text-[#DC2626] mb-[12px]">Critical Issues ({errorIssues.length})</h5>
-                                        <ul className="flex flex-col gap-[8px]">
+                                    <div className="w-[calc(50%-10px)] border border-[#FB9E9E] rounded-[10px] p-5">
+                                        <div className="flex flex-wrap gap-[10px]">
+                                            <svg className="w-[25px]" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 70 70" fill="none">
+                                                <circle cx="35" cy="35" r="33" stroke="#FB9E9E" strokeWidth="4" />
+                                                <path d="M35.0001 14.375C33.9853 14.375 33.0571 15.2375 33.1251 16.25L34.0626 41.5625C34.0626 41.8111 34.1614 42.0496 34.3372 42.2254C34.513 42.4012 34.7515 42.5 35.0001 42.5C35.2487 42.5 35.4872 42.4012 35.663 42.2254C35.8388 42.0496 35.9376 41.8111 35.9376 41.5625L36.8751 16.25C36.9431 15.2375 36.0149 14.375 35.0001 14.375Z" stroke="#FB9E9E" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round" />
+                                                <path d="M35 55.625C36.0355 55.625 36.875 54.7855 36.875 53.75C36.875 52.7145 36.0355 51.875 35 51.875C33.9645 51.875 33.125 52.7145 33.125 53.75C33.125 54.7855 33.9645 55.625 35 55.625Z" stroke="#FB9E9E" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            <div className="w-[calc(100%-35px)] leading-[0]">
+                                                <h5 className="text-[#000024] font-bold text-[16px] leading-[100%] mb-[10px]">Critical Issues ({errorIssues.length})</h5>
+                                                <p className="font-normal text-[14px] leading-[100%] text-[#000024] inline-block">Fix these issues to improve your resume accuracy, credibility, and overall quality.</p>
+                                            </div>
+                                        </div>
+                                        <ul className="bg-[#FB9E9E1A] rounded-[20px] p-[22px] mt-[22px]">
                                             {errorIssues.map((issue, i) => (
-                                                <li key={i} className="font-normal text-[13px] text-[#000024] flex gap-[8px]">
-                                                    <span className="text-[#DC2626]">•</span>
+                                                <li key={i} className={`font-normal text-[13px] text-[#000024] flex gap-[10px] ${ errorIssues.length > 1 ? "border-b border-[#FB9E9E]" : "" } border-b border-[#FB9E9E] py-[8px] first:pt-0`}>
+                                                    <span className="text-[#FB9E9E]">•</span>
                                                     {issue.message}
                                                 </li>
                                             ))}
@@ -311,12 +340,22 @@ export default function ATSChecker() {
                                     </div>
                                 )}
                                 {warningIssues.length > 0 && (
-                                    <div className="w-[calc(50%-10px)] border border-[#F59E0B26] bg-[#FFFBEB] rounded-[10px] p-5">
-                                        <h5 className="font-bold text-[15px] text-[#B45309] mb-[12px]">Warnings ({warningIssues.length})</h5>
-                                        <ul className="flex flex-col gap-[8px]">
+                                    <div className="w-[calc(50%-10px)] border border-[#ffcc00] rounded-[10px] p-5">
+                                        <div className="flex flex-wrap gap-[10px]">
+                                            <svg className="w-[25px]" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 70 70" fill="none">
+                                                <circle cx="35" cy="35" r="33" stroke="#ffcc00" strokeWidth="4" />
+                                                <path d="M35.0001 14.375C33.9853 14.375 33.0571 15.2375 33.1251 16.25L34.0626 41.5625C34.0626 41.8111 34.1614 42.0496 34.3372 42.2254C34.513 42.4012 34.7515 42.5 35.0001 42.5C35.2487 42.5 35.4872 42.4012 35.663 42.2254C35.8388 42.0496 35.9376 41.8111 35.9376 41.5625L36.8751 16.25C36.9431 15.2375 36.0149 14.375 35.0001 14.375Z" stroke="#ffcc00" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round" />
+                                                <path d="M35 55.625C36.0355 55.625 36.875 54.7855 36.875 53.75C36.875 52.7145 36.0355 51.875 35 51.875C33.9645 51.875 33.125 52.7145 33.125 53.75C33.125 54.7855 33.9645 55.625 35 55.625Z" stroke="#ffcc00" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            <div className="w-[calc(100%-35px)] leading-[0]">
+                                                <h5 className="text-[#000024] font-bold text-[16px] leading-[100%] mb-[10px]">Warnings ({warningIssues.length})</h5>
+                                                <p className="font-normal text-[14px] leading-[100%] text-[#000024] inline-block">Fix these issues to improve your resume accuracy, credibility, and overall quality.</p>
+                                            </div>
+                                        </div>
+                                        <ul className="bg-[#ffcc0014] rounded-[20px] p-[25px] mt-[25px]">
                                             {warningIssues.map((issue, i) => (
-                                                <li key={i} className="font-normal text-[13px] text-[#000024] flex gap-[8px]">
-                                                    <span className="text-[#F59E0B]">•</span>
+                                                <li key={i} className="font-normal text-[13px] text-[#000024] flex gap-[8px] border-b border-[#ffcc00] py-[8px] first:pt-0">
+                                                    <span className="text-[#ffcc00]">•</span>
                                                     {issue.message}
                                                 </li>
                                             ))}
