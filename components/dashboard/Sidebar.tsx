@@ -30,6 +30,11 @@ const builderNavItems: NavItem[] = [
     { name: "Preview", href: "preview" },
 ];
 
+const coverLetterNavItems: NavItem[] = [
+    { name: "Basic Info", href: "basic-info" },
+    { name: "Preview", href: "preview" },
+];
+
 interface Membership {
     startDate: string;
     endDate: string;
@@ -52,8 +57,11 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const hookResumeId = useResumeId();
+    const isResumeBuilderFlow = pathname.startsWith("/templates/resume-builder");
+    const isCoverLetterFlow = pathname.startsWith("/cover-letter/") && pathname !== "/cover-letter";
+    const pathSegments = pathname.split("/").filter(Boolean);
+    const coverLetterKey = isCoverLetterFlow ? pathSegments[1] : null;
     const resumeId = searchParams.get("resumeId") || hookResumeId;
-    const isBuilderFlow = pathname.startsWith("/templates/resume-builder");
     const [membership, setMembership] = useState<Membership | null>(null);
     const [membershipLoading, setMembershipLoading] = useState<boolean>(true);
 
@@ -84,6 +92,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         };
     }, [isOpen]);
 
+    const currentNavItems = isCoverLetterFlow
+        ? coverLetterNavItems
+        : isResumeBuilderFlow
+            ? builderNavItems
+            : mainNavItems;
+
     return (
         <>
             {isOpen && (
@@ -101,7 +115,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                             </svg>
                         </Link>
                     </div>
-                    {isBuilderFlow && (
+                    {(isResumeBuilderFlow || isCoverLetterFlow) && (
                         <div className="my-[20px] px-[20px]">
                             <Link href="/dashboard" className="bg-[#0456FF26] gap-[14px] flex items-center px-[17px] py-[13px] rounded-[5px] font-bold text-[16px] leading-[100%]">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="13" viewBox="0 0 15 13" fill="none">
@@ -112,9 +126,19 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         </div>
                     )}
                     <nav className="py-[20px] px-[16px] space-y-1.5">
-                        {(isBuilderFlow ? builderNavItems : mainNavItems).map((item) => {
-                            const isActive = isBuilderFlow && resumeId ? pathname === `/templates/resume-builder/${resumeId}/${item.href}` : pathname === item.href;
-                            const targetHref = isBuilderFlow && resumeId ? `/templates/resume-builder/${resumeId}/${item.href}` : item.href;
+                        {currentNavItems.map((item) => {
+                            let targetHref = item.href;
+                            let isActive = false;
+
+                            if (isCoverLetterFlow && coverLetterKey) {
+                                targetHref = `/cover-letter/${coverLetterKey}/${item.href}`;
+                                isActive = pathname === targetHref;
+                            } else if (isResumeBuilderFlow && resumeId) {
+                                targetHref = `/templates/resume-builder/${resumeId}/${item.href}`;
+                                isActive = pathname === targetHref;
+                            } else {
+                                isActive = pathname === item.href;
+                            }
 
                             return (
                                 <div key={item.href}>
@@ -202,7 +226,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                         })}
                     </nav>
                 </div>
-                {!isBuilderFlow && (
+                {(!isResumeBuilderFlow && !isCoverLetterFlow) && (
                     <div className="p-4">
                         {membershipLoading ? (
                             <div className="bg-[#F9F8FD] rounded-[10px] py-[20px] px-[15px] border-[0.5px] border-[#CACACA80] flex flex-col justify-center items-center gap-y-[15px] animate-pulse">
