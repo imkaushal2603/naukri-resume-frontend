@@ -57,7 +57,7 @@ export default function PreviewPage() {
         if (!resumeId) return;
 
         if (!membership) {
-            toast.error("An active subscription is required to download resumes.");
+            toast.error("Please upgrade your plan to download resumes.");
             return;
         }
 
@@ -240,6 +240,13 @@ export default function PreviewPage() {
                         </div>
                         <p className="font-normal text-[12px] leading-[120%] text-[#000024CC]">Analyze your resume and improve your chances.</p>
                         <button type="button"
+                            onClick={() => {
+                                if (!membership) {
+                                    toast.error("Please upgrade your plan to use the ATS Checker.");
+                                    return;
+                                }
+                                router.push(`/ats-checker?resumeId=${resumeId}&autoCheck=true`);
+                            }}
                             className="flex items-center gap-[10px] justify-between border border-[#29B33A] bg-white py-[9px] px-[18px] rounded-[5px] font-semibold text-[13px] leading-none text-[#29B33A] cursor-pointer hover:bg-[#29B33A] hover:text-white transition-colors duration-300 disabled:opacity-50 shrink-0"
                         >
                             <div className="flex items-center gap-[10px]">

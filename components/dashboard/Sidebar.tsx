@@ -145,7 +145,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                     {item.name === "Help & Support" && (
                                         <div className="mb-[10px] border-t border-t-[#CACACA80]"></div>
                                     )}
-                                    <Link href={targetHref} onClick={() => { if (window.innerWidth < 768) onClose(); }} className={`flex items-center justify-between px-[17px] py-[13px] rounded-[5px] font-bold text-[14px] leading-[100%] mb-[10px] transition-colors ${isActive ? "bg-[#F4F1FE] text-[#0456FF]" : "text-[#000024] hover:bg-[#F4F1FE] hover:text-[#0456FF]"}`}>
+                                    <Link href={targetHref} onClick={() => { if (window.innerWidth < 768) onClose(); }} className={`flex items-center justify-between px-[17px] py-[13px] rounded-[5px] font-bold text-[14px] leading-[100%] mb-[10px] transition-colors group ${isActive ? "bg-[#F4F1FE] text-[#0456FF]" : "text-[#000024] hover:bg-[#F4F1FE] hover:text-[#0456FF]"}`}>
                                         <div className="flex items-center gap-3">
                                             <span className="w-5 h-5 flex items-center justify-center text-current">
                                                 {item.name === "Dashboard" && (
@@ -216,7 +216,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                                             <span>{item.name}</span>
                                         </div>
                                         {!membership && item.badge && (
-                                            <span className="text-[10px] font-bold bg-[#F2EFFE] text-[#0456FF] px-[10px] py-[5px] rounded-full leading-none">
+                                            <span className="text-[10px] font-bold bg-[#F2EFFE] text-[#0456FF] px-[10px] py-[5px] rounded-full leading-none transition-colors group-hover:bg-[#0456FF] group-hover:text-white">
                                                 {item.badge}
                                             </span>
                                         )}

@@ -152,9 +152,7 @@ export default function CoverLetterPreviewPage() {
                             </div>
                             <div className="w-[calc(100%-46px)] leading-[0]">
                                 <h6 className="font-bold text-[15px] leading-[140%] text-[#000024] mb-[6px]">Payment Required to Download</h6>
-                                <p className="font-normal text-[12px] leading-normal text-[#00002499] inline-block">
-                                    Please complete the payment to download your cover letter in PDF or DOCX format and unlock all premium features.
-                                </p>
+                                <p className="font-normal text-[12px] leading-normal text-[#00002499] inline-block">Please complete the payment to download your cover letter in PDF or DOCX format and unlock all premium features.</p>
                             </div>
                         </div>
                     )}

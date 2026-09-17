@@ -70,7 +70,7 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchMembership = async () => {
             try {
-                const res = await api.get("/membership");
+                const res = await withMinDelay(api.get("/membership"));
                 if (res.data.success) {
                     setMembership(res.data.status);
                 }
@@ -234,7 +234,7 @@ export default function DashboardPage() {
 
     return (
         <div className="relative">
-            {loading && <Loader overlay />}
+            {membershipLoading && <Loader overlay />}
             <div className="flex flex-wrap gap-[40px] min-[1300px]:max-[1400px]:gap-[20px]">
                 <div className="flex flex-1 flex-col gap-5 w-[calc(70%-20px)] h-fit">
                     {!checkingResumes && showTargetDiv && (
@@ -714,6 +714,13 @@ export default function DashboardPage() {
                                                     </button>
                                                     <button
                                                         type="button"
+                                                        onClick={() => {
+                                                            if (!membership) {
+                                                                toast.error("Please upgrade your plan to use the ATS Checker.");
+                                                                return;
+                                                            }
+                                                            router.push(`/ats-checker?resumeId=${resume.publicId}&autoCheck=true`);
+                                                        }}
                                                         className={`flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#29B33A] cursor-pointer ${membership ? "text-[#29B33A]" : "text-[#FF0000]"}`}>
                                                         {membership ? (
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 20 20" fill="none">
