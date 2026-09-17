@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import api from "@/services/api";
+import Loader from "@/components/ui/Loader";
 
 const TOPICS = ["Account Issue", "Billing / Payment", "Bug Report", "Feature Request", "Other"];
 
@@ -11,6 +12,12 @@ export default function Support() {
     const [message, setMessage] = useState("");
     const [file, setFile] = useState<File | null>(null);
     const [submitting, setSubmitting] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setLoading(false), 1000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const f = e.target.files?.[0];
@@ -56,7 +63,8 @@ export default function Support() {
     };
 
     return (
-        <div>
+        <div className="relative">
+            {loading && <Loader overlay />}
             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Help & Support</h4>
             <p className="font-normal text-[15px] leading-[140%] text-[#00002480] mb-[30px]">We're here to help! Submit a ticket or reach out to us using the contact details below.</p>
             <div className="flex flex-wrap gap-[20px]">
