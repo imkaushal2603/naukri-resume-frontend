@@ -185,10 +185,6 @@ export default function BasicInfoStep() {
         return `${assetBase}${path}`;
     };
 
-    // if (loading) {
-    //     return <Loader />;
-    // }
-
     return (
         <div className="relative">
             {loading && <Loader overlay />}

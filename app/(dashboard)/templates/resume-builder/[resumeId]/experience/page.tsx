@@ -348,8 +348,6 @@ export default function ExperiencePage() {
         </div>
     );
 
-    // if (loading) return <Loader />;
-
     return (
         <div className="relative">
             {loading && <Loader overlay />}

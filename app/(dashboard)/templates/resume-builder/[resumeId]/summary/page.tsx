@@ -118,10 +118,6 @@ export default function SummaryPage() {
         router.push(`/templates/resume-builder/${resumeId}/skills`);
     };
 
-    // if (loading) {
-    //     return <Loader />;
-    // }
-
     return (
         <div className="relative">
             {loading && <Loader overlay />}

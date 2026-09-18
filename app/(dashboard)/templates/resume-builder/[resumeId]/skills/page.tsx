@@ -165,10 +165,6 @@ export default function SkillsPage() {
         router.push(`/templates/resume-builder/${resumeId}/experience`);
     };
 
-    // if (loading) {
-    //     return <Loader />;
-    // }
-
     return (
         <div className="relative">
             {loading && <Loader overlay />}

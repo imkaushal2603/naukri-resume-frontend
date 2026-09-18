@@ -221,7 +221,7 @@ export default function MyResumes() {
                             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">My Resumes</h4>
                             <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Manage, edit or delete your existing resume.</p>
                         </div>
-                        <div className="w-[50%] flex justify-end items-center gap-[10px] max-[768px]:w-full max-[768px]:text-left">
+                        <div className="w-[50%] flex flex-wrap justify-end items-center gap-[10px] max-[768px]:w-full max-[768px]:text-left max-[768px]:justify-start">
                             <div>
                                 <Link href="/my-resumes/upload-resume" className="flex gap-[10px] items-center border border-[#0456FF] bg-[#fff] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-[#fff] transition-colors duration-300 hover:bg-[#0456FF0D] cursor-pointer">Upload Your Resume</Link>
                             </div>
@@ -313,7 +313,7 @@ export default function MyResumes() {
                                                     </p>
                                                 )}
                                             </div>
-                                            <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center max-[768px]:w-full max-[768px]:justify-start max-[768px]:gap-2">
+                                            <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center max-[768px]:w-full max-[768px]:justify-start max-[768px]:gap-2 min-[768px]:max-[1200px]:gap-[20px]">
                                                 <button type="button" onClick={() => handleEdit(resume.publicId)}
                                                     className="flex flex-col items-center gap-y-[5px] font-medium text-[14px] leading-[100%] text-[#000024] cursor-pointer"
                                                 >

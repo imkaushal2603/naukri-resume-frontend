@@ -684,7 +684,7 @@ export default function DashboardPage() {
                                                         </p>
                                                     )}
                                                 </div>
-                                                <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center max-[768px]:w-full max-[768px]:justify-start max-[768px]:gap-2">
+                                                <div className="w-[calc(50%-10px)] flex flex-wrap gap-[30px] justify-end items-center max-[768px]:w-full max-[768px]:justify-start max-[768px]:gap-2 min-[768px]:max-[1025px]:gap-[20px] min-[1025px]:max-[1200px]:gap-[15px]">
                                                     <button
                                                         type="button"
                                                         onClick={() => handleEdit(resume.publicId)}

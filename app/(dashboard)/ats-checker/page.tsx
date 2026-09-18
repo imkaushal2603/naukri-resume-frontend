@@ -166,7 +166,7 @@ export default function ATSChecker() {
                         <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Check how your resume performs in Applicant Tracking Systems</h4>
                         <p className="font-normal text-[15px] leading-[140%] text-[#00002480] mb-[30px]">Get AI-powered analysis and tips to improve your resume and get more interviews.</p>
                         <div className="flex flex-wrap gap-[20px]">
-                            <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
+                            <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px] max-[768px]:w-full">
                                 <label htmlFor="resume-select" className="w-full inline-block font-semibold text-[15px] leading-[100%] mb-[15px] text-[#000024]">Select a resume</label>
                                 <select id="resume-select" value={selectedResumeId} onChange={(e) => { setSelectedResumeId(e.target.value); setResult(null); }} disabled={loading || resumes.length === 0}
                                     className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] px-[16px] font-normal text-[14px] text-[#000024] cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-[#0456FF]">
@@ -198,7 +198,7 @@ export default function ATSChecker() {
                                 </button>
                             </div>
                             {result && (
-                                <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px] flex flex-col items-center gap-y-[20px]">
+                                <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px] flex flex-col items-center gap-y-[20px] max-[768px]:w-full">
                                     <h5 className="font-semibold text-[15px] leading-[100%]">Your ATS Score</h5>
                                     <CircularScore percentage={result.percentage} size={140} fontSize={28} />
                                     <div>
@@ -215,7 +215,7 @@ export default function ATSChecker() {
                                     {result.categories.map((cat) => {
                                         const catPercentage = Math.round((cat.score / cat.maxScore) * 100);
                                         return (
-                                            <div key={cat.type} className="border border-[#0456FF26] rounded-[6px] p-4 flex flex-col items-center text-center w-[calc(25%-12px)] gap-y-[20px]">
+                                            <div key={cat.type} className="border border-[#0456FF26] rounded-[6px] p-4 flex flex-col items-center text-center w-[calc(25%-12px)] gap-y-[20px] max-[768px]:w-full">
                                                 {cat.type === "contact" && (
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
                                                         <circle cx="17.5" cy="17.5" r="17.5" fill="#0456FF" fillOpacity="0.15" />
@@ -304,7 +304,7 @@ export default function ATSChecker() {
                                 </div>
                                 <div className="flex flex-wrap gap-[20px]">
                                     {result.suggestedSkills.length > 0 && (
-                                        <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[10px] p-5">
+                                        <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[10px] p-5 max-[768px]:w-full">
                                             <h5 className="flex gap-[8px] items-center font-bold text-[18px] text-[#000024] mb-[10px]">
                                                 Suggested Skills to Add
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
@@ -322,7 +322,7 @@ export default function ATSChecker() {
                                         </div>
                                     )}
                                     {suggestionIssues.length > 0 && (
-                                        <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px]">
+                                        <div className="w-[calc(50%-10px)] border border-[#0456FF26] rounded-[6px] p-[15px] max-[768px]:w-full">
                                             <h5 className="font-semibold text-[15px] leading-[100%] mb-[15px] text-[#0456FF]">AI Suggestions ({suggestionIssues.length})</h5>
                                             <ul className="flex flex-col gap-[5px]">
                                                 {suggestionIssues.map((issue, i) => (
@@ -338,7 +338,7 @@ export default function ATSChecker() {
                                         </div>
                                     )}
                                     {errorIssues.length > 0 && (
-                                        <div className="w-[calc(50%-10px)] border border-[#FB9E9E] rounded-[10px] p-5">
+                                        <div className="w-[calc(50%-10px)] border border-[#FB9E9E] rounded-[10px] p-5 max-[768px]:w-full">
                                             <div className="flex flex-wrap gap-[10px]">
                                                 <svg className="w-[25px]" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 70 70" fill="none">
                                                     <circle cx="35" cy="35" r="33" stroke="#FB9E9E" strokeWidth="4" />
@@ -361,7 +361,7 @@ export default function ATSChecker() {
                                         </div>
                                     )}
                                     {warningIssues.length > 0 && (
-                                        <div className="w-[calc(50%-10px)] border border-[#ffcc00] rounded-[10px] p-5">
+                                        <div className="w-[calc(50%-10px)] border border-[#ffcc00] rounded-[10px] p-5 max-[768px]:w-full">
                                             <div className="flex flex-wrap gap-[10px]">
                                                 <svg className="w-[25px]" xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 70 70" fill="none">
                                                     <circle cx="35" cy="35" r="33" stroke="#ffcc00" strokeWidth="4" />

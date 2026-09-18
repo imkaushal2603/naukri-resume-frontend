@@ -87,7 +87,7 @@ export default function CoverLetterTemplates() {
                     {templates.length === 0 ? (
                         <p className="text-sm text-[#00002480]">No templates available.</p>
                     ) : (
-                        <div className="grid grid-cols-5 gap-[20px] max-[768px]:grid-cols-1">
+                        <div className="grid grid-cols-5 gap-[20px] max-[500px]:grid-cols-1 min-[500px]:max-[768px]:grid-cols-2 min-[768px]:max-[1025px]:grid-cols-3 min-[1025px]:max-[1300px]:grid-cols-4">
                             {templates.map((template) => {
                                 const isSelected = template.templateKey === selectedTemplateKey;
 

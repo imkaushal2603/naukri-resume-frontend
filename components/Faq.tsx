@@ -62,7 +62,7 @@ export default function Faq() {
                         </ul>
                     </div>
                     <div className="w-[385px] max-[768px]:w-full">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="385" height="430" viewBox="0 0 385 430" fill="none">
+                        <svg className="max-[768px]:w-full" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="385" height="430" viewBox="0 0 385 430" fill="none">
                             <rect width="385" height="430" fill="url(#pattern0_71_982)" />
                             <defs>
                                 <pattern id="pattern0_71_982" patternContentUnits="objectBoundingBox" width="1" height="1">

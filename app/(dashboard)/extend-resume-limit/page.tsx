@@ -28,7 +28,6 @@ export default function ExtendResumeLimit() {
         const fetchAddons = async () => {
             try {
                 const res = await withMinDelay(api.get("/resume/limit-addons"));
-                console.log("Fetched add-ons:", res.data);
                 if (res.data.success) {
                     setAddons(res.data.addons);
                 }

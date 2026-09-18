@@ -68,7 +68,7 @@ export default function Support() {
             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Help & Support</h4>
             <p className="font-normal text-[15px] leading-[140%] text-[#00002480] mb-[30px]">We're here to help! Submit a ticket or reach out to us using the contact details below.</p>
             <div className="flex flex-wrap gap-[20px]">
-                <div className="w-[calc(50%-10px)] border border-[#CACACA80] rounded-[5px] p-[20px]">
+                <div className="w-[calc(50%-10px)] border border-[#CACACA80] rounded-[5px] p-[20px] max-[768px]:w-full">
                     <h5 className="font-bold text-[18px] leading-none text-black mb-[10px]">Submit a Support Ticket</h5>
                     <p className="font-bold text-[14px] text-[#00002480] leading-[140%] inline-block mb-[20px]">Describe your issue and our support team will get back to you as soon as possible.</p>
                     <div>
@@ -111,7 +111,7 @@ export default function Support() {
                         </button>
                     </div>
                 </div>
-                <div className="w-[calc(50%-10px)] border border-[#CACACA80] rounded-[5px] p-[20px]">
+                <div className="w-[calc(50%-10px)] border border-[#CACACA80] rounded-[5px] p-[20px] max-[768px]:w-full">
                     <h5 className="font-bold text-[18px] leading-none text-black mb-[10px]">Contact Information</h5>
                     <p className="font-bold text-[14px] text-[#00002480] leading-[140%] inline-block mb-[20px]">You can also reach us directly using the details below.</p>
                     <div className="flex flex-col gap-y-[20px]">
