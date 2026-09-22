@@ -356,7 +356,7 @@ export default function ExperiencePage() {
                     <div className="flex flex-wrap justify-between items-start gap-[20px] mb-[45px]">
                         <div className="max-[768px]:w-full">
                             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Experience</h4>
-                            <p className="font-normal text-[15px] leading-[140%] text-[#00002480]">Add your work experience. Start with your latest experience.</p>
+                            <p className="font-normal text-[15px] leading-[140%] text-[#00002480]">Add your work experience.</p>
                         </div>
                         <button onClick={openAdd}
                             className="flex gap-[10px] items-center border border-[#0456FF] bg-white py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors duration-300 shrink-0"

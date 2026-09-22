@@ -277,7 +277,7 @@ export default function Education() {
                     <div className="flex flex-wrap justify-between gap-[20px] mb-[45px]">
                         <div className="w-[calc(100%-231px)] max-[768px]:w-full">
                             <h4 className="font-bold text-[20px] leading-none text-black mb-[15px]">Education</h4>
-                            <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Add your education details. Start with your latest education.</p>
+                            <p className="font-normal text-[15px] leading-[140%] text-[#00002480] inline-block">Add your education details.</p>
                         </div>
                         <div className="max-[768px]:w-full">
                             <button onClick={openAdd}

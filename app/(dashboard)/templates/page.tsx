@@ -248,7 +248,7 @@ export default function Templates() {
                                                 </span>
                                             )}
                                             {template.preview ? (
-                                                <Image src={getImageUrl(template.preview)} alt={template.name} width={220} height={300} className="w-full h-auto rounded-[4px] object-cover" />
+                                                <Image src={getImageUrl(template.preview)} alt={template.name} width={220} height={300} className="w-full h-[360px] rounded-[4px] object-contain" />
                                             ) : (
                                                 <div className="w-full h-[300px] bg-gray-100 rounded-[4px] flex items-center justify-center text-xs text-gray-400">No preview</div>
                                             )}
