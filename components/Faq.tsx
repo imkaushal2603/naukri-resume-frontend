@@ -15,10 +15,6 @@ export default function Faq() {
             answer: "Yes. All Naukri Resume templates are optimized for Applicant Tracking Systems (ATS). Our layouts use clean formatting, readable fonts, and proper section structures to improve compatibility with most recruiters' ATS software. You can also use our ATS Score Checker to identify areas for improvement before applying."
         },
         {
-            question: "Can I customize colors and fonts?",
-            answer: "Absolutely. You can choose from multiple professionally designed templates and customize colors, fonts, spacing, and other design elements to match your personal style while maintaining a clean, recruiter-friendly appearance."
-        },
-        {
             question: "Can I download my resume for free?",
             answer: "You can create, edit, and preview your resume for free. Downloading your resume in PDF format requires an active Premium plan. Premium also includes ATS Score checking, AI suggestions, premium templates, and other advanced features."
         },

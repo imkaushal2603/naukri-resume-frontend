@@ -20,17 +20,21 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://naukri-resume.com/"),
+  alternates: {
+    canonical: "./",
+  },
   title: {
-    default: "Naukri Resume | AI Resume Builder & ATS Friendly Templates",
+    default: "AI Resume Builder | ATS-Friendly Resume Maker – Naukri Resume",
     template: "%s | Naukri Resume",
   },
-  description: "Build professional, ATS-optimized resumes in minutes with our AI-powered resume builder. Choose from modern templates and get hired faster.",
+  description: "Create a professional, ATS-friendly resume with our AI resume builder. Choose modern templates, improve your CV with AI, customize your resume, and download it easily.",
   keywords: [
     "AI Resume Builder",
     "ATS Resume Templates",
     "Free Resume Maker",
     "Professional CV Builder",
     "Job Application Resume",
+    "Naukri Resume",
   ],
   authors: [{ name: "Naukri Resume Team" }],
   creator: "Naukri Resume",
@@ -55,7 +59,7 @@ export const metadata: Metadata = {
     description: "Create ATS-friendly resumes effortlessly. Pick a template, customize with AI, and download your resume to land top interviews.",
     images: [
       {
-        url: "/logo.png",
+        url: "https://naukri-resume.com/logo.png",
         width: 1200,
         height: 630,
         alt: "Naukri Resume AI Builder Preview",
@@ -67,7 +71,7 @@ export const metadata: Metadata = {
     title: "Naukri Resume | AI Resume Builder",
     description:
       "Create ATS-friendly resumes effortlessly with AI suggestions and modern templates.",
-    images: ["/logo.png"],
+    images: ["https://naukri-resume.com/logo.png"],
   },
   icons: {
     icon: [

@@ -3,7 +3,7 @@ export default function WhyChoose() {
         <div className="py-[40px]">
             <div className="max-w-[1390px] mx-auto px-[15px]">
                 <h2 className="text-center font-bold text-[35px] leading-none text-[#000024] mb-[40px] max-[768px]:text-[30px]">Why choose <span className="font-bold text-[#0456FF]">Naukri Resume?</span></h2>
-                <ul className="flex flex-wrap gap-[100px] max-[768px]:gap-[15px] min-[768px]:max-[1025px]:gap-[40px]">
+                <ul className="flex flex-wrap gap-[100px] gap-y-[40px] max-[768px]:gap-[15px] min-[768px]:max-[1025px]:gap-[40px]">
                     <li className="w-[calc((100%-200px)/3)] flex flex-wrap gap-5 max-[400px]:w-full max-[768px]:w-[calc(50%-7.5px)] max-[768px]:bg-[#F6F7FE] min-[400px]:max-[768px]:flex-col max-[768px]:p-[15px] max-[768px]:rounded-[8px] min-[768px]:max-[1025px]:w-[calc((100%-80px)/3)]">
                         <div className="w-[50px]">
                             <svg className="max-[768px]:w-[40px] max-[768px]:h-[40px]" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">

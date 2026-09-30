@@ -15,11 +15,33 @@ import Login from "./Login";
 import Registration from "./Registration";
 import ForgotPassword from "./ForgotPassword";
 
-import Template1 from "@/public/Template1.png";
-import Template2 from "@/public/Template2.png";
-import Template3 from "@/public/Template3.png";
-import Template4 from "@/public/Template4.png";
-import Template5 from "@/public/Template5.png";
+import Template1 from "@/public/templates/amber.png";
+import Template2 from "@/public/templates/blank.png";
+import Template3 from "@/public/templates/citrine.png";
+import Template4 from "@/public/templates/classic.png";
+import Template5 from "@/public/templates/clover.png";
+import Template6 from "@/public/templates/confetti.png";
+import Template7 from "@/public/templates/coral.png";
+import Template8 from "@/public/templates/cove.png";
+import Template9 from "@/public/templates/denim.png";
+import Template10 from "@/public/templates/flare.png";
+import Template11 from "@/public/templates/frost.png";
+import Template12 from "@/public/templates/granite.png";
+import Template13 from "@/public/templates/harbor.png";
+import Template14 from "@/public/templates/indigo.png";
+import Template15 from "@/public/templates/lagoon.png";
+import Template16 from "@/public/templates/linen.png";
+import Template17 from "@/public/templates/magenta.png";
+import Template18 from "@/public/templates/marine.png";
+import Template19 from "@/public/templates/minimal.png";
+import Template20 from "@/public/templates/mist.png";
+import Template21 from "@/public/templates/onyx.png";
+import Template22 from "@/public/templates/professional.png";
+import Template23 from "@/public/templates/pulse.png";
+import Template24 from "@/public/templates/sage.png";
+import Template25 from "@/public/templates/umber.png";
+import Template26 from "@/public/templates/violet.png";
+import Template27 from "@/public/templates/willow.png";
 
 export default function CustomChooseTemplates() {
     const { isAuthenticated, loading } = useAuth();
@@ -31,11 +53,28 @@ export default function CustomChooseTemplates() {
         { id: 3, image: Template3, name: "Template 3" },
         { id: 4, image: Template4, name: "Template 4" },
         { id: 5, image: Template5, name: "Template 5" },
-        { id: 6, image: Template1, name: "Template 1" },
-        { id: 7, image: Template2, name: "Template 2" },
-        { id: 8, image: Template3, name: "Template 3" },
-        { id: 9, image: Template4, name: "Template 4" },
-        { id: 10, image: Template5, name: "Template 5" }
+        { id: 6, image: Template6, name: "Template 6" },
+        { id: 7, image: Template7, name: "Template 7" },
+        { id: 8, image: Template8, name: "Template 8" },
+        { id: 9, image: Template9, name: "Template 9" },
+        { id: 10, image: Template10, name: "Template 10" },
+        { id: 11, image: Template11, name: "Template 11" },
+        { id: 12, image: Template12, name: "Template 12" },
+        { id: 13, image: Template13, name: "Template 13" },
+        { id: 14, image: Template14, name: "Template 14" },
+        { id: 15, image: Template15, name: "Template 15" },
+        { id: 16, image: Template16, name: "Template 16" },
+        { id: 17, image: Template17, name: "Template 17" },
+        { id: 18, image: Template18, name: "Template 18" },
+        { id: 19, image: Template19, name: "Template 19" },
+        { id: 20, image: Template20, name: "Template 20" },
+        { id: 21, image: Template21, name: "Template 21" },
+        { id: 22, image: Template22, name: "Template 22" },
+        { id: 23, image: Template23, name: "Template 23" },
+        { id: 24, image: Template24, name: "Template 24" },
+        { id: 25, image: Template25, name: "Template 25" },
+        { id: 26, image: Template26, name: "Template 26" },
+        { id: 27, image: Template27, name: "Template 27" }
     ];
 
     return (
@@ -101,7 +140,7 @@ export default function CustomChooseTemplates() {
                                 <SwiperSlide key={item.id} className="py-2">
                                     <div className="group relative cursor-pointer transition-all duration-300 transform scale-95 opacity-80 hover:opacity-100 hover:scale-100 [.swiper-slide-active_&]:scale-105 [.swiper-slide-active_&]:opacity-100 [.swiper-slide-active_&]:z-20">
                                         <div className="relative overflow-hidden rounded-[10px] aspect-[1/1.41] border-2 border-[#CACACA] shadow-[0px_4px_4px_0px_#0456FF36]">
-                                            <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 300px" className="object-cover transition-transform duration-300 group-hover:scale-105" priority={index < 5} />
+                                            <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 300px" className="object-contain transition-transform duration-300 group-hover:scale-105" priority={index < 5} />
                                             <div className="absolute inset-0 bg-black/23 opacity-0 group-hover:opacity-100 [.swiper-slide-active_&]:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-[70px] px-3">
                                                 {loading ? null : isAuthenticated ? (
                                                     <Link href="/templates" className="bg-white text-[#000024] font-semibold text-[9px] px-[8px] py-[3.5px] rounded-[5px] shadow-md transition-all duration-200 cursor-pointer hover:bg-[#0456FF] hover:text-white transform translate-y-2 group-hover:translate-y-0 [.swiper-slide-active_&]:translate-y-0">Use This Template</Link>                                                   
