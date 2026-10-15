@@ -22,6 +22,7 @@ interface CoverLetterForm {
     companyName: string;
     hiringManager: string;
     summary: string;
+    photoUrl: string;
 }
 
 const initialForm: CoverLetterForm = {
@@ -33,6 +34,7 @@ const initialForm: CoverLetterForm = {
     companyName: "",
     hiringManager: "",
     summary: "",
+    photoUrl: "",
 };
 
 const fieldLabels: Record<keyof CoverLetterForm, string> = {
@@ -44,6 +46,7 @@ const fieldLabels: Record<keyof CoverLetterForm, string> = {
     companyName: "Company Name",
     hiringManager: "Hiring Manager",
     summary: "Summary",
+    photoUrl: "Photo URL"
 };
 
 const requiredFields: (keyof CoverLetterForm)[] = ["fullName", "email", "phone", "jobTitle", "companyName", "summary"];
@@ -58,6 +61,8 @@ export default function CoverLetterForm() {
     const [seenSuggestions, setSeenSuggestions] = useState<string[]>([]);
     const [loadingSuggestions, setLoadingSuggestions] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [uploadingPhoto, setUploadingPhoto] = useState(false);
+    const backendUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000").replace(/\/api\/?$/, "");
 
     const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const isValidPhone = (phone: string) => {
@@ -154,6 +159,28 @@ export default function CoverLetterForm() {
         router.push(`/cover-letter/${templateKey}/preview`);
     };
 
+    const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        if (file.size > 1024 * 1024) {
+            toast.error("File size must be under 1 MB.");
+            return;
+        }
+        setUploadingPhoto(true);
+        try {
+            const fd = new FormData();
+            fd.append("photo", file);
+            const res = await api.post("/cover-letter/photo", fd, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            if (res.data.success) handleChange("photoUrl", res.data.photoUrl);
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Failed to upload photo.");
+        } finally {
+            setUploadingPhoto(false);
+        }
+    };
+
     return (
         <div className="relative">
             {loading && <Loader overlay />}
@@ -175,6 +202,24 @@ export default function CoverLetterForm() {
                     </div>
                     <div>
                         <div className="flex flex-wrap gap-[30px] row-gap-[20px] max-[768px]:gap-y-[20px] min-[768px]:max-[1400px]:gap-[10px]">
+                            <div className="w-full flex items-center gap-[20px] mb-[30px]">
+                                <div className="w-[100px] h-[100px] rounded-full overflow-hidden bg-gray-100 border border-[#0456FF26] flex items-center justify-center">
+                                    {form.photoUrl ? (
+                                        <img src={`${backendUrl}${form.photoUrl}`} alt="Profile" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-[12px] text-gray-400">No Photo</span>
+                                    )}
+                                </div>
+                                <label className="border border-[#0456FF] rounded-[6px] px-[20px] py-[10px] text-[14px] text-[#0456FF] cursor-pointer hover:bg-[#0456FF] hover:text-white transition-colors">
+                                    {uploadingPhoto ? "Uploading..." : "Upload Photo"}
+                                    <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
+                                </label>
+                                {form.photoUrl && (
+                                    <button type="button" onClick={() => handleChange("photoUrl", "")} className="text-[13px] text-red-500">
+                                        Remove
+                                    </button>
+                                )}
+                            </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
                                 <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Full Name *</label>
                                 <div className="relative">
