@@ -78,7 +78,7 @@ export default function Plans() {
                             </div>
                             <div className="flex flex-wrap items-end gap-5 mt-[30px] mb-[20px] pb-[50px] border-b border-[#0456FF26]">
                                 <div className="w-[calc(50%-10px)]">
-                                    <h3 className="font-extrabold text-[30px] leading-[100%] text-[#0456FF]">₹199 <span className="font-extrabold text-[15px] leading-[100%] text-[#000024] inline-block">/ Week</span></h3>
+                                    <h3 className="font-extrabold text-[30px] leading-[100%] text-[#0456FF]">₹100 <span className="font-extrabold text-[15px] leading-[100%] text-[#000024] inline-block">/ Week</span></h3>
                                 </div>
                                 <div className="w-[calc(50%-10px)]">
 
@@ -199,11 +199,11 @@ export default function Plans() {
                             </div>
                             <div className="flex flex-wrap items-end gap-5 mt-[30px] mb-[20px] pb-[50px] border-b border-[#0456FF26]">
                                 <div className="w-[calc(50%-10px)]">
-                                    <h3 className="font-extrabold text-[30px] leading-[100%] text-[#0456FF]">₹1,195 <span className="font-extrabold text-[15px] leading-[100%] text-[#000024] inline-block">/ Year</span></h3>
+                                    <h3 className="font-extrabold text-[30px] leading-[100%] text-[#0456FF]">₹1100 <span className="font-extrabold text-[15px] leading-[100%] text-[#000024] inline-block">/ Year</span></h3>
                                 </div>
                                 <div className="w-[calc(50%-10px)] flex flex-wrap gap-[18px] justify-end">
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#29B33A]">Save 88.45%</span>
-                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024B2]">₹10,348</span>
+                                    <span className="font-bold text-[12px] leading-[100%] text-[#29B33A]">Save 91%</span>
+                                    <span className="font-bold text-[12px] leading-[100%] text-[#000024B2]">$₹12,222$</span>
                                 </div>
                             </div>
                             <h5 className="font-semibold text-[20px] leading-[100%] text-[#000024] mb-5">Plan Includes</h5>
