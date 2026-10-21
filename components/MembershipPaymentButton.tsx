@@ -1,6 +1,7 @@
 "use client";
 
 import { load } from "@cashfreepayments/cashfree-js";
+import { toast } from "sonner";
 import api from "@/services/api";
 
 interface MembershipPaymentButtonProps {
@@ -29,7 +30,7 @@ export default function MembershipPaymentButton({
             }
 
             const cashfree = await load({
-                mode: "sandbox",
+                mode: "production",
             });
 
             await cashfree.checkout({
@@ -38,6 +39,7 @@ export default function MembershipPaymentButton({
             });
         } catch (error) {
             console.error("Payment error:", error);
+            toast.error("Could not start the payment. Please try again.");
         }
     };
 
