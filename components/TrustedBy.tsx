@@ -18,7 +18,7 @@ export default function TrustedBy() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-100px)] min-[400px]:max-[768px]:w-full">
-                            <h3 className="font-bold text-[30px] leading-[110%] text-[#0456FF] mb-[5px] max-[768px]:text-[25px]">50K+</h3>
+                            <h3 className="font-bold text-[30px] leading-[110%] text-[#0456FF] mb-[5px] max-[768px]:text-[25px]">1K+</h3>
                             <h5 className="font-semibold text-[18px] leading-[110%] text-[#000024] mb-[5px]">Resumes Created</h5>
                             <p className="font-medium text-[14px] leading-[110%] text-[#000024]">Across all industries</p>
                         </div>
@@ -55,7 +55,7 @@ export default function TrustedBy() {
                             </svg>
                         </div>
                         <div className="w-[calc(100%-100px)] min-[400px]:max-[768px]:w-full">
-                            <h3 className="font-bold text-[30px] leading-[110%] text-[#0456FF] mb-[5px] max-[768px]:text-[25px]">12K+</h3>
+                            <h3 className="font-bold text-[30px] leading-[110%] text-[#0456FF] mb-[5px] max-[768px]:text-[25px]">1K+</h3>
                             <h5 className="font-semibold text-[18px] leading-[110%] text-[#000024] mb-[5px]">Resumes Created</h5>
                             <p className="font-medium text-[14px] leading-[110%] text-[#000024]">Across all industries</p>
                         </div>

@@ -6,6 +6,7 @@ import Logos from "../components/Logos";
 import Steps from "../components/Steps";
 import ChooseTemplates from "../components/ChooseTemplates";
 import WhyChoose from "../components/WhyChoose";
+import ChooseCovers from "../components/ChooseCovers";
 import TrustedBy from "../components/TrustedBy";
 import Testimonials from "../components/Testimonials";
 import Faq from "../components/Faq";
@@ -88,6 +89,7 @@ export default function Home() {
         <Steps />
         <ChooseTemplates />
         <WhyChoose />
+        <ChooseCovers />
         <TrustedBy />
         <Testimonials />
         <Faq />
