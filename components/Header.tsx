@@ -14,6 +14,13 @@ export default function Header() {
 
     return (
         <>
+            <div className="top_bar bg-[#0456FF]">
+                <div className="max-w-[1390px] mx-auto px-[15px]">
+                    <p className="text-center text-[15px] font-medium py-[12px] text-[#fff] leading-none">
+                        <strong>Early Access Sale:</strong> Get an instant <strong>91% OFF</strong> on all plans!
+                    </p>
+                </div>
+            </div>
             <header className="bg-[#F6F7FE] py-[25px]">
                 <div className="max-w-[1390px] mx-auto px-[15px]">
                     <div className="flex justify-between items-center flex-wrap">
@@ -55,12 +62,12 @@ export default function Header() {
                                         >
                                             Login
                                         </button>
-                                        <Link
+                                        {/* <Link
                                             href="/build-resume"
                                             className="inline-block border border-[#0456FF] bg-[#0456FF] py-[11px] px-[26px] rounded-[5px] font-semibold text-[14px] leading-none text-white hover:bg-transparent hover:text-[#0456FF] transition-colors duration-300"
                                         >
                                             Build My Resume
-                                        </Link>
+                                        </Link> */}
                                     </>
                                 )}
                             </div>
