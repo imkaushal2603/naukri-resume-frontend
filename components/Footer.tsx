@@ -1,6 +1,22 @@
+"use client";
+
 import Link from "next/link";
+import CookieBanner, { OPEN_COOKIE_SETTINGS_EVENT } from "./CookieBanner";
+import PolicyModals, { OPEN_PRIVACY_EVENT, OPEN_TERMS_EVENT } from "./PolicyModals";
 
 export default function Footer() {
+    const handleOpenPrivacy = () => {
+        window.dispatchEvent(new Event(OPEN_PRIVACY_EVENT));
+    };
+
+    const handleOpenTerms = () => {
+        window.dispatchEvent(new Event(OPEN_TERMS_EVENT));
+    };
+
+    const handleOpenCookieSettings = () => {
+        window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS_EVENT));
+    };
+
     return (
         <div className="py-[80px] relative">
             <div className="absolute left-[25px] top-[25px]">
@@ -29,14 +45,14 @@ export default function Footer() {
                         <span className="inline-block font-bold text-[18px] leading-[115%] text-[#000024] mb-[15px]">Follow us</span>
                         <ul className="flex flex-wrap gap-[10px]">
                             <li>
-                                <Link href="" className="w-[35px] h-[35px] bg-white shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] rounded-full flex justify-center items-center text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-all duration-300">
+                                <Link href="https://www.facebook.com/people/Crowdvolley/61591249543914/" target="blank" className="w-[35px] h-[35px] bg-white shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] rounded-full flex justify-center items-center text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-all duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="8" height="15" viewBox="0 0 8 15" fill="none">
                                         <path d="M5.25 8.625H7.125L7.875 5.625H5.25V4.125C5.25 3.3525 5.25 2.625 6.75 2.625H7.875V0.105C7.6305 0.0727501 6.70725 0 5.73225 0C3.696 0 2.25 1.24275 2.25 3.525V5.625H0V8.625H2.25V15H5.25V8.625Z" fill="currentColor" />
                                     </svg>
                                 </Link>
                             </li>
                             <li>
-                                <Link href="" className="w-[35px] h-[35px] bg-white shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] rounded-full flex justify-center items-center text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-all duration-300">
+                                <Link href="https://www.instagram.com/crowdvolley.it/" target="blank" className="w-[35px] h-[35px] bg-white shadow-[0px_2px_4px_0px_rgba(0,0,0,0.15)] rounded-full flex justify-center items-center text-[#0456FF] hover:bg-[#0456FF] hover:text-white transition-all duration-300">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
                                         <path d="M12 2.25C14.07 2.25 15.75 3.93 15.75 6V12C15.75 14.07 14.07 15.75 12 15.75H6C3.93 15.75 2.25 14.07 2.25 12V6C2.25 3.93 3.93 2.25 6 2.25H9H12Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         <path d="M9 6C10.6575 6 12 7.3425 12 9C12 10.6575 10.6575 12 9 12C7.3425 12 6 10.6575 6 9C6 7.3425 7.3425 6 9 6Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -74,15 +90,15 @@ export default function Footer() {
                         <p className="text-center font-normal text-[16px] leading-[130%] text-[#66667C]">© 2026 Naukri Resume. All Rights Reserved.<br />A Product by <Link href="https://crowdvolley.com/" target="_blank" className="font-semibold text-[#0456FF] hover:underline">Crowdvolley IT Solutions Pvt. Ltd</Link>.</p>
                     </div>
                     <div className="w-[calc((100%-40px)/3)] flex flex-wrap gap-3 items-center justify-end max-[768px]:w-full max-[768px]:justify-center min-[768px]:max-[1025px]:w-full min-[768px]:max-[1025px]:justify-center">
-                        <Link href="" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] hover:text-[#0456FF] transition-colors duration-300">Privacy Policy</Link>
+                        <button onClick={handleOpenPrivacy} type="button" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] cursor-pointer hover:text-[#0456FF] transition-colors duration-300">Privacy Policy</button>
                         <span>|</span>
-                        <Link href="" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] hover:text-[#0456FF] transition-colors duration-300">Terms of Use</Link>
+                        <button onClick={handleOpenTerms} type="button" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] cursor-pointer hover:text-[#0456FF] transition-colors duration-300">Terms of Use</button>
                         <span>|</span>
-                        <Link href="" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] hover:text-[#0456FF] transition-colors duration-300">Cookies Policy</Link>
+                        <button onClick={handleOpenCookieSettings} type="button" className="inline-block font-medium text-[16px] leading-[150%] text-[#000024] cursor-pointer hover:text-[#0456FF] transition-colors duration-300">Cookies Policy</button>
                     </div>
                 </div>
             </div>
-            <div className="absolute right-[25px] bottom-[25px]">
+            <div className="absolute right-[25px] bottom-[25px] pointer-events-none">
                 <svg className="w-[100%]" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="92" height="68" viewBox="0 0 92 68" fill="none">
                     <rect opacity="0.6" width="92" height="68" fill="url(#pattern0_96_25)" />
                     <defs>
@@ -93,6 +109,8 @@ export default function Footer() {
                     </defs>
                 </svg>
             </div>
+            <CookieBanner />
+            <PolicyModals />
         </div>
     )
 }

@@ -3,13 +3,6 @@ import { useResume } from "@/context/ResumeContext";
 import api from "@/services/api";
 import Link from "next/link";
 
-function withMinDelay<T>(promise: Promise<T>, ms: number = 1000): Promise<T> {
-    return Promise.all([
-        promise,
-        new Promise((resolve) => setTimeout(resolve, ms)),
-    ]).then(([result]) => result as T);
-}
-
 interface Membership {
     startDate: string;
     endDate: string;
@@ -115,10 +108,13 @@ export default function PlanDetails() {
                                 }
                                 {membership &&
                                     (() => {
-                                        const daysRemaining = Math.max(
-                                            0,
-                                            Math.ceil(
-                                                (new Date(membership.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+                                        const daysRemaining = Math.min(
+                                            membership.plan.durationDays,
+                                            Math.max(
+                                                0,
+                                                Math.ceil(
+                                                    (new Date(membership.endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+                                                )
                                             )
                                         );
                                         return (

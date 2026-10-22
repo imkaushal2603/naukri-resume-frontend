@@ -1,15 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 import Image from "next/image";
 
 export default function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+
   const testimonials = [
     {
       id: 1,
@@ -58,6 +62,9 @@ export default function Testimonials() {
     },
   ];
 
+  const visibleDots = 5;
+  const activeDotIndex = activeIndex % visibleDots;
+
   return (
     <div className="py-[40px] relative overflow-hidden">
       <div className="max-w-[1390px] mx-auto px-[15px]">
@@ -77,17 +84,20 @@ export default function Testimonials() {
             </svg>
           </button>
           <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
+            modules={[Navigation]}
             loop={true}
             spaceBetween={16}
             slidesPerView={4}
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
+              setActiveIndex(swiper.realIndex);
+            }}
+            onSlideChange={(swiper) => {
+              setActiveIndex(swiper.realIndex);
+            }}
             navigation={{
               prevEl: ".swiper-prev-btn",
               nextEl: ".swiper-next-btn",
-            }}
-            pagination={{
-              clickable: true,
-              el: ".custom-pagination",
             }}
             breakpoints={{
               320: { slidesPerView: 1 },
@@ -140,7 +150,27 @@ export default function Testimonials() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="h-[15px] custom-pagination flex justify-center items-center gap-[10px] mt-[30px] [&>.swiper-pagination-bullet]:w-[15px] [&>.swiper-pagination-bullet]:h-[15px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
+          <div className="flex justify-center items-center gap-[10px] mt-[40px] h-[15px]">
+            {Array.from({ length: 5 }, (_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => {
+                  const targetIndex =
+                    Math.floor(activeIndex / 5) * 5 + index;
+
+                  if (targetIndex < testimonials.length) {
+                    swiperInstance?.slideToLoop(targetIndex);
+                  }
+                }}
+                aria-label={`Go to pagination dot ${index + 1}`}
+                className={`w-[12px] h-[12px] shrink-0 rounded-full cursor-pointer transition-all duration-300 ${activeDotIndex === index
+                  ? "bg-[#0456FF]"
+                  : "bg-[#CACACA]"
+                  }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>

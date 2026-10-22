@@ -4,11 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Navigation } from "swiper/modules";
+import type { Swiper as SwiperType } from "swiper";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import "swiper/css/pagination";
 
 import { useAuth } from "@/context/AuthContext";
 import Login from "./Login";
@@ -35,6 +35,9 @@ export default function CustomChooseTemplates() {
     const { isAuthenticated, loading } = useAuth();
     const [activeAuthModal, setActiveAuthModal] = useState<"login" | "register" | "reset" | null>(null);
 
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [swiperInstance, setSwiperInstance] = useState<SwiperType | null>(null);
+
     const templates = [
         { id: 1, image: Template1, name: "Template 1" },
         { id: 2, image: Template2, name: "Template 2" },
@@ -52,6 +55,9 @@ export default function CustomChooseTemplates() {
         { id: 14, image: Template14, name: "Template 14" },
         { id: 15, image: Template15, name: "Template 15" },
     ];
+
+    const visibleDots = 5;
+    const activeDotIndex = activeIndex % visibleDots;
 
     return (
         <>
@@ -82,29 +88,32 @@ export default function CustomChooseTemplates() {
                         )}
                     </div>
                     <div className="relative px-[70px]">
-                        <button className="template-prev-btn absolute left-0 top-1/2 -translate-y-1/2 z-30 w-[40px] h-[40px] rounded-full bg-[#0456FF] text-white flex items-center justify-center shadow-md hover:bg-[#0041C7] transition-all duration-200 cursor-pointer">
+                        <button className="template-prev-btn-cover absolute left-0 top-1/2 -translate-y-1/2 z-30 w-[40px] h-[40px] rounded-full bg-[#0456FF] text-white flex items-center justify-center shadow-md hover:bg-[#0041C7] transition-all duration-200 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="m15 18-6-6 6-6" />
                             </svg>
                         </button>
-                        <button className="template-next-btn absolute right-0 top-1/2 -translate-y-1/2 z-30 w-[40px] h-[40px] rounded-full bg-white border border-[#0456FF] text-[#0456FF] flex items-center justify-center shadow-md hover:bg-[#0456FF] hover:text-white transition-all duration-200 cursor-pointer">
+                        <button className="template-next-btn-cover absolute right-0 top-1/2 -translate-y-1/2 z-30 w-[40px] h-[40px] rounded-full bg-white border border-[#0456FF] text-[#0456FF] flex items-center justify-center shadow-md hover:bg-[#0456FF] hover:text-white transition-all duration-200 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="m9 18 6-6-6-6" />
                             </svg>
                         </button>
                         <Swiper
-                            modules={[Navigation, Pagination]}
+                            modules={[Navigation]}
                             loop={true}
                             centeredSlides={true}
                             spaceBetween={16}
                             slidesPerView={5}
-                            navigation={{
-                                prevEl: ".template-prev-btn",
-                                nextEl: ".template-next-btn",
+                            onSwiper={(swiper) => {
+                                setSwiperInstance(swiper);
+                                setActiveIndex(swiper.realIndex);
                             }}
-                            pagination={{
-                                clickable: true,
-                                el: ".custom-template-pagination-cover",
+                            onSlideChange={(swiper) => {
+                                setActiveIndex(swiper.realIndex);
+                            }}
+                            navigation={{
+                                prevEl: ".template-prev-btn-cover",
+                                nextEl: ".template-next-btn-cover",
                             }}
                             breakpoints={{
                                 320: { slidesPerView: 1, spaceBetween: 10 },
@@ -119,7 +128,7 @@ export default function CustomChooseTemplates() {
                                             <Image src={item.image} alt={item.name} fill sizes="(max-width: 768px) 100vw, 300px" className="object-contain transition-transform duration-300 group-hover:scale-105" priority={index < 5} />
                                             <div className="absolute inset-0 bg-black/23 opacity-0 group-hover:opacity-100 [.swiper-slide-active_&]:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-[70px] px-3">
                                                 {loading ? null : isAuthenticated ? (
-                                                    <Link href="/templates" className="bg-white text-[#000024] font-semibold text-[9px] px-[8px] py-[3.5px] rounded-[5px] shadow-md transition-all duration-200 cursor-pointer hover:bg-[#0456FF] hover:text-white transform translate-y-2 group-hover:translate-y-0 [.swiper-slide-active_&]:translate-y-0">Use This Template</Link>                                                   
+                                                    <Link href="/templates" className="bg-white text-[#000024] font-semibold text-[9px] px-[8px] py-[3.5px] rounded-[5px] shadow-md transition-all duration-200 cursor-pointer hover:bg-[#0456FF] hover:text-white transform translate-y-2 group-hover:translate-y-0 [.swiper-slide-active_&]:translate-y-0">Use This Template</Link>
                                                 ) : (
                                                     <button onClick={() => setActiveAuthModal("login")} className="bg-white text-[#000024] font-semibold text-[9px] px-[8px] py-[3.5px] rounded-[5px] shadow-md transition-all duration-200 cursor-pointer hover:bg-[#0456FF] hover:text-white transform translate-y-2 group-hover:translate-y-0 [.swiper-slide-active_&]:translate-y-0">Use This Template</button>
                                                 )}
@@ -130,7 +139,27 @@ export default function CustomChooseTemplates() {
                             ))}
                         </Swiper>
                     </div>
-                    <div className="h-[15px] custom-template-pagination-cover flex justify-center items-center gap-[10px] mt-[40px] [&>.swiper-pagination-bullet]:w-[12px] [&>.swiper-pagination-bullet]:h-[12px] [&>.swiper-pagination-bullet]:bg-[#CACACA] [&>.swiper-pagination-bullet]:opacity-100 [&>.swiper-pagination-bullet-active]:bg-[#0456FF] [&>.swiper-pagination-bullet]:rounded-full [&>.swiper-pagination-bullet]:cursor-pointer [&>.swiper-pagination-bullet]:transition-all"></div>
+                    <div className="flex justify-center items-center gap-[10px] mt-[40px] h-[15px]">
+                        {Array.from({ length: 5 }, (_, index) => (
+                            <button
+                                key={index}
+                                type="button"
+                                onClick={() => {
+                                    const targetIndex =
+                                        Math.floor(activeIndex / 5) * 5 + index;
+
+                                    if (targetIndex < templates.length) {
+                                        swiperInstance?.slideToLoop(targetIndex);
+                                    }
+                                }}
+                                aria-label={`Go to pagination dot ${index + 1}`}
+                                className={`w-[12px] h-[12px] shrink-0 rounded-full cursor-pointer transition-all duration-300 ${activeDotIndex === index
+                                        ? "bg-[#0456FF]"
+                                        : "bg-[#CACACA]"
+                                    }`}
+                            />
+                        ))}
+                    </div>
                 </div>
             </div>
             <Login

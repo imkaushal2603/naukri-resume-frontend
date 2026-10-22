@@ -12,6 +12,7 @@
     "@cashfreepayments/cashfree-js": "^1.0.7",
     "@react-oauth/google": "^0.13.5",
     "axios": "^1.19.0",
+    "js-cookie": "^3.0.8",
     "next": "16.2.11",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
