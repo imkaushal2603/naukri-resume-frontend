@@ -1,14 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    staleTimes: {
-      dynamic: 0,
-      static: 180,
-    },
-  },
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",
@@ -23,6 +18,17 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+  },
+  compress: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion", "react-icons", "sonner"],
+    staleTimes: {
+      dynamic: 0,
+      static: 180,
+    },
   },
 };
 
