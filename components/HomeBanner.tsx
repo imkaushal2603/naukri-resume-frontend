@@ -110,7 +110,7 @@ export default function HomeBanner() {
                             </div>
                         </div>
                         <div className="w-[50%] flex items-end flex-wrap gap-[50px] max-[768px]:w-full max-[768px]:max-w-[700px] max-[768px]:gap-0 max-[1400px]:max-w-[382px] min-[768px]:max-[1400px]:gap-0 max-[1400px]:relative">
-                            <div className="relative w-[382px] max-[768px]:px-[15px] min-[768px]:max-[1400px]:px-[15px]">
+                            <div className="relative w-[382px] max-[768px]:!max-w-none max-[768px]:px-[15px] min-[768px]:max-[1400px]:px-[15px]">
                                 <Image className="shadow-[1px_1px_4px_0px_#00000040] rounded-[15px]" src={Harbor} alt="Harbor" width={382} height={490} priority />
                                 <div className={`absolute -right-[21px] top-[35px] w-[50px] h-[50px] bg-white shadow-[0px_1px_4px_0px_#00000040] rounded-[10px] flex justify-center items-center transition-all duration-500 max-[1400px]:left-[-4px] ${showBadge1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="24" viewBox="0 0 19 24" fill="none">
