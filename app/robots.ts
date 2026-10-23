@@ -1,17 +1,21 @@
-import { MetadataRoute } from 'next';
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
-      userAgent: '*',
-      allow: '/',
+      userAgent: "*",
+      allow: "/",
       disallow: [
-        '/dashboard/',
-        '/templates/',
-        '/payment/',
-        '/reset-password/',
+        "/dashboard/",
+        "/my-resumes/",
+        "/templates/",
+        "/plans/",
+        "/extend-resume-limit/",
+        "/payment/",
+        "/reset-password/",
+        "/api/",
       ],
     },
-    sitemap: 'https://naukri-resume.com/sitemap.xml',
+    sitemap: "https://naukri-resume.com/sitemap.xml",
   };
 }

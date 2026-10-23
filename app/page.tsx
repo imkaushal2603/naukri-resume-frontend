@@ -40,13 +40,8 @@ export default function Home() {
         "offers": {
           "@type": "Offer",
           "price": "0",
-          "priceCurrency": "USD",
-        },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.9",
-          "ratingCount": "1250",
-        },
+          "priceCurrency": "INR",
+        }
       },
       {
         "@type": "FAQPage",
@@ -57,7 +52,7 @@ export default function Home() {
             "name": "What is Naukri Resume?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes.",
+              "text": "Naukri Resume is an AI-powered resume builder designed to help job seekers create professional, ATS-friendly resumes in minutes. Choose from modern templates, customize your content, preview your resume in real time, and download it in PDF format with a premium plan.",
             },
           },
           {
@@ -65,7 +60,23 @@ export default function Home() {
             "name": "Is Naukri Resume ATS-friendly?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Yes. All Naukri Resume templates are optimized for Applicant Tracking Systems (ATS).",
+              "text": "Yes. All Naukri Resume templates are optimized for Applicant Tracking Systems (ATS). Our layouts use clean formatting, readable fonts, and proper section structures to improve compatibility with most recruiters' ATS software. You can also use our ATS Score Checker to identify areas for improvement before applying.",
+            },
+          },
+          {
+            "@type": "Question",
+            "name": "Can I download my resume for free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can create, edit, and preview your resume for free. Downloading your resume in PDF format requires an active Premium plan. Premium also includes ATS Score checking, AI suggestions, premium templates, and other advanced features.",
+            },
+          },
+          {
+            "@type": "Question",
+            "name": "Is my data safe with Naukri Resume?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Your privacy and security are important to us. Your resume data is stored securely using encrypted connections, and we never sell or share your personal information with third parties. You remain in full control of your resumes and account at all times.",
             },
           },
         ],
@@ -77,7 +88,9 @@ export default function Home() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
 
       <Header />
