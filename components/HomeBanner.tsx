@@ -145,7 +145,7 @@ export default function HomeBanner() {
                     </div>
                 </div>
                 <div className="absolute bottom-0 right-0 w-1/2 -z-1 max-[768px]:w-full">
-                    <Image src={WAVE} alt="wave" width={869} height={407} className="w-full h-full" />
+                    <Image src={WAVE} alt="Background Wave" width={869} height={407} priority fetchPriority="high" className="w-full h-full" />
                 </div>
             </div>
             <Login
