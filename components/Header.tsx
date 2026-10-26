@@ -33,7 +33,7 @@ export default function Header() {
                 <div className="max-w-[1390px] mx-auto px-[15px]">
                     <div className="flex justify-between items-center flex-wrap">
                         <div className="w-[200px]">
-                            <Link href="/" aria-label="Naukri Resume home">
+                            <Link href="/" aria-label="Naukri Resume Home">
                                 <Image src={Logo} alt="Naukri Resume" width={196} height={55} priority />
                             </Link>
                         </div>
