@@ -244,7 +244,7 @@ export default function BasicInfoStep() {
                                             <path d="M8 1.9C8.27578 1.9 8.54885 1.95432 8.80364 2.05985C9.05842 2.16539 9.28992 2.32007 9.48492 2.51508C9.67993 2.71008 9.83461 2.94158 9.94015 3.19636C10.0457 3.45115 10.1 3.72422 10.1 4C10.1 4.27578 10.0457 4.54885 9.94015 4.80364C9.83461 5.05842 9.67993 5.28992 9.48492 5.48492C9.28992 5.67993 9.05842 5.83461 8.80364 5.94015C8.54885 6.04568 8.27578 6.1 8 6.1C7.44305 6.1 6.9089 5.87875 6.51508 5.48492C6.12125 5.0911 5.9 4.55695 5.9 4C5.9 3.44305 6.12125 2.9089 6.51508 2.51508C6.9089 2.12125 7.44305 1.9 8 1.9ZM8 10.9C10.97 10.9 14.1 12.36 14.1 13V14.1H1.9V13C1.9 12.36 5.03 10.9 8 10.9ZM8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 9C5.33 9 0 10.34 0 13V16H16V13C16 10.34 10.67 9 8 9Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.fullName || ""} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.fullName || ""} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -255,7 +255,7 @@ export default function BasicInfoStep() {
                                             <path d="M1.5 3C0.671573 3 0 3.67157 0 4.5V11.5C0 12.3284 0.671573 13 1.5 13H14.5C15.3284 13 16 12.3284 16 11.5V4.5C16 3.67157 15.3284 3 14.5 3H1.5ZM1.5 4.5H14.5V5.21739L8 9.28261L1.5 5.21739V4.5ZM14.5 11.5H1.5V6.78261L7.52786 10.5498C7.81846 10.7314 8.18154 10.7314 8.47214 10.5498L14.5 6.78261V11.5Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="email" value={form.email || ""} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="email" value={form.email || ""} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -266,7 +266,7 @@ export default function BasicInfoStep() {
                                             <path d="M17.9984 12.46L12.7284 11.85L10.2084 14.37C7.36983 12.9259 5.0625 10.6186 3.61844 7.78L6.14844 5.25L5.53844 0H0.0284377C-0.551562 10.18 7.81844 18.55 17.9984 17.97V12.46Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.phone || ""} onChange={(e) => handleChange("phone", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.phone || ""} onChange={(e) => handleChange("phone", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -278,7 +278,7 @@ export default function BasicInfoStep() {
                                             <path d="M9.49967 1.00012C7.81501 3.69973 6.92188 6.81799 6.92188 10.0001C6.92188 13.1823 7.81501 16.3005 9.49967 19.0001M10.4997 1.00012C12.1843 3.69973 13.0775 6.81799 13.0775 10.0001C13.0775 13.1823 12.1843 16.3005 10.4997 19.0001" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.country || ""} onChange={(e) => handleChange("country", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.country || ""} onChange={(e) => handleChange("country", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -290,7 +290,7 @@ export default function BasicInfoStep() {
                                             <path d="M9.49967 1.00012C7.81501 3.69973 6.92188 6.81799 6.92188 10.0001C6.92188 13.1823 7.81501 16.3005 9.49967 19.0001M10.4997 1.00012C12.1843 3.69973 13.0775 6.81799 13.0775 10.0001C13.0775 13.1823 12.1843 16.3005 10.4997 19.0001" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.state || ""} onChange={(e) => handleChange("state", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.state || ""} onChange={(e) => handleChange("state", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -302,7 +302,7 @@ export default function BasicInfoStep() {
                                             <path d="M8.75 20.7502H15.75C17.636 20.7502 18.578 20.7502 19.164 20.1642C19.75 19.5782 19.75 18.6352 19.75 16.7502V10.2502M16.75 8.75024V5.75024M5.75 9.75024H6.75M5.75 13.7502H6.75M14.75 12.7502H15.75M15.25 20.7502V16.7502" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.city || ""} onChange={(e) => handleChange("city", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.city || ""} onChange={(e) => handleChange("city", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -314,7 +314,7 @@ export default function BasicInfoStep() {
                                             <path d="M9.49967 1.00012C7.81501 3.69973 6.92188 6.81799 6.92188 10.0001C6.92188 13.1823 7.81501 16.3005 9.49967 19.0001M10.4997 1.00012C12.1843 3.69973 13.0775 6.81799 13.0775 10.0001C13.0775 13.1823 12.1843 16.3005 10.4997 19.0001" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.zipCode || ""} onChange={(e) => handleChange("zipCode", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.zipCode || ""} onChange={(e) => handleChange("zipCode", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -325,7 +325,7 @@ export default function BasicInfoStep() {
                                             <path d="M5 5H5.002M5 8V13M8 7V9M8 9V13M8 9C8 8.5 8.917 7.217 10 7C11.38 6.724 13 7.5 13 9V13M3 17H15C15.5304 17 16.0391 16.7893 16.4142 16.4142C16.7893 16.0391 17 15.5304 17 15V3C17 2.46957 16.7893 1.96086 16.4142 1.58579C16.0391 1.21071 15.5304 1 15 1H3C2.46957 1 1.96086 1.21071 1.58579 1.58579C1.21071 1.96086 1 2.46957 1 3V15C1 15.5304 1.21071 16.0391 1.58579 16.4142C1.96086 16.7893 2.46957 17 3 17Z" stroke="#0456FF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.linkedin || ""} onChange={(e) => handleChange("linkedin", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.linkedin || ""} onChange={(e) => handleChange("linkedin", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -336,7 +336,7 @@ export default function BasicInfoStep() {
                                             <path d="M10 0C8.68678 0 7.38642 0.258658 6.17317 0.761205C4.95991 1.26375 3.85752 2.00035 2.92893 2.92893C1.05357 4.8043 0 7.34784 0 10C0 14.42 2.87 18.17 6.84 19.5C7.34 19.58 7.5 19.27 7.5 19V17.31C4.73 17.91 4.14 15.97 4.14 15.97C3.68 14.81 3.03 14.5 3.03 14.5C2.12 13.88 3.1 13.9 3.1 13.9C4.1 13.97 4.63 14.93 4.63 14.93C5.5 16.45 6.97 16 7.54 15.76C7.63 15.11 7.89 14.67 8.17 14.42C5.95 14.17 3.62 13.31 3.62 9.5C3.62 8.39 4 7.5 4.65 6.79C4.55 6.54 4.2 5.5 4.75 4.15C4.75 4.15 5.59 3.88 7.5 5.17C8.29 4.95 9.15 4.84 10 4.84C10.85 4.84 11.71 4.95 12.5 5.17C14.41 3.88 15.25 4.15 15.25 4.15C15.8 5.5 15.45 6.54 15.35 6.79C16 7.5 16.38 8.39 16.38 9.5C16.38 13.32 14.04 14.16 11.81 14.41C12.17 14.72 12.5 15.33 12.5 16.26V19C12.5 19.27 12.66 19.59 13.17 19.5C17.14 18.16 20 14.42 20 10C20 8.68678 19.7413 7.38642 19.2388 6.17317C18.7362 4.95991 17.9997 3.85752 17.0711 2.92893C16.1425 2.00035 15.0401 1.26375 13.8268 0.761205C12.6136 0.258658 11.3132 0 10 0Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.github || ""} onChange={(e) => handleChange("github", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.github || ""} onChange={(e) => handleChange("github", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                         </div>

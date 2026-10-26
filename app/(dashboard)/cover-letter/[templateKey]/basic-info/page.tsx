@@ -215,7 +215,7 @@ export default function CoverLetterForm() {
                                     <input type="file" accept="image/*" onChange={handlePhotoChange} className="hidden" />
                                 </label>
                                 {form.photoUrl && (
-                                    <button type="button" onClick={() => handleChange("photoUrl", "")} className="text-[13px] text-red-500">
+                                    <button type="button" onClick={() => handleChange("photoUrl", "")} className="text-[13px] text-red-500 cursor-pointer">
                                         Remove
                                     </button>
                                 )}
@@ -228,7 +228,7 @@ export default function CoverLetterForm() {
                                             <path d="M8 1.9C8.27578 1.9 8.54885 1.95432 8.80364 2.05985C9.05842 2.16539 9.28992 2.32007 9.48492 2.51508C9.67993 2.71008 9.83461 2.94158 9.94015 3.19636C10.0457 3.45115 10.1 3.72422 10.1 4C10.1 4.27578 10.0457 4.54885 9.94015 4.80364C9.83461 5.05842 9.67993 5.28992 9.48492 5.48492C9.28992 5.67993 9.05842 5.83461 8.80364 5.94015C8.54885 6.04568 8.27578 6.1 8 6.1C7.44305 6.1 6.9089 5.87875 6.51508 5.48492C6.12125 5.0911 5.9 4.55695 5.9 4C5.9 3.44305 6.12125 2.9089 6.51508 2.51508C6.9089 2.12125 7.44305 1.9 8 1.9ZM8 10.9C10.97 10.9 14.1 12.36 14.1 13V14.1H1.9V13C1.9 12.36 5.03 10.9 8 10.9ZM8 0C5.79 0 4 1.79 4 4C4 6.21 5.79 8 8 8C10.21 8 12 6.21 12 4C12 1.79 10.21 0 8 0ZM8 9C5.33 9 0 10.34 0 13V16H16V13C16 10.34 10.67 9 8 9Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.fullName} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.fullName} onChange={(e) => handleChange("fullName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -239,7 +239,7 @@ export default function CoverLetterForm() {
                                             <path d="M1.5 3C0.671573 3 0 3.67157 0 4.5V11.5C0 12.3284 0.671573 13 1.5 13H14.5C15.3284 13 16 12.3284 16 11.5V4.5C16 3.67157 15.3284 3 14.5 3H1.5ZM1.5 4.5H14.5V5.21739L8 9.28261L1.5 5.21739V4.5ZM14.5 11.5H1.5V6.78261L7.52786 10.5498C7.81846 10.7314 8.18154 10.7314 8.47214 10.5498L14.5 6.78261V11.5Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="email" value={form.email} onChange={(e) => handleChange("email", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -250,7 +250,7 @@ export default function CoverLetterForm() {
                                             <path d="M17.9984 12.46L12.7284 11.85L10.2084 14.37C7.36983 12.9259 5.0625 10.6186 3.61844 7.78L6.14844 5.25L5.53844 0H0.0284377C-0.551562 10.18 7.81844 18.55 17.9984 17.97V12.46Z" fill="#0456FF" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.phone} onChange={(e) => handleChange("phone", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.phone} onChange={(e) => handleChange("phone", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -262,7 +262,7 @@ export default function CoverLetterForm() {
                                             <path d="M8.75 20.7502H15.75C17.636 20.7502 18.578 20.7502 19.164 20.1642C19.75 19.5782 19.75 18.6352 19.75 16.7502V10.2502M16.75 8.75024V5.75024M5.75 9.75024H6.75M5.75 13.7502H6.75M14.75 12.7502H15.75M15.25 20.7502V16.7502" stroke="#0456FF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.address} onChange={(e) => handleChange("address", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.address} onChange={(e) => handleChange("address", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -274,7 +274,7 @@ export default function CoverLetterForm() {
                                             <path d="M19 10.613a20.986 20.986 0 01-8 2.003V14a1 1 0 01-2 0v-1.384c-2.74-.131-5.46-.798-8-2.003V17.5A1.5 1.5 0 002.5 19h15a1.5 1.5 0 001.5-1.5v-6.887z" fill="#0456ff" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.jobTitle} onChange={(e) => handleChange("jobTitle", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.jobTitle} onChange={(e) => handleChange("jobTitle", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -285,7 +285,7 @@ export default function CoverLetterForm() {
                                             <path d="M8 2L8 6L4 6L4 48L46 48L46 14L30 14L30 6L26 6L26 2 Z M 10 4L24 4L24 8L28 8L28 46L19 46L19 39L15 39L15 46L6 46L6 8L10 8 Z M 10 10L10 12L12 12L12 10 Z M 14 10L14 12L16 12L16 10 Z M 18 10L18 12L20 12L20 10 Z M 22 10L22 12L24 12L24 10 Z M 10 15L10 19L12 19L12 15 Z M 14 15L14 19L16 19L16 15 Z M 18 15L18 19L20 19L20 15 Z M 22 15L22 19L24 19L24 15 Z M 30 16L44 16L44 46L30 46 Z M 32 18L32 20L34 20L34 18 Z M 36 18L36 20L38 20L38 18 Z M 40 18L40 20L42 20L42 18 Z M 10 21L10 25L12 25L12 21 Z M 14 21L14 25L16 25L16 21 Z M 18 21L18 25L20 25L20 21 Z M 22 21L22 25L24 25L24 21 Z M 32 22L32 24L34 24L34 22 Z M 36 22L36 24L38 24L38 22 Z M 40 22L40 24L42 24L42 22 Z M 32 26L32 28L34 28L34 26 Z M 36 26L36 28L38 28L38 26 Z M 40 26L40 28L42 28L42 26 Z M 10 27L10 31L12 31L12 27 Z M 14 27L14 31L16 31L16 27 Z M 18 27L18 31L20 31L20 27 Z M 22 27L22 31L24 31L24 27 Z M 32 30L32 32L34 32L34 30 Z M 36 30L36 32L38 32L38 30 Z M 40 30L40 32L42 32L42 30 Z M 10 33L10 37L12 37L12 33 Z M 14 33L14 37L16 37L16 33 Z M 18 33L18 37L20 37L20 33 Z M 22 33L22 37L24 37L24 33 Z M 32 34L32 36L34 36L34 34 Z M 36 34L36 36L38 36L38 34 Z M 40 34L40 36L42 36L42 34 Z M 32 38L32 40L34 40L34 38 Z M 36 38L36 40L38 40L38 38 Z M 40 38L40 40L42 40L42 38 Z M 10 39L10 44L12 44L12 39 Z M 22 39L22 44L24 44L24 39 Z M 32 42L32 44L34 44L34 42 Z M 36 42L36 44L38 44L38 42 Z M 40 42L40 44L42 44L42 42Z" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.companyName} onChange={(e) => handleChange("companyName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.companyName} onChange={(e) => handleChange("companyName", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-[calc((100%-60px)/3)] max-[768px]:w-full min-[768px]:max-[1400px]:w-[calc((100%-20px)/3)]">
@@ -312,7 +312,7 @@ export default function CoverLetterForm() {
                                             <path d="M759.95 991.448h-63.986c-4.422 0-8-3.576-8-7.998s3.578-7.998 8-7.998h63.986c4.42 0 7.998 3.576 7.998 7.998s-3.578 7.998-7.998 7.998z" fill="" />
                                         </svg>
                                     </div>
-                                    <input type="text" value={form.hiringManager} onChange={(e) => handleChange("hiringManager", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold" />
+                                    <input type="text" value={form.hiringManager} onChange={(e) => handleChange("hiringManager", e.target.value)} className="w-full border border-[#0456FF26] rounded-[6px] py-[12px] pl-[60px] pr-[20px] text-[14px] leading-none text-black font-bold outline-none focus:outline-none focus:ring-0" />
                                 </div>
                             </div>
                             <div className="w-full">
