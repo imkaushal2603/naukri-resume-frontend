@@ -111,7 +111,7 @@ export default function HomeBanner() {
                         </div>
                         <div className="w-[50%] flex items-end flex-wrap gap-[50px] max-[768px]:w-full max-[768px]:max-w-[700px] max-[768px]:gap-0 max-[1400px]:max-w-[382px] min-[768px]:max-[1400px]:gap-0 max-[1400px]:relative">
                             <div className="relative w-[382px] max-[768px]:!max-w-none max-[768px]:px-[15px] min-[768px]:max-[1400px]:px-[15px]">
-                                <Image className="shadow-[1px_1px_4px_0px_#00000040] rounded-[15px]" src={Harbor} alt="Harbor" width={382} height={490} priority />
+                                <Image className="shadow-[1px_1px_4px_0px_#00000040] rounded-[15px]" src={Harbor} alt="Harbor" width={382} height={490} priority fetchPriority="high" />
                                 <div className={`absolute -right-[21px] top-[35px] w-[50px] h-[50px] bg-white shadow-[0px_1px_4px_0px_#00000040] rounded-[10px] flex justify-center items-center transition-all duration-500 max-[1400px]:left-[-4px] ${showBadge1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"}`}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="24" viewBox="0 0 19 24" fill="none">
                                         <path fillRule="evenodd" clipRule="evenodd" d="M4.0625 13.75C4.0625 13.5014 4.16127 13.2629 4.33709 13.0871C4.5129 12.9113 4.75136 12.8125 5 12.8125H13.75C13.9986 12.8125 14.2371 12.9113 14.4129 13.0871C14.5887 13.2629 14.6875 13.5014 14.6875 13.75C14.6875 13.9986 14.5887 14.2371 14.4129 14.4129C14.2371 14.5887 13.9986 14.6875 13.75 14.6875H5C4.75136 14.6875 4.5129 14.5887 4.33709 14.4129C4.16127 14.2371 4.0625 13.9986 4.0625 13.75ZM4.0625 17.5C4.0625 17.2514 4.16127 17.0129 4.33709 16.8371C4.5129 16.6613 4.75136 16.5625 5 16.5625H13.75C13.9986 16.5625 14.2371 16.6613 14.4129 16.8371C14.5887 17.0129 14.6875 17.2514 14.6875 17.5C14.6875 17.7486 14.5887 17.9871 14.4129 18.1629C14.2371 18.3387 13.9986 18.4375 13.75 18.4375H5C4.75136 18.4375 4.5129 18.3387 4.33709 18.1629C4.16127 17.9871 4.0625 17.7486 4.0625 17.5Z" fill="#0456FF" />
@@ -145,7 +145,7 @@ export default function HomeBanner() {
                     </div>
                 </div>
                 <div className="absolute bottom-0 right-0 w-1/2 -z-1 max-[768px]:w-full">
-                    <Image src={WAVE} alt="Background Wave" width={869} height={407} priority fetchPriority="high" className="w-full h-full" />
+                    <Image src={WAVE} alt="Background Wave" width={869} height={407} loading="eager" className="w-full h-full" />
                 </div>
             </div>
             <Login
