@@ -135,7 +135,7 @@ export default function Support() {
                             </div>
                             <div>
                                 <h6 className="text-[16px] font-bold leading-[120%] mb-[6px] text-[#000024]">Phone</h6>
-                                <a href="tel:+911234567890" className="text-[#0456FF] font-bold text-[16px] leading-normal inline-block mb-[6px]">+91 12345 67890</a>
+                                <a href="tel:+911724521292" className="text-[#0456FF] font-bold text-[16px] leading-normal inline-block mb-[6px]">+91 172-4521292</a>
                                 <p className="text-[#00002480] text-[15px] leading-normal">Mon - Sat, 10:00 AM - 7:00 PM (IST)</p>
                             </div>
                         </div>
