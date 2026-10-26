@@ -5,7 +5,7 @@ import Link from "next/link";
 import CookieBanner, { OPEN_COOKIE_SETTINGS_EVENT } from "./CookieBanner";
 import PolicyModals, { OPEN_PRIVACY_EVENT, OPEN_TERMS_EVENT } from "./PolicyModals";
 import FOOTER from "@/public/footer/footer.png";
-import DOTS from "@/public/footer/dots.png";
+import DOTS from "@/public/footer/Dots.png";
 
 export default function Footer() {
     const handleOpenPrivacy = () => {
