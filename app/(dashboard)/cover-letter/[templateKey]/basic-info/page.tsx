@@ -318,7 +318,7 @@ export default function CoverLetterForm() {
                             <div className="w-full">
                                 <label className="inline-block font-bold text-[12px] leading-none text-black mb-[8px]">Summary *</label>
                                 <div className="relative leading-[0]">
-                                    <textarea value={form.summary} onChange={(e) => handleChange("summary", e.target.value)} rows={6} placeholder="Write why you're a great fit for this role..." className="w-full border border-[#0456FF26] rounded-[6px] p-[16px] text-[14px] leading-none text-black font-bold resize-y" />
+                                    <textarea value={form.summary} onChange={(e) => handleChange("summary", e.target.value)} rows={6} placeholder="Write why you're a great fit for this role..." className="w-full border border-[#0456FF26] rounded-[6px] p-[16px] text-[14px] leading-none text-black font-bold resize-y outline-none focus:outline-none" />
                                 </div>
                             </div>
                         </div>

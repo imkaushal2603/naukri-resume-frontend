@@ -141,7 +141,7 @@ export default function CustomChooseTemplates() {
                             }}
                             breakpoints={{
                                 320: { slidesPerView: 1, spaceBetween: 10 },
-                                640: { slidesPerView: 2, spaceBetween: 12 },
+                                640: { slidesPerView: 3, spaceBetween: 12 },
                                 1024: { slidesPerView: 5, spaceBetween: 16 },
                             }}
                             className="!p-[8px] [&_.swiper-wrapper]:items-center">
